@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<style>
+  @font-face {
+    font-family: 'DM Serif Display';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../assets/fonts/dm-serif-display-latin.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../assets/fonts/jetbrains-mono-latin.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400 600;
+    src: url('../assets/fonts/inter-latin.woff2') format('woff2');
+  }
+
+  /* Exact light theme tokens from common.css */
+  :root {
+    --bg-color:   #F8F6F2;
+    --text-main:  #121212;
+    --text-muted: #666666;
+    --accent:     #2A45B6;
+    --accent-red: #CC2936;
+    --border:     rgba(0, 0, 0, 0.10);
+    --font-serif: 'DM Serif Display', Georgia, serif;
+    --font-mono:  'JetBrains Mono', monospace;
+    --font-sans:  'Inter', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 1200px;
+    height: 628px;
+    overflow: hidden;
+    background: var(--bg-color);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .card {
+    width: 1200px;
+    height: 628px;
+    display: flex;
+    background: var(--bg-color);
+    position: relative;
+  }
+
+  /* ── Left column ────────────────────────────────────────────── */
+  .left {
+    width: 560px;
+    flex-shrink: 0;
+    padding: 52px 56px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+  }
+
+  .atom-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .title-block {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 96px;
+    line-height: 1.0;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
+  }
+
+  .tagline {
+    margin-top: 28px;
+    font-family: var(--font-mono);
+    font-size: 19px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .accent-rule {
+    width: 220px;
+    height: 1px;
+    background: var(--accent);
+    margin-top: 20px;
+    opacity: 0.55;
+  }
+
+  .url-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 7px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.03);
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Divider ─────────────────────────────────────────────────── */
+  .divider {
+    width: 1px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.10);
+    flex-shrink: 0;
+  }
+
+  /* ── Right column: canvas ───────────────────────────────────── */
+  .right {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- ── Left ───────────────────────────────────────────────────── -->
+  <div class="left">
+    <!-- Atom icon -->
+    <svg class="atom-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="22" cy="22" rx="18" ry="7" stroke="#2A45B6" stroke-width="1.5"/>
+      <ellipse cx="22" cy="22" rx="18" ry="7" stroke="#2A45B6" stroke-width="1.5"
+               transform="rotate(60 22 22)"/>
+      <ellipse cx="22" cy="22" rx="18" ry="7" stroke="#2A45B6" stroke-width="1.5"
+               transform="rotate(120 22 22)"/>
+      <circle cx="22" cy="22" r="3.5" fill="#2A45B6"/>
+    </svg>
+
+    <!-- Title -->
+    <div class="title-block">
+      <h1>Physics<br>Notebook</h1>
+      <p class="tagline">Interactive simulations<br>for every physics concept</p>
+      <div class="accent-rule"></div>
+    </div>
+
+    <!-- URL -->
+    <div class="url-badge">physics-notebook.casberry.in</div>
+  </div>
+
+  <!-- ── Divider ─────────────────────────────────────────────────── -->
+  <div class="divider"></div>
+
+  <!-- ── Right: canvas visualization ───────────────────────────── -->
+  <div class="right">
+    <canvas id="c"></canvas>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const W = canvas.offsetWidth;
+const H = canvas.offsetHeight;
+canvas.width  = W * 2;   // retina
+canvas.height = H * 2;
+const ctx = canvas.getContext('2d');
+ctx.scale(2, 2);
+
+const BG      = '#F8F6F2';
+const BLUE    = '#2A45B6';
+const RED     = '#CC2936';
+const MUTED   = '#666666';
+const WAVECLR = 'rgba(42, 69, 182, 0.35)';
+const DOTCLR  = 'rgba(0,0,0,0.09)';
+
+// ── Dot grid ─────────────────────────────────────────────────────────────────
+for (let gx = 20; gx < W - 4; gx += 24) {
+  for (let gy = 14; gy < H - 4; gy += 24) {
+    ctx.beginPath();
+    ctx.arc(gx, gy, 1.1, 0, Math.PI * 2);
+    ctx.fillStyle = DOTCLR;
+    ctx.fill();
+  }
+}
+
+// ── Concentric orbital rings ─────────────────────────────────────────────────
+const cx = W * 0.52, cy = H * 0.46;
+const rings = [{ r: 180, lw: 2 }, { r: 142, lw: 2 }, { r: 106, lw: 1.5 },
+               { r: 72,  lw: 1.2 }, { r: 42, lw: 1 }];
+
+rings.forEach(({ r, lw }) => {
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.strokeStyle = BLUE;
+  ctx.lineWidth = lw;
+  ctx.globalAlpha = 0.75;
+  ctx.stroke();
+  ctx.globalAlpha = 1.0;
+});
+
+// ── Pendulum (red) ────────────────────────────────────────────────────────────
+const pivX = cx - 26, pivY = cy - 172;
+const L = 198;
+ctx.strokeStyle = RED;
+ctx.lineWidth = 2;
+ctx.beginPath();
+for (let deg = -38; deg <= 38; deg += 2) {
+  const rad = deg * Math.PI / 180;
+  const x = pivX + L * Math.sin(rad);
+  const y = pivY + L * Math.cos(rad);
+  if (deg === -38) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+}
+ctx.stroke();
+// Bob at 28°
+const bobX = pivX + L * Math.sin(28 * Math.PI / 180);
+const bobY = pivY + L * Math.cos(28 * Math.PI / 180);
+ctx.beginPath();
+ctx.arc(bobX, bobY, 9, 0, Math.PI * 2);
+ctx.fillStyle = RED;
+ctx.fill();
+// Pivot
+ctx.beginPath();
+ctx.arc(pivX, pivY, 3.5, 0, Math.PI * 2);
+ctx.fillStyle = MUTED;
+ctx.fill();
+
+// ── Sine wave (blue, bottom) ─────────────────────────────────────────────────
+const wy = H * 0.80;
+ctx.strokeStyle = WAVECLR;
+ctx.lineWidth = 2;
+ctx.globalAlpha = 0.85;
+ctx.beginPath();
+for (let px = 16; px < W - 10; px += 3) {
+  const t = (px - 16) / 220;
+  const py = wy + 19 * Math.sin(t * Math.PI * 2.8);
+  if (px === 16) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+ctx.globalAlpha = 1.0;
+</script>
+</body>
+</html>
