@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Principle of Least Action • Physics Notebook</title>
+    <meta name="description" content="Explore Hamilton's Principle and the Principle of Least Action — the variational foundation that unifies classical mechanics, optics, and quantum field theory through stationary action.">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <style>
+        /* AI Links */
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .sim-controls {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+        }
+    </style>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Theme Init -->
+    <script>
+        const savedTheme = localStorage.getItem('physics-notebook-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body && document.body.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <nav class="sticky">
+        <div class="nav-bg"></div>
+        <a href="../index.html" class="logo">
+            <i data-lucide="arrow-left" width="16"></i>
+            Library
+        </a>
+        <button id="themeBtn">
+            <i data-lucide="moon" width="16"></i> Theme
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="text-reveal-wrapper">
+            <h1 class="hero-title">Principle of<br>Least Action</h1>
+            <p style="margin-top: 2rem; font-size: 1.4rem; max-width: 40ch;">
+                Nature is parsimonious: every physical system evolves along the unique path that makes its action stationary.
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION 1: The Action Functional -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">01. The Action Integral</h3>
+                <h2>Hamilton's Principle</h2>
+                <p>
+                    The <strong>Action</strong> ($S$) is a single scalar number — the time-integral of the Lagrangian $L = T - V$ along a path between two fixed states. Hamilton's Principle asserts that the path actually taken by a physical system is the one for which the action is <strong>stationary</strong> ($\delta S = 0$): not necessarily a minimum, but an extremum.
+                </p>
+                <div class="math-block">
+                    $$S[q] = \int_{t_1}^{t_2} L(q_i, \dot{q}_i, t)\, dt, \qquad \delta S = 0$$
+                </div>
+                <p>
+                    Applying calculus of variations to this condition yields the <strong>Euler-Lagrange equations</strong> — the equations of motion for any generalized coordinate $q_i$, free of constraint forces.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">Fermat's Principle of Light</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        Just as a ray of light always travels the path that minimizes travel time (Fermat's Principle), a particle travels the path that makes mechanical action stationary. Both are instances of the same deep variational logic.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('action', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('action', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('action', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('action', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('action', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Gravity (g) <span id="val-g1">9.8</span> m/s²</label>
+                        <input type="range" id="input-g1" min="1.0" max="20.0" step="0.5" value="9.8">
+                    </div>
+                    <div class="slider-group">
+                        <label>Length (l) <span id="val-l1">1.5</span> m</label>
+                        <input type="range" id="input-l1" min="0.5" max="2.5" step="0.1" value="1.5">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-action" aria-label="Pendulum simulation showing the stationary-action path"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 2: Euler-Lagrange & Path Comparison -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent-secondary);">02. Variational Calculus</h3>
+                <h2>Euler-Lagrange Equations</h2>
+                <p>
+                    By demanding $\delta S = 0$ for all small path variations $\delta q_i(t)$ that vanish at the endpoints, integration by parts produces the <strong>Euler-Lagrange equations</strong>:
+                </p>
+                <div class="math-block">
+                    $$\frac{d}{dt}\!\left(\frac{\partial L}{\partial \dot{q}_i}\right) - \frac{\partial L}{{\partial q_i}} = 0$$
+                </div>
+                <p>
+                    These second-order ODEs replace Newton's $\mathbf{F} = m\mathbf{a}$ in any coordinate system. For a free particle ($V = 0$) they give uniform motion; for a pendulum they reproduce the nonlinear swing equation — all from one scalar $L$.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Key Insight</span>
+                    <h4 style="margin-bottom:0.5rem;">Coordinate Independence</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        Because the Lagrangian is a scalar, the Euler-Lagrange equations hold in <em>any</em> generalized coordinates — polar, spherical, or curvilinear — without rewriting force components. Constraints are handled automatically.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('euler-lagrange', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('euler-lagrange', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('euler-lagrange', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('euler-lagrange', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('euler-lagrange', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Path Variants (n) <span id="val-paths">5</span></label>
+                        <input type="range" id="input-paths" min="3" max="9" step="1" value="5">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-euler" aria-label="Path comparison visualization showing action values for varied paths"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 3: Universality — Optics, QM, GR -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--text-muted);">03. Universal Reach</h3>
+                <h2>From Classical to Quantum</h2>
+                <p>
+                    The principle extends far beyond classical mechanics. In <strong>optics</strong>, Fermat's principle minimizes optical path length. In <strong>quantum mechanics</strong>, Feynman's path integral formulation sums $e^{iS/\hbar}$ over <em>all</em> paths — the classical stationary path dominates as $\hbar \to 0$. In <strong>General Relativity</strong>, the Einstein–Hilbert action $S = \int R\sqrt{-g}\, d^4x$ yields Einstein's field equations.
+                </p>
+                <div class="math-block">
+                    $$\mathcal{Z} = \int \mathcal{D}[q]\, e^{iS[q]/\hbar}$$
+                </div>
+                <p>
+                    The simulation below shows how Feynman's sum-over-paths concept works: many random paths, each weighted by a phase $e^{iS/\hbar}$, with constructive interference selecting the classical trajectory.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Scientific Milestone</span>
+                    <h4 style="margin-bottom:0.5rem;">Noether's Theorem Connection</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        Every continuous symmetry of the action produces a conserved quantity. Time-translation symmetry → energy conservation. Spatial symmetry → momentum. Rotational symmetry → angular momentum. The action principle is the bridge between symmetry and conservation laws.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('feynman', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('feynman', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('feynman', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('feynman', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('feynman', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-feynman" aria-label="Feynman path integral visualization showing multiple paths with phase interference"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- REFERENCES -->
+    <section class="references">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h3>Academic References</h3>
+            <ul>
+                <li><strong>Landau, L. D., &amp; Lifshitz, E. M.</strong> (1976). <em>Mechanics</em>, Vol. 1 of <em>Course of Theoretical Physics</em>, 3rd Edition. Butterworth-Heinemann.</li>
+                <li><strong>Goldstein, H., Poole, C., &amp; Safko, J.</strong> (2001). <em>Classical Mechanics</em>, 3rd Edition. Pearson.</li>
+                <li><strong>Feynman, R. P., &amp; Hibbs, A. R.</strong> (1965). <em>Quantum Mechanics and Path Integrals</em>. McGraw-Hill.</li>
+                <li><strong>Taylor, J. R.</strong> (2005). <em>Classical Mechanics</em>. University Science Books.</li>
+            </ul>
+        </div>
+    </section>
+
+    <script src="../js/common.js"></script>
+    <script>
+        function openAI(topic, model) {
+            let prompt = "";
+            switch (topic) {
+                case 'action':
+                    prompt = "Explain Hamilton's Principle of Stationary Action. What is the action functional S, and why does setting delta S = 0 reproduce the correct equations of motion for any classical system?";
+                    break;
+                case 'euler-lagrange':
+                    prompt = "Derive the Euler-Lagrange equations from the principle of stationary action using calculus of variations. Why are they coordinate-independent and how do they handle constraints?";
+                    break;
+                case 'feynman':
+                    prompt = "Explain Feynman's path integral formulation of quantum mechanics. How does the sum over all paths exp(iS/hbar) reduce to the classical least-action path in the limit of large action compared to hbar?";
+                    break;
+            }
+            launchAIPrompt(model, prompt);
+        }
+
+        const APP = {
+            visuals: [],
+            observer: null,
+
+            init() {
+                this.setupObserver();
+                this.initVisuals();
+
+                window.addEventListener('theme-changed', () => {
+                    this.visuals.forEach(v => v.updateColors());
+                });
+            },
+
+            setupObserver() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const visual = this.visuals.find(v => v.canvas === entry.target);
+                        if (visual) visual.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.1 });
+            },
+
+            initVisuals() {
+                this.addVisual(new ActionVisual('canvas-action'));
+                this.addVisual(new EulerVisual('canvas-euler'));
+                this.addVisual(new FeynmanVisual('canvas-feynman'));
+            },
+
+            addVisual(visual) {
+                this.visuals.push(visual);
+                this.observer.observe(visual.canvas);
+            }
+        };
+
+        // ── BASE ─────────────────────────────────────────────────────────────
+        class BaseVisual {
+            constructor(id) {
+                this.canvas = document.getElementById(id);
+                this.ctx = this.canvas.getContext('2d');
+                this.isVisible = false;
+                this.updateColors();
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.loop();
+            }
+            updateColors() {
+                this.color = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
+                this.bg = getComputedStyle(document.body).getPropertyValue('--bg-color').trim();
+                this.accent = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+                this.secondary = getComputedStyle(document.body).getPropertyValue('--accent-secondary').trim();
+            }
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width * 2;
+                this.canvas.height = rect.height * 2;
+                this.scale = 2;
+                this.cx = this.canvas.width / 2;
+                this.cy = this.canvas.height / 2;
+            }
+            loop() {
+                if (this.isVisible) this.draw();
+                requestAnimationFrame(() => this.loop());
+            }
+            getResponsiveFontSize() {
+                let size = 13 * this.scale;
+                if (this.canvas.width < 750 * this.scale) size = 11 * this.scale;
+                if (this.canvas.width < 600 * this.scale) size = 9.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) size = 8.5 * this.scale;
+                return size;
+            }
+            draw() { }
+        }
+
+        // ── SECTION 1: Pendulum via Euler-Lagrange ────────────────────────────
+        class ActionVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.theta = 0.7;
+                this.omega = 0.0;
+                this.g = 9.8;
+                this.l = 1.5;
+                this.trail = [];
+
+                const gInput = document.getElementById('input-g1');
+                const lInput = document.getElementById('input-l1');
+
+                gInput.addEventListener('input', (e) => {
+                    this.g = parseFloat(e.target.value);
+                    this.trail = [];
+                    document.getElementById('val-g1').textContent = e.target.value;
+                });
+                lInput.addEventListener('input', (e) => {
+                    this.l = parseFloat(e.target.value);
+                    this.trail = [];
+                    document.getElementById('val-l1').textContent = e.target.value;
+                });
+            }
+
+            draw() {
+                const W = this.canvas.width;
+                const H = this.canvas.height;
+                this.ctx.clearRect(0, 0, W, H);
+
+                // Euler-Lagrange EOM: theta'' = -(g/l)*sin(theta)
+                const dt = 0.016;
+                const alpha = -(this.g / this.l) * Math.sin(this.theta);
+                this.omega += alpha * dt;
+                this.omega *= 0.9995;
+                this.theta += this.omega * dt;
+
+                // Energies
+                const KE = 0.5 * Math.pow(this.l * this.omega, 2);
+                const PE = this.g * this.l * (1 - Math.cos(this.theta));
+                const S_approx = (KE - PE).toFixed(2); // L = T - V instantaneous
+
+                // Pendulum geometry
+                const pivotY = H * 0.42;
+                const maxLen = Math.min(W * 0.44, H * 0.48);
+                const len = maxLen * (this.l / 2.5);
+                const bobX = this.cx + Math.sin(this.theta) * len;
+                const bobY = pivotY + Math.cos(this.theta) * len;
+
+                // Trail
+                this.trail.push({ x: bobX, y: bobY });
+                if (this.trail.length > 180) this.trail.shift();
+
+                // ── Dashboard bar ──────────────────────────────────────────
+                const fs = this.getResponsiveFontSize();
+                this.ctx.font = `700 ${fs}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `L = T−V | KE = ${KE.toFixed(2)} J | PE = ${PE.toFixed(2)} J | L = ${S_approx}`,
+                    this.cx, 28 * this.scale
+                );
+
+                // Pivot label
+                this.ctx.font = `${9 * this.scale}px 'JetBrains Mono', monospace`;
+                this.ctx.globalAlpha = 0.45;
+                this.ctx.fillText('δS = 0  (stationary action)', this.cx, 50 * this.scale);
+                this.ctx.globalAlpha = 1.0;
+
+                // ── Faint trail ───────────────────────────────────────────
+                if (this.trail.length > 2) {
+                    this.ctx.strokeStyle = this.accent;
+                    this.ctx.lineWidth = 1.5 * this.scale;
+                    this.ctx.globalAlpha = 0.25;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.trail[0].x, this.trail[0].y);
+                    for (let i = 1; i < this.trail.length; i++) {
+                        this.ctx.lineTo(this.trail[i].x, this.trail[i].y);
+                    }
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+                }
+
+                // ── String ────────────────────────────────────────────────
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.cx, pivotY);
+                this.ctx.lineTo(bobX, bobY);
+                this.ctx.stroke();
+
+                // ── Pivot ─────────────────────────────────────────────────
+                this.ctx.fillStyle = this.color;
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, pivotY, 4 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // ── Bob ───────────────────────────────────────────────────
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(bobX, bobY, 12 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+        }
+
+        // ── SECTION 2: Path Comparison — Action over varied paths ─────────────
+        class EulerVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.time = 0;
+                this.nPaths = 5;
+
+                const pInput = document.getElementById('input-paths');
+                pInput.addEventListener('input', (e) => {
+                    this.nPaths = parseInt(e.target.value);
+                    document.getElementById('val-paths').textContent = e.target.value;
+                });
+            }
+
+            draw() {
+                const W = this.canvas.width;
+                const H = this.canvas.height;
+                this.ctx.clearRect(0, 0, W, H);
+                this.time += 0.018;
+
+                const fs = this.getResponsiveFontSize();
+                const margin = 60 * this.scale;
+                const x0 = margin;
+                const x1 = W - margin;
+                const y0 = H * 0.3;
+                const y1 = H * 0.75;
+
+                // Draw endpoints
+                this.ctx.fillStyle = this.color;
+                this.ctx.globalAlpha = 0.7;
+                this.ctx.beginPath();
+                this.ctx.arc(x0, y0, 5 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+                this.ctx.beginPath();
+                this.ctx.arc(x1, y1, 5 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+                this.ctx.globalAlpha = 1.0;
+
+                // Endpoint labels
+                this.ctx.font = `${9 * this.scale}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText('q(t₁)', x0, y0 - 10 * this.scale);
+                this.ctx.fillText('q(t₂)', x1, y1 + 18 * this.scale);
+
+                // ── Draw N varied paths ────────────────────────────────────
+                // Classical path = straight-ish sinusoidal; others are perturbed
+                const steps = 80;
+                const classicalIdx = Math.floor(this.nPaths / 2);
+
+                for (let pi = 0; pi < this.nPaths; pi++) {
+                    const deviation = (pi - classicalIdx) / (this.nPaths - 1);   // -0.5 to 0.5
+                    const amplitude = deviation * H * 0.28;                       // vertical bulge
+                    // Action proxy: path that deviates most has highest "action cost"
+                    const isClassical = pi === classicalIdx;
+
+                    this.ctx.beginPath();
+                    for (let si = 0; si <= steps; si++) {
+                        const t = si / steps;
+                        const px = x0 + t * (x1 - x0);
+                        // Interpolate between endpoints with a sinusoidal bulge
+                        const py = y0 + t * (y1 - y0) + amplitude * Math.sin(Math.PI * t);
+                        if (si === 0) this.ctx.moveTo(px, py);
+                        else this.ctx.lineTo(px, py);
+                    }
+
+                    if (isClassical) {
+                        this.ctx.strokeStyle = this.accent;
+                        this.ctx.lineWidth = 3 * this.scale;
+                        this.ctx.globalAlpha = 1.0;
+                    } else {
+                        this.ctx.strokeStyle = this.color;
+                        this.ctx.lineWidth = 1.2 * this.scale;
+                        this.ctx.globalAlpha = 0.25 + 0.15 * (1 - Math.abs(deviation) * 2);
+                    }
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+                }
+
+                // Animated particle on classical path
+                const tAnim = (Math.sin(this.time) * 0.5 + 0.5); // 0..1 oscillating
+                const px = x0 + tAnim * (x1 - x0);
+                const py = y0 + tAnim * (y1 - y0); // classical path: no bulge
+
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(px, py, 8 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // ── Dashboard ─────────────────────────────────────────────
+                this.ctx.font = `700 ${fs}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `Paths = ${this.nPaths} | Classical path: δS = 0 (highlighted)`,
+                    this.cx, 28 * this.scale
+                );
+            }
+        }
+
+        // ── SECTION 3: Feynman Path Integral visualization ────────────────────
+        class FeynmanVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.time = 0;
+                this.paths = [];
+                this.hbar = 1.0;   // normalized
+                this.NPATH = 14;
+                this._initPaths();
+            }
+
+            _initPaths() {
+                this.paths = [];
+                for (let i = 0; i < this.NPATH; i++) {
+                    // Random amplitude for path deviation
+                    const amp = (Math.random() - 0.5) * 1.6;
+                    this.paths.push({ amp, phase: Math.random() * Math.PI * 2 });
+                }
+            }
+
+            // Action for a parabolic-ish path parameterized by amplitude
+            _action(amp) {
+                // Simple proxy: S proportional to (path length)^2 - more deviation = more action
+                return 0.5 * amp * amp;
+            }
+
+            draw() {
+                const W = this.canvas.width;
+                const H = this.canvas.height;
+                this.ctx.clearRect(0, 0, W, H);
+                this.time += 0.022;
+
+                const fs = this.getResponsiveFontSize();
+
+                const margin = 55 * this.scale;
+                const x0 = margin;
+                const x1 = W - margin;
+                const midY = H * 0.52;
+                const steps = 60;
+
+                // ── Draw all paths with phase-encoded opacity ──────────────
+                this.paths.forEach((path, idx) => {
+                    const S = this._action(path.amp);
+                    // Phase: e^{iS/hbar} → use cos for real part, map to opacity
+                    const phaseAngle = S / this.hbar + this.time * 0.4 + path.phase;
+                    const cosPhase = Math.cos(phaseAngle);          // real part of e^{iS}
+                    const alpha = 0.12 + 0.45 * (cosPhase * 0.5 + 0.5); // 0.12–0.57
+
+                    const isClassical = Math.abs(path.amp) < 0.15;
+
+                    this.ctx.beginPath();
+                    for (let si = 0; si <= steps; si++) {
+                        const t = si / steps;
+                        const px = x0 + t * (x1 - x0);
+                        const py = midY + path.amp * H * 0.22 * Math.sin(Math.PI * t);
+                        if (si === 0) this.ctx.moveTo(px, py);
+                        else this.ctx.lineTo(px, py);
+                    }
+
+                    if (isClassical) {
+                        this.ctx.strokeStyle = this.accent;
+                        this.ctx.lineWidth = 3 * this.scale;
+                        this.ctx.globalAlpha = 0.95;
+                    } else {
+                        this.ctx.strokeStyle = this.secondary;
+                        this.ctx.lineWidth = 1.5 * this.scale;
+                        this.ctx.globalAlpha = alpha;
+                    }
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+                });
+
+                // Endpoints
+                [{ x: x0, y: midY }, { x: x1, y: midY }].forEach(pt => {
+                    this.ctx.fillStyle = this.color;
+                    this.ctx.globalAlpha = 0.7;
+                    this.ctx.beginPath();
+                    this.ctx.arc(pt.x, pt.y, 5 * this.scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.globalAlpha = 1.0;
+                });
+
+                // Labels
+                this.ctx.font = `${9 * this.scale}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText('A', x0, midY - 10 * this.scale);
+                this.ctx.fillText('B', x1, midY - 10 * this.scale);
+
+                // ── Dashboard ─────────────────────────────────────────────
+                this.ctx.font = `700 ${fs}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `Σ exp(iS/ℏ) over all paths | Classical dominates (ℏ → 0)`,
+                    this.cx, 28 * this.scale
+                );
+            }
+        }
+
+        window.onload = () => APP.init();
+    </script>
+</body>
+
+</html>

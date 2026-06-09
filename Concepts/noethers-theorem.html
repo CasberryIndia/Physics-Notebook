@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noether's Theorem • Physics Notebook</title>
+    <meta name="description" content="Explore Emmy Noether's profound theorem: every continuous symmetry of a physical system's action corresponds to a conserved quantity — linking time-translation to energy, spatial symmetry to momentum, and rotation to angular momentum.">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <style>
+        /* AI Links */
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .sim-controls {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+        }
+    </style>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Theme Init -->
+    <script>
+        const savedTheme = localStorage.getItem('physics-notebook-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body && document.body.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <nav class="sticky">
+        <div class="nav-bg"></div>
+        <a href="../index.html" class="logo">
+            <i data-lucide="arrow-left" width="16"></i>
+            Library
+        </a>
+        <button id="themeBtn">
+            <i data-lucide="moon" width="16"></i> Theme
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="text-reveal-wrapper">
+            <h1 class="hero-title">Noether's<br>Theorem</h1>
+            <p style="margin-top: 2rem; font-size: 1.4rem; max-width: 40ch;">
+                Every continuous symmetry of a physical system's action gives rise to a corresponding conserved quantity.
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION 1: Symmetry → Conservation -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">01. The Core Insight</h3>
+                <h2>Symmetry Breeds Conservation</h2>
+                <p>
+                    Emmy Noether proved in 1918 that for every <strong>continuous symmetry</strong> of a system's action $S = \int L\,dt$, there exists an associated quantity that does not change with time. The symmetry condition is that the Lagrangian changes by at most a total time derivative under an infinitesimal transformation $q_i \to q_i + \epsilon\,\delta q_i$:
+                </p>
+                <div class="math-block">
+                    $$\delta L = \frac{dF}{dt} \;\Longrightarrow\; Q = \sum_i \frac{\partial L}{\partial \dot{q}_i}\,\delta q_i - F = \text{const}$$
+                </div>
+                <p>
+                    The conserved quantity $Q$ is called the <strong>Noether charge</strong>. The three great examples: time-translation invariance gives energy; space-translation invariance gives linear momentum; rotational invariance gives angular momentum.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">The Rules of a Fair Game</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        Imagine a game whose rules are identical no matter when you play (time symmetry) — your score total is always preserved. If the rules are identical wherever you play (space symmetry) — momentum is preserved. If identical in every direction you face (rotational symmetry) — angular momentum is preserved. Noether showed physics is the ultimate fair game.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('symmetry', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('symmetry', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('symmetry', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('symmetry', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('symmetry', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Symmetry Type
+                            <span id="val-sym-label" style="font-weight:700; color: var(--accent);">Time Translation</span>
+                        </label>
+                        <input type="range" id="input-sym" min="0" max="2" step="1" value="0"
+                            aria-label="Select symmetry type (0=time, 1=space, 2=rotation)"
+                            aria-valuetext="Time Translation">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-symmetry" aria-label="Symmetry visualization showing three fundamental conservation laws derived from Noether's theorem"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 2: The Noether Charge Formula -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent-secondary);">02. The Noether Charge</h3>
+                <h2>Canonical Momentum & Conserved Quantities</h2>
+                <p>
+                    The <strong>canonical momentum</strong> conjugate to coordinate $q_i$ is $p_i = \partial L / \partial \dot{q}_i$. Under an infinitesimal symmetry transformation $\delta q_i$, the Noether charge is:
+                </p>
+                <div class="math-block">
+                    $$Q = \sum_i p_i\,\delta q_i - F, \qquad \frac{dQ}{dt} = 0$$
+                </div>
+                <p>
+                    For <strong>time translation</strong> ($t \to t + \epsilon$): $\delta q_i = \dot{q}_i$, $F = L$, giving $Q = \sum_i p_i \dot{q}_i - L = H$ — the Hamiltonian (total energy). For <strong>spatial translation</strong>: $\delta x = 1$, $F = 0$, giving $Q = p_x$ — linear momentum. For <strong>rotation</strong> about z: $\delta x = -y$, $\delta y = x$, giving $Q = xp_y - yp_x = L_z$ — angular momentum.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Key Insight</span>
+                    <h4 style="margin-bottom:0.5rem;">Beyond Classical Mechanics</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        In quantum field theory, every internal symmetry (e.g., U(1) gauge invariance of electromagnetism) produces a conserved Noether current. Electric charge conservation follows from U(1) symmetry; colour charge from SU(3) symmetry of QCD. Noether's theorem is the invisible scaffolding of the entire Standard Model.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('charge', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('charge', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('charge', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('charge', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('charge', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Mass ratio (m₂/m₁) <span id="val-mass">1.0</span></label>
+                        <input type="range" id="input-mass" min="0.2" max="4.0" step="0.1" value="1.0"
+                            aria-label="Mass ratio of the two orbiting bodies"
+                            aria-valuetext="1.0">
+                    </div>
+                    <div class="slider-group">
+                        <label>Orbit eccentricity <span id="val-ecc">0.0</span></label>
+                        <input type="range" id="input-ecc" min="0.0" max="0.7" step="0.05" value="0.0"
+                            aria-label="Orbital eccentricity (0 = circle)"
+                            aria-valuetext="0.0">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-angular" aria-label="Two-body orbital simulation demonstrating conservation of angular momentum via Noether's rotational symmetry"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 3: Symmetry Breaking & Scope -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--text-muted);">03. Symmetry Breaking</h3>
+                <h2>When Symmetry is Lost</h2>
+                <p>
+                    Noether's theorem is a two-way street: <strong>if a symmetry is broken, the corresponding quantity is no longer conserved</strong>. In an expanding universe, time-translation symmetry is broken — energy is not globally conserved in cosmology. A crystal breaks continuous spatial symmetry, and momentum is only conserved modulo the reciprocal lattice vector (crystal momentum).
+                </p>
+                <div class="math-block">
+                    $$\frac{dQ}{dt} = -\frac{\partial L}{\partial \epsilon}\bigg|_{\epsilon=0}$$
+                </div>
+                <p>
+                    The right-hand side is zero if and only if the action is invariant. When an external field breaks the symmetry (e.g., gravity breaking spatial translation vertically), the rate of change of $Q$ equals the applied "force" — recovering familiar equations like $dp/dt = F$.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Scientific Milestone</span>
+                    <h4 style="margin-bottom:0.5rem;">Emmy Noether (1882–1935)</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        Noether developed this theorem at Göttingen in 1918 at the invitation of David Hilbert and Felix Klein, who needed a resolution to the puzzle of energy conservation in Einstein's General Relativity. Einstein called her work "the most significant creative mathematical genius thus far produced." She proved two theorems — the first (Noether's First Theorem) is the one we explore here.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('breaking', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('breaking', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('breaking', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('breaking', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('breaking', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-breaking" aria-label="Visualization showing how symmetry breaking disrupts conservation — a particle in a periodic versus asymmetric potential"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- REFERENCES -->
+    <section class="references">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h3>Academic References</h3>
+            <ul>
+                <li><strong>Noether, E.</strong> (1918). <em>Invariante Variationsprobleme</em>, Nachrichten von der Gesellschaft der Wissenschaften zu Göttingen, 235–257. (English translation by M. A. Tavel, 1971.)</li>
+                <li><strong>Goldstein, H., Poole, C., & Safko, J.</strong> (2001). <em>Classical Mechanics</em>, 3rd Edition. Pearson.</li>
+                <li><strong>Neuenschwander, D. E.</strong> (2011). <em>Emmy Noether's Wonderful Theorem</em>. Johns Hopkins University Press.</li>
+                <li><strong>Landau, L. D., & Lifshitz, E. M.</strong> (1976). <em>Mechanics</em>, Vol. 1 of <em>Course of Theoretical Physics</em>, 3rd Edition. Butterworth-Heinemann.</li>
+            </ul>
+        </div>
+    </section>
+
+    <script src="../js/common.js"></script>
+    <script>
+        function openAI(topic, model) {
+            let prompt = "";
+            switch (topic) {
+                case 'symmetry':
+                    prompt = "Explain Noether's theorem intuitively and mathematically. How does every continuous symmetry of a physical system's action give rise to a conserved quantity? Give the three canonical examples: time translation → energy, spatial translation → momentum, rotation → angular momentum.";
+                    break;
+                case 'charge':
+                    prompt = "Derive the Noether charge formula Q = Σ p_i δq_i − F from first principles using the Euler-Lagrange equations. Show explicitly how time-translation symmetry yields the Hamiltonian (energy) and how rotational symmetry yields angular momentum.";
+                    break;
+                case 'breaking':
+                    prompt = "Explain what happens to conservation laws when a symmetry is broken in Noether's theorem. Give examples from cosmology (energy conservation in an expanding universe), condensed matter (crystal momentum), and particle physics (spontaneous symmetry breaking in the Higgs mechanism).";
+                    break;
+            }
+            launchAIPrompt(model, prompt);
+        }
+
+        const APP = {
+            visuals: [],
+            observer: null,
+
+            init() {
+                this.setupObserver();
+                this.initVisuals();
+
+                window.addEventListener('theme-changed', () => {
+                    this.visuals.forEach(v => v.updateColors());
+                });
+            },
+
+            setupObserver() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const visual = this.visuals.find(v => v.canvas === entry.target);
+                        if (visual) visual.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.1 });
+            },
+
+            initVisuals() {
+                this.addVisual(new SymmetryVisual('canvas-symmetry'));
+                this.addVisual(new AngularMomentumVisual('canvas-angular'));
+                this.addVisual(new SymmetryBreakingVisual('canvas-breaking'));
+            },
+
+            addVisual(visual) {
+                this.visuals.push(visual);
+                this.observer.observe(visual.canvas);
+            }
+        };
+
+        // ── BASE ─────────────────────────────────────────────────────────────
+        class BaseVisual {
+            constructor(id) {
+                this.canvas = document.getElementById(id);
+                this.ctx = this.canvas.getContext('2d');
+                this.isVisible = false;
+                this.updateColors();
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.loop();
+            }
+            updateColors() {
+                this.color = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
+                this.bg = getComputedStyle(document.body).getPropertyValue('--bg-color').trim();
+                this.accent = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+                this.secondary = getComputedStyle(document.body).getPropertyValue('--accent-secondary').trim();
+            }
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width * 2;
+                this.canvas.height = rect.height * 2;
+                this.scale = 2;
+                this.cx = this.canvas.width / 2;
+                this.cy = this.canvas.height / 2;
+            }
+            loop() {
+                if (this.isVisible) this.draw();
+                requestAnimationFrame(() => this.loop());
+            }
+            getResponsiveFontSize() {
+                let size = 13 * this.scale;
+                if (this.canvas.width < 750 * this.scale) size = 11 * this.scale;
+                if (this.canvas.width < 600 * this.scale) size = 9.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) size = 8.5 * this.scale;
+                return size;
+            }
+            draw() { }
+        }
+
+        // ── SECTION 1: Symmetry → Conservation map ────────────────────────────
+        class SymmetryVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.time = 0;
+                this.symType = 0; // 0=time, 1=space, 2=rotation
+                this.phase = 0;
+
+                const symLabels = ['Time Translation', 'Space Translation', 'Rotation'];
+                const input = document.getElementById('input-sym');
+                const label = document.getElementById('val-sym-label');
+                if (input) {
+                    input.addEventListener('input', (e) => {
+                        this.symType = parseInt(e.target.value);
+                        this.time = 0;
+                        this.phase = 0;
+                        label.textContent = symLabels[this.symType];
+                        input.setAttribute('aria-valuetext', symLabels[this.symType]);
+                    });
+                }
+            }
+
+            draw() {
+                const W = this.canvas.width;
+                const H = this.canvas.height;
+                this.ctx.clearRect(0, 0, W, H);
+                this.time += 0.02;
+
+                const fs = this.getResponsiveFontSize();
+                const trackY = H * 0.5;
+                const margin = 60 * this.scale;
+
+                // ── Dashboard bar ─────────────────────────────────────────────
+                this.ctx.font = `700 ${fs}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+
+                const labels = [
+                    'Time Symmetry → E conserved',
+                    'Space Symmetry → p conserved',
+                    'Rotational Symmetry → L conserved'
+                ];
+                const conserved = [
+                    `E = ${(5.0).toFixed(2)} J  (constant)`,
+                    `p = ${(2.4).toFixed(2)} kg·m/s  (constant)`,
+                    `L = ${(3.1).toFixed(2)} kg·m²/s  (constant)`
+                ];
+                this.ctx.fillText(labels[this.symType], this.cx, 28 * this.scale);
+                this.ctx.font = `${9 * this.scale}px 'JetBrains Mono', monospace`;
+                this.ctx.globalAlpha = 0.5;
+                this.ctx.fillText(conserved[this.symType], this.cx, 50 * this.scale);
+                this.ctx.globalAlpha = 1.0;
+
+                if (this.symType === 0) {
+                    // Time translation: pendulum — energy oscillates KE↔PE but total is flat
+                    this.phase += 0.035;
+                    const theta = 0.65 * Math.sin(this.phase);
+                    const pivotX = this.cx;
+                    const pivotY = H * 0.30;
+                    const len = Math.min(W * 0.22, H * 0.38);
+                    const bobX = pivotX + Math.sin(theta) * len;
+                    const bobY = pivotY + Math.cos(theta) * len;
+
+                    // Energy bar chart
+                    const barW = 18 * this.scale;
+                    const barMaxH = H * 0.22;
+                    const barBaseY = H * 0.88;
+                    const ke = Math.cos(theta) * Math.cos(theta);
+                    const pe = 1 - ke;
+
+                    // KE bar
+                    this.ctx.fillStyle = this.accent;
+                    this.ctx.globalAlpha = 0.85;
+                    this.ctx.fillRect(W * 0.7 - barW, barBaseY - ke * barMaxH, barW, ke * barMaxH);
+                    // PE bar
+                    this.ctx.fillStyle = this.secondary;
+                    this.ctx.fillRect(W * 0.7 + 4 * this.scale, barBaseY - pe * barMaxH, barW, pe * barMaxH);
+                    this.ctx.globalAlpha = 1.0;
+
+                    // Total energy line
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = 1.5 * this.scale;
+                    this.ctx.globalAlpha = 0.4;
+                    this.ctx.setLineDash([4 * this.scale, 4 * this.scale]);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(W * 0.65, barBaseY - barMaxH);
+                    this.ctx.lineTo(W * 0.78, barBaseY - barMaxH);
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+                    this.ctx.globalAlpha = 1.0;
+
+                    // Bar labels
+                    this.ctx.font = `${8 * this.scale}px 'JetBrains Mono', monospace`;
+                    this.ctx.fillStyle = this.color;
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText('KE', W * 0.7 - barW / 2, barBaseY + 12 * this.scale);
+                    this.ctx.fillText('PE', W * 0.7 + 4 * this.scale + barW / 2, barBaseY + 12 * this.scale);
+                    this.ctx.fillText('E tot', W * 0.715, barBaseY - barMaxH - 6 * this.scale);
+
+                    // Pendulum
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(pivotX, pivotY);
+                    this.ctx.lineTo(bobX, bobY);
+                    this.ctx.stroke();
+
+                    this.ctx.fillStyle = this.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(pivotX, pivotY, 4 * this.scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                    this.ctx.fillStyle = this.accent;
+                    this.ctx.beginPath();
+                    this.ctx.arc(bobX, bobY, 11 * this.scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                } else if (this.symType === 1) {
+                    // Space translation: particle gliding horizontally — momentum unchanged
+                    const speed = 2.4;
+                    const px = ((this.time * speed * 40 * this.scale) % (W + 40 * this.scale)) - 20 * this.scale;
+                    const py = trackY;
+
+                    // Track
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = 1.5 * this.scale;
+                    this.ctx.globalAlpha = 0.15;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(margin, py);
+                    this.ctx.lineTo(W - margin, py);
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+
+                    // Momentum arrow
+                    const arrowLen = 55 * this.scale;
+                    this.ctx.strokeStyle = this.secondary;
+                    this.ctx.fillStyle = this.secondary;
+                    this.ctx.lineWidth = 2.5 * this.scale;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(px + 14 * this.scale, py);
+                    this.ctx.lineTo(px + 14 * this.scale + arrowLen, py);
+                    this.ctx.stroke();
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(px + 14 * this.scale + arrowLen, py);
+                    this.ctx.lineTo(px + 14 * this.scale + arrowLen - 8 * this.scale, py - 6 * this.scale);
+                    this.ctx.lineTo(px + 14 * this.scale + arrowLen - 8 * this.scale, py + 6 * this.scale);
+                    this.ctx.fill();
+
+                    // Particle
+                    this.ctx.fillStyle = this.accent;
+                    this.ctx.beginPath();
+                    this.ctx.arc(px, py, 12 * this.scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                    // p label
+                    this.ctx.font = `700 ${9 * this.scale}px 'JetBrains Mono', monospace`;
+                    this.ctx.fillStyle = this.secondary;
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText('p →', px + 14 * this.scale + arrowLen / 2, py - 12 * this.scale);
+
+                    // Reference tick marks (space translation markers)
+                    const tickStep = 80 * this.scale;
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = 1 * this.scale;
+                    this.ctx.globalAlpha = 0.2;
+                    for (let tx = margin; tx < W - margin; tx += tickStep) {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(tx, py - 8 * this.scale);
+                        this.ctx.lineTo(tx, py + 8 * this.scale);
+                        this.ctx.stroke();
+                    }
+                    this.ctx.globalAlpha = 1.0;
+
+                } else {
+                    // Rotation: planet orbiting — angular momentum conserved
+                    this.phase += 0.025;
+                    const cx = this.cx;
+                    const cy = H * 0.55;
+                    const rx = W * 0.28;
+                    const ry = H * 0.22;
+                    const px = cx + Math.cos(this.phase) * rx;
+                    const py = cy + Math.sin(this.phase) * ry;
+
+                    // Orbit ellipse
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = 1.2 * this.scale;
+                    this.ctx.globalAlpha = 0.15;
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+
+                    // Angular momentum vector arrow (perpendicular to radius, at bob)
+                    const radAngle = Math.atan2(py - cy, px - cx);
+                    const Langle = radAngle - Math.PI / 2;
+                    const Llen = 45 * this.scale;
+                    this.ctx.strokeStyle = this.secondary;
+                    this.ctx.fillStyle = this.secondary;
+                    this.ctx.lineWidth = 2.5 * this.scale;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(px, py);
+                    this.ctx.lineTo(px + Math.cos(Langle) * Llen, py + Math.sin(Langle) * Llen);
+                    this.ctx.stroke();
+                    this.ctx.beginPath();
+                    const tip = { x: px + Math.cos(Langle) * Llen, y: py + Math.sin(Langle) * Llen };
+                    this.ctx.moveTo(tip.x, tip.y);
+                    this.ctx.lineTo(tip.x - Math.cos(Langle - 0.4) * 8 * this.scale, tip.y - Math.sin(Langle - 0.4) * 8 * this.scale);
+                    this.ctx.lineTo(tip.x - Math.cos(Langle + 0.4) * 8 * this.scale, tip.y - Math.sin(Langle + 0.4) * 8 * this.scale);
+                    this.ctx.fill();
+
+                    // Radius line
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = 1.2 * this.scale;
+                    this.ctx.globalAlpha = 0.3;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(cx, cy);
+                    this.ctx.lineTo(px, py);
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+
+                    // Central mass
+                    this.ctx.fillStyle = this.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(cx, cy, 10 * this.scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                    // Orbiting body
+                    this.ctx.fillStyle = this.accent;
+                    this.ctx.beginPath();
+                    this.ctx.arc(px, py, 8 * this.scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                    // v label
+                    this.ctx.font = `700 ${9 * this.scale}px 'JetBrains Mono', monospace`;
+                    this.ctx.fillStyle = this.secondary;
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText('v', tip.x + 12 * this.scale, tip.y);
+                }
+            }
+        }
+
+        // ── SECTION 2: Angular Momentum Conservation (Two-Body Orbit) ─────────
+        class AngularMomentumVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.time = 0;
+                this.massRatio = 1.0;
+                this.eccentricity = 0.0;
+                this.trail1 = [];
+                this.trail2 = [];
+
+                const massInput = document.getElementById('input-mass');
+                const massVal = document.getElementById('val-mass');
+                const eccInput = document.getElementById('input-ecc');
+                const eccVal = document.getElementById('val-ecc');
+
+                if (massInput) {
+                    massInput.addEventListener('input', (e) => {
+                        this.massRatio = parseFloat(e.target.value);
+                        this.trail1 = [];
+                        this.trail2 = [];
+                        massVal.textContent = parseFloat(e.target.value).toFixed(1);
+                        e.target.setAttribute('aria-valuetext', parseFloat(e.target.value).toFixed(1));
+                    });
+                }
+                if (eccInput) {
+                    eccInput.addEventListener('input', (e) => {
+                        this.eccentricity = parseFloat(e.target.value);
+                        this.trail1 = [];
+                        this.trail2 = [];
+                        eccVal.textContent = parseFloat(e.target.value).toFixed(2);
+                        e.target.setAttribute('aria-valuetext', parseFloat(e.target.value).toFixed(2));
+                    });
+                }
+            }
+
+            draw() {
+                const W = this.canvas.width;
+                const H = this.canvas.height;
+                this.ctx.clearRect(0, 0, W, H);
+                this.time += 0.025;
+
+                const fs = this.getResponsiveFontSize();
+
+                // Center of mass frame
+                const cx = this.cx;
+                const cy = H * 0.54;
+
+                // Elliptical orbit: parameterized by true anomaly approximation
+                const a = Math.min(W, H) * 0.26;  // semi-major axis
+                const e = this.eccentricity;
+                const b = a * Math.sqrt(1 - e * e); // semi-minor axis
+
+                // Kepler's second law proxy: angular speed varies with distance
+                // r = a(1 - e²)/(1 + e·cosθ)
+                const r_e = (theta) => (a * (1 - e * e)) / (1 + e * Math.cos(theta));
+                const theta1 = this.time;
+
+                const r1 = r_e(theta1);
+                const x1 = cx + r1 * Math.cos(theta1) * (1 / (1 + this.massRatio));
+                const y1 = cy + r1 * Math.sin(theta1) * (1 / (1 + this.massRatio));
+                const x2 = cx - r1 * Math.cos(theta1) * (this.massRatio / (1 + this.massRatio));
+                const y2 = cy - r1 * Math.sin(theta1) * (this.massRatio / (1 + this.massRatio));
+
+                // Trails
+                this.trail1.push({ x: x1, y: y1 });
+                this.trail2.push({ x: x2, y: y2 });
+                if (this.trail1.length > 120) this.trail1.shift();
+                if (this.trail2.length > 120) this.trail2.shift();
+
+                // Draw trails
+                [[this.trail1, this.accent], [this.trail2, this.secondary]].forEach(([trail, color]) => {
+                    if (trail.length < 2) return;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(trail[0].x, trail[0].y);
+                    for (let i = 1; i < trail.length; i++) this.ctx.lineTo(trail[i].x, trail[i].y);
+                    this.ctx.strokeStyle = color;
+                    this.ctx.lineWidth = 1.2 * this.scale;
+                    this.ctx.globalAlpha = 0.25;
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+                });
+
+                // Radius lines from CoM
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 1 * this.scale;
+                this.ctx.globalAlpha = 0.2;
+                this.ctx.beginPath(); this.ctx.moveTo(cx, cy); this.ctx.lineTo(x1, y1); this.ctx.stroke();
+                this.ctx.beginPath(); this.ctx.moveTo(cx, cy); this.ctx.lineTo(x2, y2); this.ctx.stroke();
+                this.ctx.globalAlpha = 1.0;
+
+                // CoM
+                this.ctx.fillStyle = this.color;
+                this.ctx.beginPath();
+                this.ctx.arc(cx, cy, 5 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Bodies
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(x1, y1, 9 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                this.ctx.fillStyle = this.secondary;
+                this.ctx.beginPath();
+                this.ctx.arc(x2, y2, 9 * this.scale * Math.cbrt(this.massRatio), 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Angular momentum L = r × v (cross product, z-component) — stays constant
+                const Lz = r1 * Math.sqrt(1 - e * e) * a; // proportional to actual L_z
+                const LzNorm = (Lz / (a * a)).toFixed(3);
+
+                // ── Dashboard ────────────────────────────────────────────────
+                this.ctx.font = `700 ${fs}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `L_z = ${LzNorm} (const) | e = ${e.toFixed(2)} | m₂/m₁ = ${this.massRatio.toFixed(1)}`,
+                    this.cx, 28 * this.scale
+                );
+                this.ctx.font = `${9 * this.scale}px 'JetBrains Mono', monospace`;
+                this.ctx.globalAlpha = 0.45;
+                this.ctx.fillText('Rotational symmetry → L conserved (Noether)', this.cx, 50 * this.scale);
+                this.ctx.globalAlpha = 1.0;
+            }
+        }
+
+        // ── SECTION 3: Symmetry Breaking visualization ────────────────────────
+        class SymmetryBreakingVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.time = 0;
+                this.particles = [];
+                // Init two particles — one in symmetric potential, one in broken
+                this._initParticles();
+            }
+
+            _initParticles() {
+                this.particles = [
+                    { x: 0.0, vx: 0.8, phase: 0, sym: true },   // symmetric
+                    { x: 0.0, vx: 0.6, phase: 0, sym: false }    // broken
+                ];
+            }
+
+            // Symmetric: V(x) = cos(x)  — all troughs identical
+            _vSym(x) { return Math.cos(x); }
+            _fSym(x) { return Math.sin(x); }   // F = -dV/dx
+
+            // Broken: V(x) = cos(x) + 0.5*sin(x/2)  — one side is deeper
+            _vBroken(x) { return Math.cos(x) + 0.45 * Math.sin(x / 2.0); }
+            _fBroken(x) { return Math.sin(x) - 0.45 * 0.5 * Math.cos(x / 2.0); }
+
+            draw() {
+                const W = this.canvas.width;
+                const H = this.canvas.height;
+                this.ctx.clearRect(0, 0, W, H);
+                this.time += 0.016;
+
+                const fs = this.getResponsiveFontSize();
+
+                // Update particles
+                const dt = 0.03;
+                this.particles.forEach(p => {
+                    const f = p.sym ? this._fSym(p.x) : this._fBroken(p.x);
+                    p.vx += f * dt;
+                    p.vx *= 0.999;
+                    p.x += p.vx * dt;
+                    // Wrap
+                    if (p.x > Math.PI * 3) { p.x = -Math.PI * 3; }
+                    if (p.x < -Math.PI * 3) { p.x = Math.PI * 3; }
+                });
+
+                // Draw two potential curves side by side
+                const halfW = W / 2 - 20 * this.scale;
+                const plotH = H * 0.38;
+                const plotMidY = H * 0.62;
+                const xMin = -Math.PI * 2.5;
+                const xMax = Math.PI * 2.5;
+                const xRange = xMax - xMin;
+
+                // Helper: map physics x → canvas coords
+                const toCanvasX = (px, offsetX) => offsetX + ((px - xMin) / xRange) * halfW;
+                const toCanvasY = (vy, ampScale) => plotMidY - vy * ampScale;
+
+                const ampScale = plotH * 0.35;
+                const offsets = [20 * this.scale, W / 2 + 20 * this.scale];
+
+                ['sym', 'broken'].forEach((mode, mi) => {
+                    const offsetX = offsets[mi];
+                    const vFn = mode === 'sym' ? this._vSym.bind(this) : this._vBroken.bind(this);
+                    const color = mode === 'sym' ? this.accent : this.secondary;
+
+                    // Potential curve
+                    this.ctx.beginPath();
+                    for (let i = 0; i <= 200; i++) {
+                        const px = xMin + (i / 200) * xRange;
+                        const cx2 = toCanvasX(px, offsetX);
+                        const cy2 = toCanvasY(vFn(px), ampScale);
+                        if (i === 0) this.ctx.moveTo(cx2, cy2);
+                        else this.ctx.lineTo(cx2, cy2);
+                    }
+                    this.ctx.strokeStyle = color;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    this.ctx.globalAlpha = 0.7;
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+
+                    // Particle on the curve
+                    const p = this.particles[mi];
+                    const pcx = toCanvasX(p.x, offsetX);
+                    const pcy = toCanvasY(vFn(p.x), ampScale) - 9 * this.scale;
+                    this.ctx.fillStyle = color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(pcx, pcy, 8 * this.scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                    // Label
+                    this.ctx.font = `700 ${9 * this.scale}px 'JetBrains Mono', monospace`;
+                    this.ctx.fillStyle = color;
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText(
+                        mode === 'sym' ? 'Symmetric V(x)' : 'Broken V(x)',
+                        offsetX + halfW / 2,
+                        H * 0.86
+                    );
+                    const momLabel = mode === 'sym'
+                        ? `p = ${(p.vx).toFixed(2)} (bounded)`
+                        : `p = ${(p.vx).toFixed(2)} (drifts)`;
+                    this.ctx.font = `${8 * this.scale}px 'JetBrains Mono', monospace`;
+                    this.ctx.globalAlpha = 0.6;
+                    this.ctx.fillText(momLabel, offsetX + halfW / 2, H * 0.92);
+                    this.ctx.globalAlpha = 1.0;
+                });
+
+                // Divider line
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 1 * this.scale;
+                this.ctx.globalAlpha = 0.15;
+                this.ctx.beginPath();
+                this.ctx.moveTo(W / 2, H * 0.12);
+                this.ctx.lineTo(W / 2, H * 0.95);
+                this.ctx.stroke();
+                this.ctx.globalAlpha = 1.0;
+
+                // ── Dashboard ─────────────────────────────────────────────
+                this.ctx.font = `700 ${fs}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    'Symmetry present → p conserved | Symmetry broken → p not conserved',
+                    this.cx, 28 * this.scale
+                );
+            }
+        }
+
+        window.onload = () => APP.init();
+    </script>
+</body>
+
+</html>

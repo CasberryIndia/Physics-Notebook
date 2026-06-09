@@ -12,8 +12,8 @@ You can add the missing concept and domains to this list. So that anyone can use
 - [x] Rotational Dynamics
 - [x] Oscillations and Harmonic Motion
 - [x] Lagrangian & Hamiltonian Mechanics
-- [ ] Principle of Least Action
-- [ ] Noether's Theorem
+- [x] Principle of Least Action
+- [x] Noether's Theorem
 - [ ] Chaos and Nonlinear Dynamics
 
 ## Waves & Optics

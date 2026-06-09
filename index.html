@@ -59,6 +59,10 @@
                 <button class="filter-chip" data-filter="Waves">Waves & Optics</button>
                 <button class="filter-chip" data-filter="Electromagnetism">Electromagnetism</button>
                 <button class="filter-chip" data-filter="Quantum">Quantum</button>
+                <button class="filter-chip view-all-domains-btn" id="viewAllDomainsBtn" aria-haspopup="dialog" aria-expanded="false">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:middle;margin-right:5px;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    View All Domains
+                </button>
             </div>
         </div>
     </div>
@@ -71,6 +75,262 @@
     <footer class="main-footer">
         <p>Want to add a concept? <a href="contribute.html">Contribute</a></p>
     </footer>
+
+    <!-- ================================================================
+         DOMAINS OVERLAY
+    ================================================================ -->
+    <div id="domainsOverlay" class="domains-overlay" role="dialog" aria-modal="true" aria-label="All Physics Domains" hidden>
+        <div class="domains-overlay-backdrop" id="domainsOverlayBackdrop"></div>
+        <div class="domains-overlay-panel">
+
+            <div class="domains-overlay-header">
+                <div>
+                    <h2 class="domains-overlay-title">All Physics Domains</h2>
+                    <p class="domains-overlay-subtitle">Browse every domain and concept — live pages are linked, upcoming ones are in the roadmap.</p>
+                </div>
+                <button class="domains-close-btn" id="domainsCloseBtn" aria-label="Close domains panel">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
+            <div class="domains-overlay-body">
+
+                <!-- DOMAIN: Mechanics (Classical) -->
+                <section class="domain-section" aria-labelledby="domain-mechanics">
+                    <div class="domain-section-header">
+                        <i data-lucide="settings-2" class="domain-icon" width="22" height="22" aria-hidden="true"></i>
+                        <div>
+                            <h3 id="domain-mechanics" class="domain-name">Mechanics <span class="domain-sub">(Classical)</span></h3>
+                            <p class="domain-desc">Motion, forces, energy, and the laws governing macroscopic physical systems.</p>
+                        </div>
+                        <span class="domain-badge domain-badge--active">Parent Domain</span>
+                    </div>
+                    <ul class="concept-list">
+                        <li class="concept-item concept-item--live"><a href="Concepts/newtons-laws-of-motion.html">Newton's Laws of Motion</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/conservation-of-energy.html">Conservation of Energy</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/conservation-of-momentum.html">Conservation of Momentum &amp; Angular Momentum</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/work-energy-principle.html">Work-Energy Principle</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/rotational-dynamics.html">Rotational Dynamics</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/simple-oscillations.html">Oscillations and Harmonic Motion</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/lagrangian-hamiltonian-mechanics.html">Lagrangian &amp; Hamiltonian Mechanics</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/principle-of-least-action.html">Principle of Least Action</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/noethers-theorem.html">Noether's Theorem</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--soon"><span>Chaos and Nonlinear Dynamics</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                    </ul>
+                </section>
+
+                <div class="domain-divider" role="separator"></div>
+
+                <!-- DOMAIN: Waves & Optics -->
+                <section class="domain-section" aria-labelledby="domain-waves">
+                    <div class="domain-section-header">
+                        <i data-lucide="waves" class="domain-icon" width="22" height="22" aria-hidden="true"></i>
+                        <div>
+                            <h3 id="domain-waves" class="domain-name">Waves &amp; Optics</h3>
+                            <p class="domain-desc">Wave propagation, interference, diffraction, and the nature of light.</p>
+                        </div>
+                        <span class="domain-badge domain-badge--active">Parent Domain</span>
+                    </div>
+                    <ul class="concept-list">
+                        <li class="concept-item concept-item--live"><a href="Concepts/wave-interference.html">Wave Interference</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/gravitational-waves.html">Gravitational Waves</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--soon"><span>Wave Equation and Superposition Principle</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Diffraction</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Polarization of Waves</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Geometrical Optics</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Physical Optics</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Lasers and Coherence</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Optical Instruments</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                    </ul>
+                </section>
+
+                <div class="domain-divider" role="separator"></div>
+
+                <!-- DOMAIN: Electromagnetism -->
+                <section class="domain-section" aria-labelledby="domain-em">
+                    <div class="domain-section-header">
+                        <i data-lucide="zap" class="domain-icon" width="22" height="22" aria-hidden="true"></i>
+                        <div>
+                            <h3 id="domain-em" class="domain-name">Electromagnetism</h3>
+                            <p class="domain-desc">Electric fields, magnetic fields, and Maxwell's unified theory.</p>
+                        </div>
+                        <span class="domain-badge domain-badge--active">Parent Domain</span>
+                    </div>
+                    <ul class="concept-list">
+                        <li class="concept-item concept-item--live"><a href="Concepts/electric-fields.html">Electric Fields</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/magnetic-fields.html">Magnetic Fields</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--soon"><span>Coulomb's Law</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Electric Fields &amp; Potentials</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Gauss's Law</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Biot-Savart Law and Ampère's Law</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Faraday's Law of Induction</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Maxwell's Equations</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Lorentz Force Law</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Electromagnetic Waves</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Electric Circuits</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                    </ul>
+                </section>
+
+                <div class="domain-divider" role="separator"></div>
+
+                <!-- DOMAIN: Thermodynamics & Statistical Mechanics -->
+                <section class="domain-section" aria-labelledby="domain-thermo">
+                    <div class="domain-section-header">
+                        <i data-lucide="flame" class="domain-icon" width="22" height="22" aria-hidden="true"></i>
+                        <div>
+                            <h3 id="domain-thermo" class="domain-name">Thermodynamics <span class="domain-sub">&amp; Statistical Mechanics</span></h3>
+                            <p class="domain-desc">Heat, entropy, thermodynamic laws, and statistical description of matter.</p>
+                        </div>
+                        <span class="domain-badge domain-badge--new">New Domain</span>
+                    </div>
+                    <ul class="concept-list">
+                        <li class="concept-item concept-item--soon"><span>Zeroth Law (Thermal Equilibrium)</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>First Law (Conservation of Energy)</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Second Law (Entropy Increase)</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Third Law (Absolute Entropy)</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Entropy (Boltzmann's Equation)</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Thermodynamic Potentials</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Kinetic Theory of Gases</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Statistical Ensembles</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Phase Transitions</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Heat Engines &amp; Carnot Cycle</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                    </ul>
+                </section>
+
+                <div class="domain-divider" role="separator"></div>
+
+                <!-- DOMAIN: Quantum Mechanics -->
+                <section class="domain-section" aria-labelledby="domain-quantum">
+                    <div class="domain-section-header">
+                        <i data-lucide="atom" class="domain-icon" width="22" height="22" aria-hidden="true"></i>
+                        <div>
+                            <h3 id="domain-quantum" class="domain-name">Quantum Mechanics</h3>
+                            <p class="domain-desc">Wave functions, uncertainty, superposition, and the quantum world.</p>
+                        </div>
+                        <span class="domain-badge domain-badge--active">Parent Domain</span>
+                    </div>
+                    <ul class="concept-list">
+                        <li class="concept-item concept-item--live"><a href="Concepts/double-slit-experiment.html">Double Slit Experiment</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--soon"><span>Photoelectric Effect</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Blackbody Radiation</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Bohr Model of Atom</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>de Broglie Waves</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Heisenberg Uncertainty Principle</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Schrödinger Equation</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Pauli Exclusion Principle</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Spin and Angular Momentum</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Quantum Statistics</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Quantum Field Theory</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                    </ul>
+                </section>
+
+                <div class="domain-divider" role="separator"></div>
+
+                <!-- DOMAIN: Relativity -->
+                <section class="domain-section" aria-labelledby="domain-relativity">
+                    <div class="domain-section-header">
+                        <i data-lucide="orbit" class="domain-icon" width="22" height="22" aria-hidden="true"></i>
+                        <div>
+                            <h3 id="domain-relativity" class="domain-name">Relativity</h3>
+                            <p class="domain-desc">Special and general relativity, spacetime curvature, and cosmic phenomena.</p>
+                        </div>
+                        <span class="domain-badge domain-badge--active">Parent Domain</span>
+                    </div>
+                    <ul class="concept-list">
+                        <li class="concept-item concept-item--live"><a href="Concepts/special-relativity.html">Special Relativity</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/gravitational-waves.html">Gravitational Waves</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--soon"><span>General Relativity</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Equivalence Principle</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Lorentz Transformation</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Cosmological Models</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                    </ul>
+                </section>
+
+                <div class="domain-divider" role="separator"></div>
+
+                <!-- DOMAIN: Atomic, Nuclear & Particle Physics -->
+                <section class="domain-section" aria-labelledby="domain-nuclear">
+                    <div class="domain-section-header">
+                        <i data-lucide="circle-dot" class="domain-icon" width="22" height="22" aria-hidden="true"></i>
+                        <div>
+                            <h3 id="domain-nuclear" class="domain-name">Atomic, Nuclear <span class="domain-sub">&amp; Particle Physics</span></h3>
+                            <p class="domain-desc">Sub-atomic structure, nuclear reactions, and the Standard Model of particles.</p>
+                        </div>
+                        <span class="domain-badge domain-badge--new">New Domain</span>
+                    </div>
+                    <ul class="concept-list">
+                        <li class="concept-item concept-item--soon"><span>Atomic Structure</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Radioactivity</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Nuclear Physics</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Elementary Particles</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Standard Model</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                    </ul>
+                </section>
+
+                <div class="domain-divider" role="separator"></div>
+
+                <!-- DOMAIN: Condensed Matter & AMO -->
+                <section class="domain-section" aria-labelledby="domain-condensed">
+                    <div class="domain-section-header">
+                        <i data-lucide="microscope" class="domain-icon" width="22" height="22" aria-hidden="true"></i>
+                        <div>
+                            <h3 id="domain-condensed" class="domain-name">Condensed Matter <span class="domain-sub">&amp; AMO</span></h3>
+                            <p class="domain-desc">Solid-state physics, band theory, superconductivity, and atomic optics.</p>
+                        </div>
+                        <span class="domain-badge domain-badge--new">New Domain</span>
+                    </div>
+                    <ul class="concept-list">
+                        <li class="concept-item concept-item--soon"><span>Crystal Lattices &amp; Bragg Diffraction</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Band Theory of Solids</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Superconductivity</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Semiconductors &amp; Transistors</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Quantum Hall Effect</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                    </ul>
+                </section>
+
+                <div class="domain-divider" role="separator"></div>
+
+                <!-- DOMAIN: Astrophysics & Cosmology -->
+                <section class="domain-section" aria-labelledby="domain-astro">
+                    <div class="domain-section-header">
+                        <i data-lucide="telescope" class="domain-icon" width="22" height="22" aria-hidden="true"></i>
+                        <div>
+                            <h3 id="domain-astro" class="domain-name">Astrophysics <span class="domain-sub">&amp; Cosmology</span></h3>
+                            <p class="domain-desc">Stars, black holes, the Big Bang, and the large-scale structure of the universe.</p>
+                        </div>
+                        <span class="domain-badge domain-badge--new">New Domain</span>
+                    </div>
+                    <ul class="concept-list">
+                        <li class="concept-item concept-item--soon"><span>Stellar Structure &amp; Evolution</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Cosmology (Big Bang, CMB)</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Black Holes &amp; GR</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Dark Matter &amp; Dark Energy</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                    </ul>
+                </section>
+
+                <div class="domain-divider" role="separator"></div>
+
+                <!-- DOMAIN: Cross-Disciplinary & Methods -->
+                <section class="domain-section" aria-labelledby="domain-methods">
+                    <div class="domain-section-header">
+                        <i data-lucide="compass" class="domain-icon" width="22" height="22" aria-hidden="true"></i>
+                        <div>
+                            <h3 id="domain-methods" class="domain-name">Cross-Disciplinary <span class="domain-sub">&amp; Methods</span></h3>
+                            <p class="domain-desc">Mathematical tools, computational methods, and instrumentation spanning all domains.</p>
+                        </div>
+                        <span class="domain-badge domain-badge--new">New Domain</span>
+                    </div>
+                    <ul class="concept-list">
+                        <li class="concept-item concept-item--soon"><span>Statistical &amp; Computational Methods</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Mathematical Tools</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Instrumentation &amp; Measurement</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--soon"><span>Chaos &amp; Complexity</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                    </ul>
+                </section>
+
+            </div><!-- /.domains-overlay-body -->
+        </div><!-- /.domains-overlay-panel -->
+    </div><!-- /#domainsOverlay -->
 
     <!-- Scripts -->
     <script src="js/common.js"></script>
@@ -206,6 +466,22 @@
                 desc: 'Reformulating physics using scalar energy, generalized coordinates, action principles, and phase space flow.',
                 type: 'lagrangian-hamiltonian',
                 href: 'Concepts/lagrangian-hamiltonian-mechanics.html'
+            },
+            {
+                id: 'principle-of-least-action',
+                title: 'Principle of Least Action',
+                domain: 'Mechanics',
+                desc: 'Nature selects the unique path that makes the action stationary — the variational foundation of all modern physics.',
+                type: 'least-action',
+                href: 'Concepts/principle-of-least-action.html'
+            },
+            {
+                id: 'noethers-theorem',
+                title: "Noether's Theorem",
+                domain: 'Mechanics',
+                desc: 'Every continuous symmetry of a physical system yields a conserved quantity — the deep bridge between symmetry and conservation laws.',
+                type: 'noethers-theorem',
+                href: 'Concepts/noethers-theorem.html'
             }
         ];
 
@@ -982,6 +1258,158 @@
             }
         }
 
+        class LeastActionVisual extends BaseVisual {
+            constructor(canvas) {
+                super(canvas);
+                this.time = 0;
+                this.theta = 0.8;
+                this.omega = 0.0;
+                this.trail = [];
+            }
+
+            draw() {
+                if (!this.isVisible) return;
+                this.time += 0.05;
+                this.clear();
+
+                const cx = this.width / 2;
+                const cy = this.height / 2;
+
+                // Simple pendulum via Euler-Lagrange: theta'' = -(g/l)*sin(theta)
+                const alpha = -2.8 * Math.sin(this.theta);
+                this.omega += alpha * 0.016;
+                this.omega *= 0.9996;
+                this.theta += this.omega * 0.016;
+
+                const pivotY = cy * 0.55;
+                const len = Math.min(cx, cy) * 0.72;
+                const bobX = cx + Math.sin(this.theta) * len;
+                const bobY = pivotY + Math.cos(this.theta) * len;
+
+                // Trail
+                this.trail.push({ x: bobX, y: bobY });
+                if (this.trail.length > 120) this.trail.shift();
+
+                // Draw faint action trail
+                if (this.trail.length > 2) {
+                    this.ctx.strokeStyle = this.accent;
+                    this.ctx.lineWidth = 1;
+                    this.ctx.globalAlpha = 0.2;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.trail[0].x, this.trail[0].y);
+                    for (let i = 1; i < this.trail.length; i++) {
+                        this.ctx.lineTo(this.trail[i].x, this.trail[i].y);
+                    }
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+                }
+
+                // String
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 1.5;
+                this.ctx.beginPath();
+                this.ctx.moveTo(cx, pivotY);
+                this.ctx.lineTo(bobX, bobY);
+                this.ctx.stroke();
+
+                // Pivot
+                this.ctx.fillStyle = this.color;
+                this.ctx.beginPath();
+                this.ctx.arc(cx, pivotY, 3, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Bob
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(bobX, bobY, 7, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Delta S label
+                this.ctx.fillStyle = this.color;
+                this.ctx.font = '9px \'JetBrains Mono\', monospace';
+                this.ctx.textAlign = 'center';
+                this.ctx.globalAlpha = 0.5;
+                this.ctx.fillText('\u03B4S = 0', cx, pivotY - 8);
+                this.ctx.globalAlpha = 1.0;
+            }
+        }
+
+        class NoethersTheoremVisual extends BaseVisual {
+            constructor(canvas) {
+                super(canvas);
+                this.time = 0;
+                this.phase = 0;
+                this.trail = [];
+            }
+
+            draw() {
+                if (!this.isVisible) return;
+                this.time += 0.03;
+                this.phase += 0.028;
+                this.clear();
+
+                const cx = this.width / 2;
+                const cy = this.height / 2;
+
+                // Three orbiting nodes around a central point — representing
+                // the three conservation laws from three symmetries
+                const radii = [this.width * 0.28, this.width * 0.22, this.width * 0.16];
+                const speeds = [1.0, -1.5, 2.1];
+                const colors = [this.accent, this.accentSecondary, this.color];
+                const offsets = [0, Math.PI * 2 / 3, Math.PI * 4 / 3];
+
+                // Faint concentric orbit rings
+                radii.forEach((r, i) => {
+                    this.ctx.strokeStyle = colors[i];
+                    this.ctx.lineWidth = 1;
+                    this.ctx.globalAlpha = 0.1;
+                    this.ctx.beginPath();
+                    this.ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    this.ctx.stroke();
+                });
+                this.ctx.globalAlpha = 1.0;
+
+                // Orbiting particles
+                radii.forEach((r, i) => {
+                    const angle = this.phase * speeds[i] + offsets[i];
+                    const px = cx + Math.cos(angle) * r;
+                    const py = cy + Math.sin(angle) * r;
+
+                    // Radius spoke
+                    this.ctx.strokeStyle = colors[i];
+                    this.ctx.lineWidth = 1;
+                    this.ctx.globalAlpha = 0.2;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(cx, cy);
+                    this.ctx.lineTo(px, py);
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+
+                    // Particle
+                    this.ctx.fillStyle = colors[i];
+                    this.ctx.beginPath();
+                    this.ctx.arc(px, py, i === 0 ? 6 : i === 1 ? 5 : 4, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+
+                // Central axis
+                this.ctx.fillStyle = this.color;
+                this.ctx.globalAlpha = 0.8;
+                this.ctx.beginPath();
+                this.ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+                this.ctx.fill();
+                this.ctx.globalAlpha = 1.0;
+
+                // Label
+                this.ctx.fillStyle = this.color;
+                this.ctx.font = '9px \'JetBrains Mono\', monospace';
+                this.ctx.textAlign = 'center';
+                this.ctx.globalAlpha = 0.4;
+                this.ctx.fillText('E · p · L', cx, cy + this.height * 0.38);
+                this.ctx.globalAlpha = 1.0;
+            }
+        }
+
         // ------------------------------------------------------------------
         // APP LOGIC
         // ------------------------------------------------------------------
@@ -1083,6 +1511,8 @@
                             case 'special-relativity': visual = new SpecialRelativityVisual(canvas); break;
                             case 'rotational-dynamics': visual = new RotationalDynamicsVisual(canvas); break;
                             case 'lagrangian-hamiltonian': visual = new LagrangianHamiltonianVisual(canvas); break;
+                            case 'least-action': visual = new LeastActionVisual(canvas); break;
+                            case 'noethers-theorem': visual = new NoethersTheoremVisual(canvas); break;
                             default: visual = new BaseVisual(canvas);
                         }
                         visual.resize();
@@ -1141,9 +1571,63 @@
             }
         };
 
+        // ------------------------------------------------------------------
+        // DOMAINS OVERLAY
+        // ------------------------------------------------------------------
+        const DomainsOverlay = {
+            overlay: null,
+            panel: null,
+            openBtn: null,
+            closeBtn: null,
+            backdrop: null,
+            lastFocus: null,
+
+            init() {
+                this.overlay  = document.getElementById('domainsOverlay');
+                this.panel    = this.overlay.querySelector('.domains-overlay-panel');
+                this.openBtn  = document.getElementById('viewAllDomainsBtn');
+                this.closeBtn = document.getElementById('domainsCloseBtn');
+                this.backdrop = document.getElementById('domainsOverlayBackdrop');
+
+                this.openBtn.addEventListener('click', () => this.open());
+                this.closeBtn.addEventListener('click', () => this.close());
+                this.backdrop.addEventListener('click', () => this.close());
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && !this.overlay.hidden) this.close();
+                });
+            },
+
+            open() {
+                this.lastFocus = document.activeElement;
+                this.overlay.hidden = false;
+                document.body.style.overflow = 'hidden';
+                this.openBtn.setAttribute('aria-expanded', 'true');
+                // Small delay so the panel animates in after display
+                requestAnimationFrame(() => {
+                    this.overlay.classList.add('is-open');
+                    this.closeBtn.focus();
+                });
+            },
+
+            close() {
+                this.overlay.classList.remove('is-open');
+                this.openBtn.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+                // Wait for CSS transition before hiding
+                this.panel.addEventListener('transitionend', () => {
+                    if (!this.overlay.classList.contains('is-open')) {
+                        this.overlay.hidden = true;
+                    }
+                    if (this.lastFocus) this.lastFocus.focus();
+                }, { once: true });
+            }
+        };
+
         window.addEventListener('DOMContentLoaded', () => {
             gsap.from('.library-header', { opacity: 0, y: -20, duration: 1, ease: 'power3.out' });
             App.init();
+            DomainsOverlay.init();
         });
 
     </script>
