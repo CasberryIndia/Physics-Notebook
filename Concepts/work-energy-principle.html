@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work-Energy Principle • Physics Notebook</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <style>
+        /* AI Links */
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Responsive Layout Overrides */
+        .visual-col {
+            height: 65vh; /* Keep height balanced */
+            max-height: 550px;
+            min-height: 380px;
+        }
+
+        /* Mobile specific adjustments to ensure controls are stacked above canvas */
+        @media screen and (max-width: 1024px) {
+            .split-layout {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content-col {
+                order: 1;
+            }
+
+            .visual-col {
+                order: 2;
+                height: 48vh;
+                min-height: 320px;
+                width: 100%;
+                margin-left: 0;
+                margin-bottom: 2rem;
+                border-radius: 12px;
+                border: 1px solid var(--border-color);
+            }
+
+            .sim-controls {
+                margin-top: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        .sim-btn {
+            width: 100%;
+            padding: 12px;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.1s ease;
+        }
+
+        .sim-btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+        }
+
+        .btn-secondary {
+            background: var(--accent-secondary);
+        }
+
+        .btn-dark {
+            background: var(--text-main);
+            color: var(--bg-color);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .radio-option input {
+            cursor: pointer;
+        }
+    </style>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Theme Init -->
+    <script>
+        const savedTheme = localStorage.getItem('physics-notebook-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body && document.body.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <nav class="sticky">
+        <div class="nav-bg"></div>
+        <a href="../index.html" class="logo">
+            <i data-lucide="arrow-left" width="16"></i>
+            Library
+        </a>
+        <button id="themeBtn">
+            <i data-lucide="moon" width="16"></i> Theme
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="text-reveal-wrapper">
+            <h1 class="hero-title">Work-Energy<br>Principle</h1>
+            <p style="margin-top: 2rem; font-size: 1.4rem; max-width: 40ch;">
+                The net work done by all forces acting on an object is exactly equal to the change in its kinetic energy.
+            </p>
+        </div>
+    </section>
+
+    <!-- CHAPTER 1: THE RELATIONSHIP -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">01. The Relationship</h3>
+                <h2>Force & Displacement Area</h2>
+                <p>
+                    Work is defined as force applied over a distance. Mathematically, it is the integral of force with respect to displacement. This is equivalent to the <strong>area under the Force vs. Displacement curve</strong>.
+                </p>
+                <div class="math-block">
+                    $$W_{net} = \int_{x_i}^{x_f} F(x) \, dx = \Delta KE = \frac{1}{2}mv_f^2 - \frac{1}{2}mv_i^2$$
+                </div>
+
+                <!-- ETU CARD -->
+                <div class="etu-card">
+                    <span class="etu-tag">Variable Forces</span>
+                    <h4 style="margin-bottom:0.5rem;">Linear vs. Constant Forces</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        When a force is constant, work is simply $F \cdot d$. However, for a variable force (like compressing a spring, where $F = kx$), the force changes with distance. The Work-Energy principle perfectly accommodates both by calculating the cumulative area under the force profile.
+                    </p>
+                </div>
+
+                <!-- AI LINKS -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('work_displacement', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('work_displacement', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('work_displacement', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('work_displacement', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('work_displacement', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <div class="sim-controls">
+                    <div class="radio-group">
+                        <span class="radio-option">
+                            <input type="radio" id="force-const" name="force-type" value="constant" checked>
+                            <label for="force-const">Constant Force</label>
+                        </span>
+                        <span class="radio-option">
+                            <input type="radio" id="force-var" name="force-type" value="variable">
+                            <label for="force-var">Linear Variable Force</label>
+                        </span>
+                    </div>
+                    <div class="slider-group">
+                        <label>Max Force <span id="val-force-mag">5</span> N</label>
+                        <input type="range" id="input-force-mag" min="1" max="10" step="1" value="5">
+                    </div>
+                    <div class="slider-group">
+                        <label>Application Distance <span id="val-force-dist">3.0</span> m</label>
+                        <input type="range" id="input-force-dist" min="1" max="5" step="0.5" value="3.0">
+                    </div>
+                    <div class="slider-group">
+                        <label>Cart Mass <span id="val-cart-mass">2.0</span> kg</label>
+                        <input type="range" id="input-cart-mass" min="1.0" max="5.0" step="0.5" value="2.0">
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <button id="btn-run-force" class="sim-btn btn-primary">Start Acceleration</button>
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-force-area" style="background: rgba(0,0,0,0.015);"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHAPTER 2: DISSIPATION -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent-secondary);">02. Dissipation</h3>
+                <h2>Friction & Thermal Energy</h2>
+                <p>
+                    When non-conservative forces like kinetic friction act on a system, they perform <strong>negative work</strong>. This negative work removes mechanical kinetic energy from the system, converting it directly into internal thermal energy (heat).
+                </p>
+                <div class="math-block">
+                    $$W_{net} = W_{applied} + W_{friction} = \Delta KE$$
+                    $$Q = E_{thermal} = -W_{friction} = f_k \cdot d = \mu_k m g \cdot d$$
+                </div>
+
+                <!-- AI LINKS -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('work_friction', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('work_friction', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('work_friction', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('work_friction', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('work_friction', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Applied Push Force <span id="val-push-force">8</span> N</label>
+                        <input type="range" id="input-push-force" min="4" max="16" step="1" value="8">
+                    </div>
+                    <div class="slider-group">
+                        <label>Friction Coefficient $(\mu_k)$ <span id="val-mu">0.15</span></label>
+                        <input type="range" id="input-mu" min="0.00" max="0.40" step="0.05" value="0.15">
+                    </div>
+                    <div class="slider-group">
+                        <label>Block Mass <span id="val-block-mass">2.0</span> kg</label>
+                        <input type="range" id="input-block-mass" min="1.0" max="5.0" step="0.5" value="2.0">
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <button id="btn-push-block" class="sim-btn btn-secondary">Push Block</button>
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-friction" style="background: rgba(0,0,0,0.015);"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHAPTER 3: SAFETY ENGINEERING -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--text-main);">03. Safety Engineering</h3>
+                <h2>Stopping Distance & $v^2$ Scaling</h2>
+                <p>
+                    When a vehicle applies its brakes, the friction between the brake pads and rotors (and the tires and road) does negative work to reduce the car's kinetic energy to zero.
+                </p>
+                <div class="math-block">
+                    $$W_{stopping} = -F_{brake} \cdot d = 0 - \frac{1}{2}mv_i^2 \implies d = \frac{m v_i^2}{2 F_{brake}}$$
+                </div>
+
+                <!-- ETU CARD -->
+                <div class="etu-card" style="border-left: 3px solid var(--accent-secondary);">
+                    <span class="etu-tag" style="background: var(--accent-secondary);">Critical Insight</span>
+                    <h4 style="margin-bottom:0.5rem;">The Quadratic Penalty</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        Because kinetic energy depends on the <strong>square</strong> of velocity ($v^2$), doubling your speed doesn't double your stopping distance—it <strong>quadruples</strong> it! A car traveling at 100 km/h requires four times the distance to stop compared to one at 50 km/h, under identical braking forces.
+                    </p>
+                </div>
+
+                <!-- AI LINKS -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('work_safety', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('work_safety', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('work_safety', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('work_safety', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('work_safety', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Initial Velocity <span id="val-init-v">20</span> m/s</label>
+                        <input type="range" id="input-init-v" min="10" max="40" step="5" value="20">
+                    </div>
+                    <div class="slider-group">
+                        <label>Braking Force <span id="val-brake-force">4000</span> N</label>
+                        <input type="range" id="input-brake-force" min="2000" max="8000" step="1000" value="4000">
+                    </div>
+                    <div style="margin-top: 0.5rem;">
+                        <button id="btn-apply-brake" class="sim-btn btn-dark">Apply Brakes</button>
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-safety" style="background: rgba(0,0,0,0.015);"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="references">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h3>Academic References</h3>
+            <ul>
+                <li><strong>Leibniz, G. W.</strong> (1686). <em>Brief Demonstration of a Memorable Error of Descartes</em> (Introduction of $mv^2$ as vis viva).</li>
+                <li><strong>Coriolis, G. G.</strong> (1829). <em>Calcul de l'Effet des Machines</em> (Formal definition of work and kinetic energy).</li>
+                <li><strong>Serway, R. A., & Jewett, J. W.</strong> (2018). <em>Physics for Scientists and Engineers</em>, Chapter 7 (Work and Kinetic Energy).</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="../js/common.js"></script>
+    <script>
+        function openAI(topic, model) {
+            let prompt = "";
+            switch (topic) {
+                case 'work_displacement': 
+                    prompt = "Derive the Work-Energy Theorem for a variable force F(x). Explain how the integral representing the area under a Force vs. Displacement graph is equivalent to the change in Kinetic Energy."; 
+                    break;
+                case 'work_friction': 
+                    prompt = "Explain the Work-Energy Theorem in systems containing friction. How is positive work from an applied force balanced by negative work from friction to produce the net change in kinetic energy and generate thermal heat?"; 
+                    break;
+                case 'work_safety': 
+                    prompt = "Derive the stopping distance equation using the Work-Energy Theorem. Explain physically why stopping distance scales with the square of the initial velocity, and discuss its practical implications for road safety."; 
+                    break;
+            }
+            launchAIPrompt(model, prompt);
+        }
+
+        const APP = {
+            visuals: [],
+            observer: null,
+            init() {
+                this.setupObserver();
+                this.initScrollAnimations();
+                this.initVisuals();
+                window.addEventListener('theme-changed', () => this.visuals.forEach(v => v.updateColors()));
+            },
+            setupObserver() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const visual = this.visuals.find(v => v.canvas === entry.target);
+                        if (visual) visual.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.1 });
+            },
+            initScrollAnimations() {
+                gsap.registerPlugin(ScrollTrigger);
+                gsap.utils.toArray('h1, h2, h3').forEach(el => gsap.from(el, { opacity: 0, y: 30, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 85%" } }));
+                gsap.utils.toArray('.math-block').forEach(el => gsap.from(el, { scale: 0.95, opacity: 0, duration: 1, ease: "power2.out", scrollTrigger: { trigger: el, start: "top 90%" } }));
+            },
+            initVisuals() {
+                this.addVisual(new ForceAreaSim('canvas-force-area'));
+                this.addVisual(new FrictionSim('canvas-friction'));
+                this.addVisual(new SafetySim('canvas-safety'));
+            },
+            addVisual(visual) {
+                this.visuals.push(visual);
+                this.observer.observe(visual.canvas);
+            }
+        };
+
+        class BaseSim {
+            constructor(id) {
+                this.canvas = document.getElementById(id);
+                this.ctx = this.canvas.getContext('2d');
+                this.isVisible = false;
+                this.updateColors();
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                setTimeout(() => { this.resize(); this.loop(); }, 50);
+            }
+            updateColors() {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark' || 
+                               (document.body && document.body.getAttribute('data-theme') === 'dark');
+                
+                this.isDarkTheme = isDark;
+
+                if (isDark) {
+                    this.color = '#EAEAEA'; // High contrast off-white
+                    this.bgColor = '#0E0E0E';
+                    this.accent = '#5C7CFA';
+                    this.accentSecondary = '#FF4D5A';
+                    this.hudBg = 'rgba(255, 255, 255, 0.07)';
+                    this.hudBorder = 'rgba(255, 255, 255, 0.15)';
+                    this.gridColor = 'rgba(255, 255, 255, 0.08)';
+                } else {
+                    this.color = '#121212'; // High contrast slate/black
+                    this.bgColor = '#F8F6F2';
+                    this.accent = '#2A45B6';
+                    this.accentSecondary = '#CC2936';
+                    this.hudBg = 'rgba(0, 0, 0, 0.05)';
+                    this.hudBorder = 'rgba(0, 0, 0, 0.1)';
+                    this.gridColor = 'rgba(0, 0, 0, 0.06)';
+                }
+            }
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.style.width = '100%';
+                this.canvas.style.height = '100%';
+                this.scale = window.devicePixelRatio || 2;
+                this.canvas.width = rect.width * this.scale;
+                this.canvas.height = rect.height * this.scale;
+                this.w = rect.width;
+                this.h = rect.height;
+            }
+            loop() {
+                if (this.isVisible) this.draw();
+                requestAnimationFrame(() => this.loop());
+            }
+            draw() { }
+
+            drawEnergyBar(x, y, label, labelColor, fillLevel, fillColor, maxH = 100) {
+                const w = 32 * this.scale;
+                const h = maxH * this.scale;
+                const filledH = Math.max(0, Math.min(1.0, fillLevel)) * h;
+                const px = x * this.scale;
+                const py = y * this.scale;
+
+                // Track outline
+                this.ctx.strokeStyle = this.color;
+                this.ctx.globalAlpha = 0.25;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.strokeRect(px, py - h, w, h);
+                this.ctx.globalAlpha = 1.0;
+
+                // Track fill
+                this.ctx.fillStyle = fillColor || labelColor;
+                this.ctx.fillRect(px, py - filledH, w, filledH);
+
+                // Label
+                this.ctx.fillStyle = this.color;
+                const fontSize = 12 * this.scale;
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(label, px + w / 2, py + (18 * this.scale));
+            }
+        }
+
+        // ==========================
+        // 1. FORCE-DISPLACEMENT AREA SIM
+        // ==========================
+        class ForceAreaSim extends BaseSim {
+            constructor(id) {
+                super(id);
+                this.forceType = 'constant';
+                this.forceMag = 5;
+                this.forceDist = 3.0;
+                this.cartMass = 2.0;
+
+                this.cartX = 0;
+                this.cartV = 0;
+                this.workDone = 0;
+                this.running = false;
+
+                const inputForce = document.getElementById('input-force-mag');
+                const inputDist = document.getElementById('input-force-dist');
+                const inputMass = document.getElementById('input-cart-mass');
+                const btnRun = document.getElementById('btn-run-force');
+
+                inputForce.addEventListener('input', (e) => {
+                    this.forceMag = parseFloat(e.target.value);
+                    document.getElementById('val-force-mag').innerText = e.target.value;
+                    if (!this.running) this.resetSim();
+                });
+
+                inputDist.addEventListener('input', (e) => {
+                    this.forceDist = parseFloat(e.target.value);
+                    document.getElementById('val-force-dist').innerText = parseFloat(e.target.value).toFixed(1);
+                    if (!this.running) this.resetSim();
+                });
+
+                inputMass.addEventListener('input', (e) => {
+                    this.cartMass = parseFloat(e.target.value);
+                    document.getElementById('val-cart-mass').innerText = parseFloat(e.target.value).toFixed(1);
+                    if (!this.running) this.resetSim();
+                });
+
+                document.querySelectorAll('input[name="force-type"]').forEach((radio) => {
+                    radio.addEventListener('change', (e) => {
+                        this.forceType = e.target.value;
+                        if (!this.running) this.resetSim();
+                    });
+                });
+
+                btnRun.addEventListener('click', () => {
+                    if (this.running) {
+                        this.resetSim();
+                    } else {
+                        this.running = true;
+                        btnRun.innerText = "Reset / Stop";
+                        btnRun.classList.remove('btn-primary');
+                        btnRun.classList.add('btn-dark');
+                    }
+                });
+            }
+
+            resetSim() {
+                this.running = false;
+                this.cartX = 0;
+                this.cartV = 0;
+                this.workDone = 0;
+                const btnRun = document.getElementById('btn-run-force');
+                btnRun.innerText = "Start Acceleration";
+                btnRun.classList.add('btn-primary');
+                btnRun.classList.remove('btn-dark');
+            }
+
+            getForceAt(x) {
+                if (x > this.forceDist) return 0;
+                if (this.forceType === 'constant') {
+                    return this.forceMag;
+                } else {
+                    return this.forceMag * (x / this.forceDist);
+                }
+            }
+
+            getWorkUpTo(x) {
+                const limitX = Math.min(x, this.forceDist);
+                if (this.forceType === 'constant') {
+                    return this.forceMag * limitX;
+                } else {
+                    return 0.5 * (this.forceMag / this.forceDist) * limitX * limitX;
+                }
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Sleek layout configuration to avoid any visual overlaps
+                const isMobile = this.w < 500;
+                const trackY = isMobile ? this.canvas.height * 0.28 : this.canvas.height * 0.44;
+                const trackStart = (isMobile ? 25 : 60) * this.scale;
+                const trackEnd = this.canvas.width - (isMobile ? 25 : 240) * this.scale;
+                const trackLen = trackEnd - trackStart;
+
+                // Physics update
+                if (this.running) {
+                    const dt = 0.016;
+                    // Provide a tiny initial velocity nudge to kickstart acceleration if starting at rest with variable force (force is 0 at origin)
+                    if (this.cartX === 0 && this.cartV === 0 && this.forceType === 'variable') {
+                        this.cartV = 0.15;
+                    }
+                    const force = this.getForceAt(this.cartX);
+                    const accel = force / this.cartMass;
+                    this.cartV += accel * dt;
+                    this.cartX += this.cartV * dt;
+                    this.workDone = this.getWorkUpTo(this.cartX);
+
+                    // Clamp to maximum track position
+                    if (this.cartX >= 5.0) {
+                        this.cartX = 5.0;
+                        this.running = false;
+                    }
+                }
+
+                const px = trackStart + (this.cartX / 5.0) * trackLen;
+
+                // 1. Draw Track line
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 3 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(trackStart, trackY);
+                this.ctx.lineTo(trackEnd, trackY);
+                this.ctx.stroke();
+
+                // Draw markers on track (0m to 5m) - Large bold markers
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                const markerFontSize = Math.max(8 * this.scale, Math.min(12 * this.scale, this.canvas.width * 0.035));
+                this.ctx.font = `600 ${markerFontSize}px 'JetBrains Mono', monospace`;
+                for (let m = 0; m <= 5; m++) {
+                    const mx = trackStart + (m / 5.0) * trackLen;
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(mx, trackY);
+                    this.ctx.lineTo(mx, trackY + 6 * this.scale);
+                    this.ctx.stroke();
+                    this.ctx.fillText(`${m}m`, mx, trackY + 18 * this.scale);
+                }
+
+                // Highlight Force application region
+                const endForceX = trackStart + (this.forceDist / 5.0) * trackLen;
+                this.ctx.fillStyle = 'rgba(52, 152, 219, 0.08)';
+                this.ctx.fillRect(trackStart, trackY - (isMobile ? 40 : 60) * this.scale, endForceX - trackStart, (isMobile ? 40 : 60) * this.scale);
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.setLineDash([4 * this.scale, 4 * this.scale]);
+                this.ctx.beginPath();
+                this.ctx.moveTo(endForceX, trackY - (isMobile ? 50 : 75) * this.scale);
+                this.ctx.lineTo(endForceX, trackY);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]); // Reset dash
+
+                this.ctx.fillStyle = this.accent;
+                this.ctx.font = `700 ${markerFontSize}px 'Inter', sans-serif`;
+                // Draw label above the force application boundary to avoid overlap
+                this.ctx.fillText("Force Applied Zone", (trackStart + endForceX) / 2, trackY - (isMobile ? 44 : 66) * this.scale);
+
+                // 2. Draw Cart (Minimalist Circle Representation)
+                const massR = (isMobile ? 8 : 12) * this.scale;
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(px, trackY - massR, massR, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Vector Force Arrow (Minimalist and Precise)
+                const forceNow = this.getForceAt(this.cartX);
+                if (forceNow > 0) {
+                    this.ctx.strokeStyle = this.accentSecondary;
+                    this.ctx.fillStyle = this.accentSecondary;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    
+                    const arrowY = trackY - massR;
+                    const arrowLen = (forceNow / 10) * (isMobile ? 40 : 80) * this.scale + 15 * this.scale;
+                    const arrowStartX = px - massR - arrowLen;
+                    const arrowEndX = px - massR - 2 * this.scale;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(arrowStartX, arrowY);
+                    this.ctx.lineTo(arrowEndX, arrowY);
+                    this.ctx.stroke();
+
+                    // Arrowhead
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(arrowEndX, arrowY);
+                    this.ctx.lineTo(arrowEndX - 4 * this.scale, arrowY - 3 * this.scale);
+                    this.ctx.lineTo(arrowEndX - 4 * this.scale, arrowY + 3 * this.scale);
+                    this.ctx.fill();
+                    
+                    // Label
+                    this.ctx.font = `600 ${markerFontSize - 1 * this.scale}px 'JetBrains Mono', monospace`;
+                    this.ctx.fillText(`${forceNow.toFixed(1)} N`, px - massR - arrowLen / 2, arrowY - 6 * this.scale);
+                }
+
+                // 3. Sleek Horizontal Top Status Bar - Spans the entire top width!
+                const ke = 0.5 * this.cartMass * this.cartV * this.cartV;
+                const barX = 20 * this.scale;
+                const barY = 15 * this.scale;
+                const barW = this.canvas.width - 40 * this.scale;
+                const barH = 40 * this.scale;
+
+                this.ctx.fillStyle = this.hudBg;
+                this.ctx.strokeStyle = this.hudBorder;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.roundRect(barX, barY, barW, barH, 5 * this.scale);
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                // Dynamic responsive font size to completely eliminate overlapping on narrow viewports
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 12 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 10.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) fontSize = 9 * this.scale;
+
+                this.ctx.fillStyle = this.color;
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textBaseline = 'middle';
+                
+                // Draw metrics aligned left and right within status bar using concise terms
+                this.ctx.textAlign = 'left';
+                this.ctx.fillText(`Work Done (W): ${this.workDone.toFixed(1)} J`, barX + 12 * this.scale, barY + barH / 2);
+                
+                this.ctx.textAlign = 'right';
+                this.ctx.fillText(`KE: ${ke.toFixed(1)} J`, barX + barW - 12 * this.scale, barY + barH / 2);
+                this.ctx.textBaseline = 'alphabetic'; // Reset
+
+                // 4. Draw Plot (Force vs. Displacement) in bottom half - Dynamically Sized
+                const plotX = (isMobile ? 35 : 60) * this.scale;
+                const plotY = this.canvas.height - (isMobile ? 55 : 70) * this.scale;
+                const plotW = this.canvas.width - (isMobile ? 70 : 320) * this.scale;
+                const plotH = isMobile ? this.canvas.height * 0.28 : this.canvas.height * 0.36;
+
+                // Draw Plot Axes
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(plotX, plotY - plotH);
+                this.ctx.lineTo(plotX, plotY);
+                this.ctx.lineTo(plotX + plotW, plotY);
+                this.ctx.stroke();
+
+                // Axes Labels
+                this.ctx.fillStyle = this.color;
+                this.ctx.font = `700 ${markerFontSize}px 'Inter', sans-serif`;
+                this.ctx.textAlign = 'right';
+                this.ctx.fillText("F (N)", plotX - 6 * this.scale, plotY - plotH + 4 * this.scale);
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText("Displacement x (m)", plotX + plotW / 2, plotY + 22 * this.scale);
+
+                // Draw Plot Profile & Fill Area (Integral = Work)
+                this.ctx.beginPath();
+                this.ctx.moveTo(plotX, plotY);
+                
+                // Construct the force curve
+                const points = [];
+                for (let dx = 0.0; dx <= 5.0; dx += 0.05) {
+                    let forceValue = 0;
+                    if (dx <= this.forceDist) {
+                        forceValue = (this.forceType === 'constant') 
+                            ? this.forceMag 
+                            : this.forceMag * (dx / this.forceDist);
+                    }
+                    const pxPlot = plotX + (dx / 5.0) * plotW;
+                    const pyPlot = plotY - (forceValue / 10.0) * plotH;
+                    points.push({ x: pxPlot, y: pyPlot, rx: dx });
+                }
+
+                // Render filled area representing work done so far (using theme's accent color transparently)
+                this.ctx.save();
+                this.ctx.globalAlpha = 0.15;
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.moveTo(plotX, plotY);
+                points.forEach(pt => {
+                    if (pt.rx <= this.cartX) {
+                        this.ctx.lineTo(pt.x, pt.y);
+                    }
+                });
+                const currentPlotX = plotX + (this.cartX / 5.0) * plotW;
+                this.ctx.lineTo(currentPlotX, plotY);
+                this.ctx.closePath();
+                this.ctx.fill();
+                this.ctx.restore();
+
+                // Draw full force profile line
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 3 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(plotX, plotY - (this.getForceAt(0) / 10.0) * plotH);
+                points.forEach(pt => {
+                    this.ctx.lineTo(pt.x, pt.y);
+                });
+                this.ctx.stroke();
+
+                // 5. Energy Bars - Dynamically Centered/Stacked
+                const maxTheoreticalWork = this.getWorkUpTo(5.0);
+
+                if (isMobile) {
+                    const barBaseX = this.w / 2 - 36;
+                    const barBaseY = this.h - 10;
+                    this.drawEnergyBar(barBaseX, barBaseY, "Work", this.accent, this.workDone / maxTheoreticalWork, null, 40);
+                    this.drawEnergyBar(barBaseX + 40, barBaseY, "KE", this.accentSecondary, ke / maxTheoreticalWork, null, 40);
+                } else {
+                    const barBaseX = this.w - 120;
+                    const barBaseY = this.h - 70;
+                    this.drawEnergyBar(barBaseX, barBaseY, "Work", this.accent, this.workDone / maxTheoreticalWork, null, 110);
+                    this.drawEnergyBar(barBaseX + 48, barBaseY, "KE", this.accentSecondary, ke / maxTheoreticalWork, null, 110);
+                }
+            }
+        }
+
+        // ==========================
+        // 2. FRICTION SIMULATION (DISSIPATION)
+        // ==========================
+        class FrictionSim extends BaseSim {
+            constructor(id) {
+                super(id);
+                this.pushForce = 8;
+                this.mu = 0.15;
+                this.mass = 2.0;
+
+                this.posX = 0.5;
+                this.vel = 0;
+                this.running = false;
+                
+                this.workApplied = 0;
+                this.workFriction = 0;
+                this.thermalEnergy = 0;
+
+                const inputPush = document.getElementById('input-push-force');
+                const inputMu = document.getElementById('input-mu');
+                const inputMass = document.getElementById('input-block-mass');
+                const btnPush = document.getElementById('btn-push-block');
+
+                inputPush.addEventListener('input', (e) => {
+                    this.pushForce = parseFloat(e.target.value);
+                    document.getElementById('val-push-force').innerText = e.target.value;
+                    if (!this.running) this.resetSim();
+                });
+
+                inputMu.addEventListener('input', (e) => {
+                    this.mu = parseFloat(e.target.value);
+                    document.getElementById('val-mu').innerText = parseFloat(e.target.value).toFixed(2);
+                    if (!this.running) this.resetSim();
+                });
+
+                inputMass.addEventListener('input', (e) => {
+                    this.mass = parseFloat(e.target.value);
+                    document.getElementById('val-block-mass').innerText = parseFloat(e.target.value).toFixed(1);
+                    if (!this.running) this.resetSim();
+                });
+
+                btnPush.addEventListener('click', () => {
+                    if (this.running) {
+                        this.resetSim();
+                    } else {
+                        this.running = true;
+                        btnPush.innerText = "Reset Sim";
+                        btnPush.classList.remove('btn-secondary');
+                        btnPush.classList.add('btn-dark');
+                    }
+                });
+            }
+
+            resetSim() {
+                this.running = false;
+                this.posX = 0.5;
+                this.vel = 0;
+                this.workApplied = 0;
+                this.workFriction = 0;
+                this.thermalEnergy = 0;
+                const btnPush = document.getElementById('btn-push-block');
+                btnPush.innerText = "Push Block";
+                btnPush.classList.add('btn-secondary');
+                btnPush.classList.remove('btn-dark');
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Lower track position to completely decouple HUD and track visual bounds
+                const isMobile = this.w < 500;
+                const trackY = isMobile ? this.canvas.height * 0.36 : this.canvas.height * 0.48;
+                const trackStart = (isMobile ? 25 : 60) * this.scale;
+                const trackEnd = this.canvas.width - (isMobile ? 25 : 260) * this.scale;
+                const trackLen = trackEnd - trackStart;
+
+                const pushLimit = 2.5;
+                const fFrictionMag = this.mu * this.mass * 9.81;
+
+                if (this.running) {
+                    const dt = 0.016;
+                    const fApp = (this.posX <= pushLimit) ? this.pushForce : 0;
+                    
+                    let fNet = 0;
+                    if (this.vel > 0 || fApp > 0) {
+                        const friction = Math.min(fFrictionMag, fApp + this.vel * this.mass / dt);
+                        fNet = fApp - friction;
+
+                        const accel = fNet / this.mass;
+                        this.vel += accel * dt;
+                        
+                        if (this.vel < 0) this.vel = 0;
+
+                        const dx = this.vel * dt;
+                        this.posX += dx;
+
+                        if (this.posX <= pushLimit) {
+                            this.workApplied += fApp * dx;
+                            this.workFriction += friction * dx;
+                        } else {
+                            const frictionAfter = (this.vel > 0) ? fFrictionMag : 0;
+                            this.workFriction += frictionAfter * dx;
+                        }
+                        this.thermalEnergy = this.workFriction;
+                    }
+
+                    if (this.vel === 0 && this.posX > pushLimit) {
+                        this.running = false;
+                    }
+
+                    if (this.posX >= 5.0) {
+                        this.posX = 5.0;
+                        this.running = false;
+                        this.vel = 0;
+                    }
+                }
+
+                const px = trackStart + (this.posX / 5.0) * trackLen;
+
+                // 1. Draw Surface line
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 3 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(trackStart, trackY);
+                this.ctx.lineTo(trackEnd, trackY);
+                this.ctx.stroke();
+
+                // Draw markers on ground (0m to 5m) - Large bold markers
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                const labelFontSize = Math.max(8 * this.scale, Math.min(12 * this.scale, this.canvas.width * 0.035));
+                this.ctx.font = `600 ${labelFontSize}px 'JetBrains Mono', monospace`;
+                for (let m = 0; m <= 5; m++) {
+                    const mx = trackStart + (m / 5.0) * trackLen;
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(mx, trackY);
+                    this.ctx.lineTo(mx, trackY + 6 * this.scale);
+                    this.ctx.stroke();
+                    this.ctx.fillText(`${m}m`, mx, trackY + 18 * this.scale);
+                }
+
+                // Show push limit boundary
+                const limitX = trackStart + (pushLimit / 5.0) * trackLen;
+                this.ctx.strokeStyle = this.accentSecondary;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.setLineDash([4 * this.scale, 4 * this.scale]);
+                this.ctx.beginPath();
+                this.ctx.moveTo(limitX, trackY - (isMobile ? 50 : 90) * this.scale);
+                this.ctx.lineTo(limitX, trackY);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+                
+                this.ctx.fillStyle = this.accentSecondary;
+                this.ctx.font = `700 ${labelFontSize}px 'Inter', sans-serif`;
+                // Draw label at offset to prevent any overlap
+                this.ctx.fillText("Push Limit (2.5m)", limitX, trackY - (isMobile ? 54 : 96) * this.scale);
+
+                // 2. Draw Block (Minimalist Circle Representation)
+                const massR = (isMobile ? 8 : 12) * this.scale;
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(px, trackY - massR, massR, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Draw Vector arrows (Minimalist and Precise)
+                // Applied push force (accent) pointing right
+                if (this.running && this.posX <= pushLimit) {
+                    this.ctx.strokeStyle = this.accent;
+                    this.ctx.fillStyle = this.accent;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    const arrowY = trackY - massR;
+                    const arrowLen = (this.pushForce / 16) * (isMobile ? 40 : 80) * this.scale + 15 * this.scale;
+                    const arrowStartX = px - massR - arrowLen;
+                    const arrowEndX = px - massR - 2 * this.scale;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(arrowStartX, arrowY);
+                    this.ctx.lineTo(arrowEndX, arrowY);
+                    this.ctx.stroke();
+
+                    // Arrowhead
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(arrowEndX, arrowY);
+                    this.ctx.lineTo(arrowEndX - 4 * this.scale, arrowY - 3 * this.scale);
+                    this.ctx.lineTo(arrowEndX - 4 * this.scale, arrowY + 3 * this.scale);
+                    this.ctx.fill();
+                    
+                    this.ctx.font = `600 ${labelFontSize - 2 * this.scale}px 'JetBrains Mono', monospace`;
+                    this.ctx.fillText("F_app", px - massR - arrowLen / 2, arrowY - 6 * this.scale);
+                }
+
+                // Frictional force (accentSecondary) pointing left
+                if (this.running && this.vel > 0) {
+                    this.ctx.strokeStyle = this.accentSecondary;
+                    this.ctx.fillStyle = this.accentSecondary;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    const arrowY = trackY - massR;
+                    const arrowLen = (fFrictionMag / 10) * (isMobile ? 40 : 80) * this.scale + 15 * this.scale;
+                    const arrowStartX = px + massR + 2 * this.scale;
+                    const arrowEndX = px + massR + arrowLen;
+
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(arrowEndX, arrowY);
+                    this.ctx.lineTo(arrowStartX, arrowY);
+                    this.ctx.stroke();
+
+                    // Arrowhead pointing left
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(arrowStartX, arrowY);
+                    this.ctx.lineTo(arrowStartX + 4 * this.scale, arrowY - 3 * this.scale);
+                    this.ctx.lineTo(arrowStartX + 4 * this.scale, arrowY + 3 * this.scale);
+                    this.ctx.fill();
+
+                    this.ctx.font = `600 ${labelFontSize - 2 * this.scale}px 'JetBrains Mono', monospace`;
+                    this.ctx.fillText("F_frict", px + massR + arrowLen / 2, arrowY - 6 * this.scale);
+                }
+
+                // 3. Sleek Horizontal Top Status Bar - Spans the entire top width!
+                const ke = 0.5 * this.mass * this.vel * this.vel;
+                const barX = 20 * this.scale;
+                const barY = 15 * this.scale;
+                const barW = this.canvas.width - 40 * this.scale;
+                const barH = 40 * this.scale;
+
+                this.ctx.fillStyle = this.hudBg;
+                this.ctx.strokeStyle = this.hudBorder;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.roundRect(barX, barY, barW, barH, 5 * this.scale);
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                // Dynamic responsive font size to completely eliminate overlapping on narrow viewports
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 12 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 10.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) fontSize = 9 * this.scale;
+
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textBaseline = 'middle';
+                
+                // Three evenly spaced columns inside the top horizontal status bar using concise labels
+                this.ctx.textAlign = 'left';
+                this.ctx.fillStyle = this.accent;
+                this.ctx.fillText(`W_app: +${this.workApplied.toFixed(1)} J`, barX + 12 * this.scale, barY + barH / 2);
+                
+                this.ctx.textAlign = 'center';
+                this.ctx.fillStyle = this.accentSecondary;
+                this.ctx.fillText(`Heat (Q): -${this.thermalEnergy.toFixed(1)} J`, barX + barW / 2, barY + barH / 2);
+                
+                this.ctx.textAlign = 'right';
+                this.ctx.fillStyle = this.color;
+                this.ctx.fillText(`KE: ${ke.toFixed(1)} J`, barX + barW - 12 * this.scale, barY + barH / 2);
+                this.ctx.textBaseline = 'alphabetic'; // Reset
+
+                // 4. Real-time Energy Balance Bars
+                const maxTheoreticalEnergy = this.pushForce * pushLimit; // Max work applied
+
+                if (isMobile) {
+                    const barBaseX = this.w / 2 - 58;
+                    const barBaseY = this.h - 10;
+                    this.drawEnergyBar(barBaseX, barBaseY, "W_in", this.accent, this.workApplied / maxTheoreticalEnergy, null, 40);
+                    this.drawEnergyBar(barBaseX + 40, barBaseY, "Heat", this.accentSecondary, this.thermalEnergy / maxTheoreticalEnergy, null, 40);
+                    this.drawEnergyBar(barBaseX + 80, barBaseY, "KE", this.color, ke / maxTheoreticalEnergy, null, 40);
+                } else {
+                    const barBaseX = this.w - 140;
+                    const barBaseY = this.h - 70;
+                    this.drawEnergyBar(barBaseX, barBaseY, "W_in", this.accent, this.workApplied / maxTheoreticalEnergy, null, 120);
+                    this.drawEnergyBar(barBaseX + 48, barBaseY, "Heat", this.accentSecondary, this.thermalEnergy / maxTheoreticalEnergy, null, 120);
+                    this.drawEnergyBar(barBaseX + 96, barBaseY, "KE", this.color, ke / maxTheoreticalEnergy, null, 120);
+                }
+            }
+        }
+
+        // ==========================
+        // 3. STOPPING DISTANCE & SAFETY SIM
+        // ==========================
+        class SafetySim extends BaseSim {
+            constructor(id) {
+                super(id);
+                this.initV = 20;
+                this.brakeForce = 4000;
+                this.mass = 1200; // Car mass
+
+                this.posX = 0;
+                this.vel = 0;
+                this.running = false;
+                this.stopped = false;
+                this.stoppingDistance = 0;
+                this.skidMarks = [];
+
+                const inputV = document.getElementById('input-init-v');
+                const inputBrake = document.getElementById('input-brake-force');
+                const btnApply = document.getElementById('btn-apply-brake');
+
+                inputV.addEventListener('input', (e) => {
+                    this.initV = parseFloat(e.target.value);
+                    document.getElementById('val-init-v').innerText = e.target.value;
+                    if (!this.running) this.resetSim();
+                });
+
+                inputBrake.addEventListener('input', (e) => {
+                    this.brakeForce = parseFloat(e.target.value);
+                    document.getElementById('val-brake-force').innerText = e.target.value;
+                    if (!this.running) this.resetSim();
+                });
+
+                btnApply.addEventListener('click', () => {
+                    if (this.running || this.stopped) {
+                        this.resetSim();
+                    } else {
+                        this.running = true;
+                        this.vel = this.initV;
+                        this.posX = 0;
+                        this.skidMarks = [];
+                        btnApply.innerText = "Reset / Restart";
+                        btnApply.classList.remove('btn-dark');
+                        btnApply.classList.add('btn-secondary');
+                    }
+                });
+            }
+
+            resetSim() {
+                this.running = false;
+                this.stopped = false;
+                this.posX = 0;
+                this.vel = 0;
+                this.stoppingDistance = 0;
+                this.skidMarks = [];
+                const btnApply = document.getElementById('btn-apply-brake');
+                btnApply.innerText = "Apply Brakes";
+                btnApply.classList.add('btn-dark');
+                btnApply.classList.remove('btn-secondary');
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Lower road position slightly to resolve HUD overlap
+                const isMobile = this.w < 500;
+                const roadY = isMobile ? this.canvas.height * 0.44 : this.canvas.height * 0.50;
+                
+                const roadStart = (isMobile ? 25 : 60) * this.scale;
+                const roadEnd = this.canvas.width - (isMobile ? 25 : 60) * this.scale;
+                const roadLen = roadEnd - roadStart;
+
+                const maxMeters = 100;
+
+                // Physics update
+                if (this.running) {
+                    const dt = 0.016;
+                    const accel = -this.brakeForce / this.mass;
+                    this.vel += accel * dt;
+
+                    if (this.vel <= 0) {
+                        this.vel = 0;
+                        this.running = false;
+                        this.stopped = true;
+                        this.stoppingDistance = this.posX;
+                    }
+
+                    const dx = this.vel * dt;
+                    this.posX += dx;
+
+                    const pxMark = roadStart + (this.posX / maxMeters) * roadLen;
+                    this.skidMarks.push(pxMark);
+                }
+
+                // 1. Draw Ground Track Line (Clean, Minimalist Vector)
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 3 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(roadStart, roadY);
+                this.ctx.lineTo(roadEnd, roadY);
+                this.ctx.stroke();
+
+                // Draw markers on road (0m to 100m) - Minimalist tick marks
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                const labelFontSize = Math.max(8 * this.scale, Math.min(12 * this.scale, this.canvas.width * 0.035));
+                this.ctx.font = `600 ${labelFontSize}px 'JetBrains Mono', monospace`;
+                const step = isMobile ? 25 : 20;
+                for (let m = 0; m <= 100; m += step) {
+                    const mx = roadStart + (m / 100.0) * roadLen;
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(mx, roadY);
+                    this.ctx.lineTo(mx, roadY + 6 * this.scale);
+                    this.ctx.stroke();
+                    this.ctx.fillText(`${m}m`, mx, roadY + 18 * this.scale);
+                }
+
+                // 2. Draw Trajectory Trail (Skid Marks) as a clean motion-trail line
+                if (this.skidMarks.length > 0) {
+                    this.ctx.strokeStyle = this.color;
+                    this.ctx.lineWidth = 2.5 * this.scale;
+                    this.ctx.save();
+                    this.ctx.globalAlpha = 0.35;
+                    this.ctx.beginPath();
+                    this.skidMarks.forEach((mx, idx) => {
+                        if (idx === 0) {
+                            this.ctx.moveTo(mx, roadY);
+                        } else {
+                            this.ctx.lineTo(mx, roadY);
+                        }
+                    });
+                    this.ctx.stroke();
+                    this.ctx.restore();
+                }
+
+                // 3. Draw Vehicle (Minimalist Circle Representation)
+                const vehicleR = (isMobile ? 8 : 12) * this.scale;
+                const carX = roadStart + (this.posX / maxMeters) * roadLen;
+                this.ctx.fillStyle = this.accentSecondary;
+                this.ctx.beginPath();
+                this.ctx.arc(carX, roadY - vehicleR, vehicleR, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // 4. Sleek Horizontal Top Status Bar - Spans the entire top width!
+                const barX = 20 * this.scale;
+                const barY = 15 * this.scale;
+                const barW = this.canvas.width - 40 * this.scale;
+                const barH = 40 * this.scale;
+
+                this.ctx.fillStyle = this.hudBg;
+                this.ctx.strokeStyle = this.hudBorder;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.roundRect(barX, barY, barW, barH, 5 * this.scale);
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                // Dynamic responsive font size to completely eliminate overlapping on narrow viewports
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 12 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 10.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) fontSize = 9 * this.scale;
+
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textBaseline = 'middle';
+
+                const curV = (this.running) ? this.vel : (this.stopped ? 0 : this.initV);
+                const curVkmh = curV * 3.6;
+                const currentKE = 0.5 * this.mass * curV * curV;
+
+                // Three columns inside status bar using highly legible, concise scientific terms
+                this.ctx.textAlign = 'left';
+                this.ctx.fillStyle = this.color;
+                this.ctx.fillText(`v: ${curVkmh.toFixed(0)} km/h`, barX + 12 * this.scale, barY + barH / 2);
+
+                this.ctx.textAlign = 'center';
+                this.ctx.fillStyle = this.color;
+                this.ctx.fillText(`KE: ${(currentKE / 1000).toFixed(1)} kJ`, barX + barW / 2, barY + barH / 2);
+
+                this.ctx.textAlign = 'right';
+                if (this.stopped || (!this.running && this.stoppingDistance > 0)) {
+                    this.ctx.fillStyle = this.accentSecondary;
+                    this.ctx.fillText(`d_stop: ${this.stoppingDistance.toFixed(1)} m`, barX + barW - 12 * this.scale, barY + barH / 2);
+                } else {
+                    this.ctx.fillStyle = this.accent;
+                    this.ctx.fillText(`F: ${this.brakeForce} N`, barX + barW - 12 * this.scale, barY + barH / 2);
+                }
+                
+                this.ctx.textBaseline = 'alphabetic'; // Reset
+
+                // Reference safety STOP lines (Vertical benchmark indicator lines)
+                const getTheoreticalDist = (speed) => {
+                    const ke = 0.5 * this.mass * speed * speed;
+                    return ke / this.brakeForce;
+                };
+
+                const td10 = getTheoreticalDist(10); // 15m
+                const td20 = getTheoreticalDist(20); // 60m
+
+                const safetyFontSize = Math.max(7 * this.scale, Math.min(10 * this.scale, this.canvas.width * 0.035));
+                this.ctx.font = `700 ${safetyFontSize}px 'Inter', sans-serif`;
+                this.ctx.textAlign = 'center';
+                
+                // 36 km/h safety barrier (15m)
+                if (td10 < maxMeters) {
+                    const tx10 = roadStart + (td10 / maxMeters) * roadLen;
+                    this.ctx.strokeStyle = this.accent;
+                    this.ctx.lineWidth = 1.5 * this.scale;
+                    this.ctx.setLineDash([4 * this.scale, 4 * this.scale]);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(tx10, roadY - (isMobile ? 25 : 40) * this.scale);
+                    this.ctx.lineTo(tx10, roadY + (isMobile ? 25 : 40) * this.scale);
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+                    
+                    this.ctx.fillStyle = this.accent;
+                    const label1 = isMobile ? "36 km/h (15m)" : "Stop at 36 km/h (15m)";
+                    this.ctx.fillText(label1, tx10, roadY - (isMobile ? 28 : 45) * this.scale);
+                }
+
+                // 72 km/h safety barrier (60m)
+                if (td20 < maxMeters) {
+                    const tx20 = roadStart + (td20 / maxMeters) * roadLen;
+                    this.ctx.strokeStyle = this.accentSecondary;
+                    this.ctx.lineWidth = 1.5 * this.scale;
+                    this.ctx.setLineDash([4 * this.scale, 4 * this.scale]);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(tx20, roadY - (isMobile ? 25 : 40) * this.scale);
+                    this.ctx.lineTo(tx20, roadY + (isMobile ? 25 : 40) * this.scale);
+                    this.ctx.stroke();
+                    this.ctx.setLineDash([]);
+                    
+                    this.ctx.fillStyle = this.accentSecondary;
+                    const label2 = isMobile ? "72 km/h (60m)" : "Stop at 72 km/h (60m)";
+                    this.ctx.fillText(label2, tx20, roadY - (isMobile ? 28 : 45) * this.scale);
+                }
+            }
+        }
+
+        window.onload = () => APP.init();
+    </script>
+</body>
+
+</html>

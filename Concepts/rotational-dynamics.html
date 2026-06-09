@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotational Dynamics • Physics Notebook</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <style>
+        /* AI Links */
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .sim-controls {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+        }
+    </style>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Theme Init -->
+    <script>
+        const savedTheme = localStorage.getItem('physics-notebook-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body && document.body.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <nav class="sticky">
+        <div class="nav-bg"></div>
+        <a href="../index.html" class="logo">
+            <i data-lucide="arrow-left" width="16"></i>
+            Library
+        </a>
+        <button id="themeBtn">
+            <i data-lucide="moon" width="16"></i> Theme
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="text-reveal-wrapper">
+            <h1 class="hero-title">Rotational<br>Dynamics</h1>
+            <p style="margin-top: 2rem; font-size: 1.4rem; max-width: 40ch;">
+                Exploring torque, inertia distribution, and the conservation of angular momentum in rotating systems.
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION 1: Torque and Acceleration -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">01. Angular Motion</h3>
+                <h2>Torque & Acceleration</h2>
+                <p>
+                    Just as force causes linear acceleration, <strong>torque</strong> ($\tau$) is the rotational analog
+                    of force that causes an object to undergo angular acceleration ($\alpha$). The relationship is
+                    governed by Newton's Second Law for rotation.
+                </p>
+                <div class="math-block">
+                    $$\tau = I \alpha$$
+                </div>
+                <p>
+                    Where $\tau$ is the net applied torque, $I$ is the moment of inertia, and $\alpha$ is the angular
+                    acceleration. Under constant torque, the angular speed ($\omega$) increases linearly with time:
+                    $\omega = \omega_0 + \alpha t$.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">The Playground Merry-Go-Round</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        Applying force at the outer edge of a merry-go-round yields a much larger torque than pushing close
+                        to the central spindle, making it much easier to accelerate.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('torque', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('torque', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('torque', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('torque', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('torque', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Torque (τ) <span id="val-torque">1.5</span> N·m</label>
+                        <input type="range" id="input-torque" min="-5.0" max="5.0" step="0.5" value="1.5">
+                    </div>
+                    <div class="slider-group">
+                        <label>Moment of Inertia (I) <span id="val-inertia">1.5</span> kg·m²</label>
+                        <input type="range" id="input-inertia" min="0.5" max="4.0" step="0.1" value="1.5">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-torque"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 2: Moment of Inertia and Mass Distribution -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent-secondary);">02. Inertia Distribution</h3>
+                <h2>Moment of Inertia</h2>
+                <p>
+                    Unlike translational mass, the rotational resistance of an object (the <strong>moment of inertia</strong>, $I$)
+                    depends not just on its total mass, but fundamentally on <strong>how that mass is distributed</strong>
+                    relative to the axis of rotation.
+                </p>
+                <div class="math-block">
+                    $$I = \sum m_i r_i^2$$
+                </div>
+                <p>
+                    Mass located farther from the rotational axis contributes quadratically more to the moment of inertia. For
+                    a fixed mass, concentrating it at the rim makes it significantly harder to accelerate than concentrating it at the center.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Deep Concept</span>
+                    <h4 style="margin-bottom:0.5rem;">The Parallel Axis Theorem</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        The moment of inertia about any axis parallel to an axis through the center of mass is given by
+                        $I = I_{cm} + Md^2$, where $d$ is the distance between the two axes.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('inertia', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('inertia', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('inertia', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('inertia', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('inertia', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Mass (M) <span id="val-mass">2.0</span> kg</label>
+                        <input type="range" id="input-mass" min="1.0" max="5.0" step="0.2" value="2.0">
+                    </div>
+                    <div class="slider-group">
+                        <label>Mass Distribution <span id="val-dist">0.5</span> (Center to Rim)</label>
+                        <input type="range" id="input-dist" min="0.1" max="1.0" step="0.1" value="0.5">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-inertia"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 3: Conservation of Angular Momentum -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--text-muted);">03. Conservation Laws</h3>
+                <h2>Angular Momentum</h2>
+                <p>
+                    When no external net torque acts on a system, its total <strong>angular momentum</strong> ($L$) remains
+                    constant. This is the rotational analog to the conservation of linear momentum.
+                </p>
+                <div class="math-block">
+                    $$L = I \omega = \text{constant}$$
+                </div>
+                <p>
+                    If the moment of inertia ($I$) is decreased by drawing mass inward (reducing the distribution radius $r$),
+                    the angular velocity ($\omega$) must increase proportionally to conserve $L$.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">The Spinning Figure Skater</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        An ice skater spins slowly with arms outstretched. By drawing their arms and legs in close to their
+                        body, they decrease their moment of inertia and instantly spin much faster.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('momentum', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('momentum', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('momentum', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('momentum', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('momentum', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Mass Radius (r) <span id="val-radius">0.80</span> m</label>
+                        <input type="range" id="input-radius" min="0.3" max="1.0" step="0.05" value="0.80">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-momentum"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- REFERENCES -->
+    <section class="references">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h3>Academic References</h3>
+            <ul>
+                <li><strong>Serway, R. A., & Jewett, J. W.</strong> (2018). <em>Physics for Scientists and Engineers</em>, 10th Edition. Cengage Learning.</li>
+                <li><strong>Kleppner, D., & Kolenkow, R.</strong> (2014). <em>An Introduction to Mechanics</em>, 2nd Edition. Cambridge University Press.</li>
+            </ul>
+        </div>
+    </section>
+
+    <script src="../js/common.js"></script>
+    <script>
+        function openAI(topic, model) {
+            let prompt = "";
+            switch (topic) {
+                case 'torque':
+                    prompt = "Explain Newton's second law for rotation (tau = I * alpha) and how torque depends on force, radius, and angle.";
+                    break;
+                case 'inertia':
+                    prompt = "How does the moment of inertia depend on mass distribution? Discuss the significance of mass concentrated near vs far from the axis of rotation.";
+                    break;
+                case 'momentum':
+                    prompt = "Describe the conservation of angular momentum (L = I * omega) and explain why a spinning skater accelerates when pulling in their limbs.";
+                    break;
+            }
+            launchAIPrompt(model, prompt);
+        }
+
+        const APP = {
+            visuals: [],
+            observer: null,
+
+            init() {
+                this.setupObserver();
+                this.initScrollAnimations();
+                this.initVisuals();
+
+                window.addEventListener('theme-changed', (e) => {
+                    this.visuals.forEach(v => v.updateColors());
+                });
+            },
+
+            setupObserver() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const visual = this.visuals.find(v => v.canvas === entry.target);
+                        if (visual) visual.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.1 });
+            },
+
+            initScrollAnimations() {
+                gsap.registerPlugin(ScrollTrigger);
+                gsap.utils.toArray('h1, h2, h3').forEach(el => {
+                    gsap.from(el, { opacity: 0, y: 30, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 85%" } });
+                });
+                gsap.utils.toArray('.math-block').forEach(el => {
+                    gsap.from(el, { scale: 0.95, opacity: 0, duration: 1, ease: "power2.out", scrollTrigger: { trigger: el, start: "top 90%" } });
+                });
+            },
+
+            initVisuals() {
+                this.addVisual(new TorqueVisual('canvas-torque'));
+                this.addVisual(new InertiaVisual('canvas-inertia'));
+                this.addVisual(new MomentumVisual('canvas-momentum'));
+            },
+
+            addVisual(visual) {
+                this.visuals.push(visual);
+                this.observer.observe(visual.canvas);
+            }
+        };
+
+        class BaseVisual {
+            constructor(id) {
+                this.canvas = document.getElementById(id);
+                this.ctx = this.canvas.getContext('2d');
+                this.isVisible = false;
+                this.updateColors();
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.loop();
+            }
+            updateColors() {
+                this.color = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
+                this.bg = getComputedStyle(document.body).getPropertyValue('--bg-color').trim();
+                this.accent = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+                this.secondary = getComputedStyle(document.body).getPropertyValue('--accent-secondary').trim();
+            }
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width * 2;
+                this.canvas.height = rect.height * 2;
+                this.scale = 2;
+                this.cx = this.canvas.width / 2;
+                this.cy = this.canvas.height / 2;
+            }
+            loop() {
+                if (this.isVisible) this.draw();
+                requestAnimationFrame(() => this.loop());
+            }
+            draw() { }
+        }
+
+        class TorqueVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.theta = 0;
+                this.omega = 0;
+                this.torque = 1.5;
+                this.inertia = 1.5;
+
+                const tInput = document.getElementById('input-torque');
+                const iInput = document.getElementById('input-inertia');
+
+                tInput.addEventListener('input', (e) => {
+                    this.torque = parseFloat(e.target.value);
+                    document.getElementById('val-torque').textContent = e.target.value;
+                });
+
+                iInput.addEventListener('input', (e) => {
+                    this.inertia = parseFloat(e.target.value);
+                    document.getElementById('val-inertia').textContent = e.target.value;
+                });
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Update rotational kinematics
+                const alpha = this.torque / this.inertia;
+                this.omega += alpha * 0.016; // dt = 16ms approx
+                
+                // Add minor damping/friction so it stabilizes if torque is 0
+                this.omega *= 0.992;
+                this.theta += this.omega * 0.016;
+
+                // Scale cylinder radius dynamically
+                const r = Math.min(this.cx - 30 * this.scale, this.cy * 0.55);
+
+                // Standard full-width top dashboard bar
+                const fontSize = this.getResponsiveFontSize();
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `tau = ${this.torque.toFixed(1)} N·m | I = ${this.inertia.toFixed(1)} kg·m² | alpha = ${alpha.toFixed(2)} rad/s² | omega = ${this.omega.toFixed(2)} rad/s`,
+                    this.cx,
+                    30 * this.scale
+                );
+
+                // Draw rotating cylinder / disk (Y positioned lower to avoid overlapping top dashboard)
+                const simY = Math.min(this.cy * 1.1, this.canvas.height - r - 20 * this.scale);
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 3 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, simY, r, 0, Math.PI * 2);
+                this.ctx.stroke();
+
+                // Draw spokes to show rotation
+                this.ctx.lineWidth = 1 * this.scale;
+                this.ctx.globalAlpha = 0.5;
+                for (let i = 0; i < 8; i++) {
+                    const angle = this.theta + (i * Math.PI / 4);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.cx, simY);
+                    this.ctx.lineTo(this.cx + Math.cos(angle) * r, simY + Math.sin(angle) * r);
+                    this.ctx.stroke();
+                }
+                this.ctx.globalAlpha = 1.0;
+
+                // Center pivot
+                this.ctx.fillStyle = this.color;
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, simY, 6 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Draw Torque Force vector arrow at rim
+                if (Math.abs(this.torque) > 0.1) {
+                    this.ctx.strokeStyle = this.secondary;
+                    this.ctx.fillStyle = this.secondary;
+                    this.ctx.lineWidth = 2.5 * this.scale;
+                    
+                    const arrowAngle = this.theta;
+                    const rimX = this.cx + Math.cos(arrowAngle) * r;
+                    const rimY = simY + Math.sin(arrowAngle) * r;
+
+                    // Tangent vector
+                    const tanX = -Math.sin(arrowAngle);
+                    const tanY = Math.cos(arrowAngle);
+
+                    const forceLength = this.torque * Math.min(15 * this.scale, (this.canvas.width / this.scale - r) * 0.15);
+                    const arrowEndX = rimX + tanX * forceLength;
+                    const arrowEndY = rimY + tanY * forceLength;
+
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(rimX, rimY);
+                    this.ctx.lineTo(arrowEndX, arrowEndY);
+                    this.ctx.stroke();
+
+                    // Arrowhead
+                    const headLen = 6 * this.scale;
+                    const dirX = tanX * (this.torque > 0 ? 1 : -1);
+                    const dirY = tanY * (this.torque > 0 ? 1 : -1);
+
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(arrowEndX, arrowEndY);
+                    this.ctx.lineTo(arrowEndX - dirX * headLen + dirY * headLen * 0.5, arrowEndY - dirY * headLen - dirX * headLen * 0.5);
+                    this.ctx.lineTo(arrowEndX - dirX * headLen - dirY * headLen * 0.5, arrowEndY - dirY * headLen + dirX * headLen * 0.5);
+                    this.ctx.fill();
+                }
+            }
+
+            getResponsiveFontSize() {
+                let size = 13 * this.scale;
+                if (this.canvas.width < 750 * this.scale) size = 11 * this.scale;
+                if (this.canvas.width < 600 * this.scale) size = 9.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) size = 8.5 * this.scale;
+                return size;
+            }
+        }
+
+        class InertiaVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.theta = 0;
+                this.omega = 0;
+                this.mass = 2.0;
+                this.dist = 0.5;
+
+                const mInput = document.getElementById('input-mass');
+                const dInput = document.getElementById('input-dist');
+
+                mInput.addEventListener('input', (e) => {
+                    this.mass = parseFloat(e.target.value);
+                    document.getElementById('val-mass').textContent = e.target.value;
+                });
+
+                dInput.addEventListener('input', (e) => {
+                    this.dist = parseFloat(e.target.value);
+                    document.getElementById('val-dist').textContent = e.target.value;
+                });
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                const r = Math.min(this.cx - 30 * this.scale, this.cy * 0.55);
+                // Calculate moment of inertia: I = mass * (dist^2)
+                const I = this.mass * Math.pow(this.dist, 2) * 1.5; // Scaled for physics visual
+                const constantTorque = 1.0;
+                const alpha = constantTorque / I;
+
+                this.omega += alpha * 0.016;
+                this.omega *= 0.995; // tiny friction
+                this.theta += this.omega * 0.016;
+
+                // Status/dashboard bar
+                const fontSize = this.getResponsiveFontSize();
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `Mass = ${this.mass.toFixed(1)} kg | Distribution r_eff = ${this.dist.toFixed(2)} m | Inertia I = ${I.toFixed(2)} kg·m²`,
+                    this.cx,
+                    30 * this.scale
+                );
+
+                const simY = Math.min(this.cy * 1.1, this.canvas.height - r - 20 * this.scale);
+
+                // Draw outer reference circle
+                this.ctx.strokeStyle = this.color;
+                this.ctx.globalAlpha = 0.15;
+                this.ctx.lineWidth = 1 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, simY, r, 0, Math.PI * 2);
+                this.ctx.stroke();
+                this.ctx.globalAlpha = 1.0;
+
+                // Draw mass ring/disks representing mass distribution
+                const massRadius = r * this.dist;
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 4 * this.scale * (this.mass / 2.0);
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, simY, massRadius, 0, Math.PI * 2);
+                this.ctx.stroke();
+
+                // Draw rotating spokes in the distribution circle to show rotation
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 1 * this.scale;
+                this.ctx.globalAlpha = 0.4;
+                for (let i = 0; i < 4; i++) {
+                    const angle = this.theta + (i * Math.PI / 2);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.cx, simY);
+                    this.ctx.lineTo(this.cx + Math.cos(angle) * massRadius, simY + Math.sin(angle) * massRadius);
+                    this.ctx.stroke();
+                }
+                this.ctx.globalAlpha = 1.0;
+
+                // Draw masses as points on the rim of distribution
+                this.ctx.fillStyle = this.accent;
+                for (let i = 0; i < 4; i++) {
+                    const angle = this.theta + (i * Math.PI / 2);
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.cx + Math.cos(angle) * massRadius, simY + Math.sin(angle) * massRadius, 6 * this.scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+
+                // Center pivot
+                this.ctx.fillStyle = this.color;
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, simY, 5 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+
+            getResponsiveFontSize() {
+                let size = 13 * this.scale;
+                if (this.canvas.width < 750 * this.scale) size = 11 * this.scale;
+                if (this.canvas.width < 600 * this.scale) size = 9.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) size = 8.5 * this.scale;
+                return size;
+            }
+        }
+
+        class MomentumVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.theta = 0;
+                this.radius = 0.8;
+                this.L = 3.0; // Conserved angular momentum
+
+                const rInput = document.getElementById('input-radius');
+                rInput.addEventListener('input', (e) => {
+                    this.radius = parseFloat(e.target.value);
+                    document.getElementById('val-radius').textContent = e.target.value;
+                });
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Rotational inertia of central masses: I = m * r^2
+                const I = 2.0 * Math.pow(this.radius, 2);
+                const omega = this.L / I;
+                this.theta += omega * 0.016;
+
+                const maxDrawR = Math.min(this.cx - 30 * this.scale, this.cy * 0.55);
+                const massRadius = maxDrawR * this.radius;
+
+                // Status/dashboard bar
+                const fontSize = this.getResponsiveFontSize();
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `L = ${this.L.toFixed(1)} | radius = ${this.radius.toFixed(2)} m | Inertia I = ${I.toFixed(2)} | omega = ${omega.toFixed(2)} rad/s`,
+                    this.cx,
+                    30 * this.scale
+                );
+
+                const simY = Math.min(this.cy * 1.1, this.canvas.height - maxDrawR - 20 * this.scale);
+
+                // Draw rotation speed path lines
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 1 * this.scale;
+                this.ctx.globalAlpha = 0.08;
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, simY, maxDrawR, 0, Math.PI * 2);
+                this.ctx.stroke();
+                this.ctx.globalAlpha = 1.0;
+
+                // Draw central spindle
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 4 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.cx, simY - 15 * this.scale);
+                this.ctx.lineTo(this.cx, simY + 15 * this.scale);
+                this.ctx.stroke();
+
+                // Draw two extensible arms
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.cx - massRadius, simY);
+                this.ctx.lineTo(this.cx + massRadius, simY);
+                this.ctx.stroke();
+
+                // Draw rotating masses
+                const x1 = this.cx + Math.cos(this.theta) * massRadius;
+                const y1 = simY + Math.sin(this.theta) * massRadius;
+                const x2 = this.cx - Math.cos(this.theta) * massRadius;
+                const y2 = simY - Math.sin(this.theta) * massRadius;
+
+                // Connect arms to rotating positions
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 2.5 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.cx, simY);
+                this.ctx.lineTo(x1, y1);
+                this.ctx.moveTo(this.cx, simY);
+                this.ctx.lineTo(x2, y2);
+                this.ctx.stroke();
+
+                // Draw two masses (solid spheres)
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(x1, y1, 14 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                this.ctx.beginPath();
+                this.ctx.arc(x2, y2, 14 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Rotation direction indicators
+                this.ctx.strokeStyle = this.secondary;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.globalAlpha = 0.6;
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, simY, massRadius + 12 * this.scale, this.theta - 0.4, this.theta + 0.4);
+                this.ctx.stroke();
+
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, simY, massRadius + 12 * this.scale, this.theta + Math.PI - 0.4, this.theta + Math.PI + 0.4);
+                this.ctx.stroke();
+                this.ctx.globalAlpha = 1.0;
+            }
+
+            getResponsiveFontSize() {
+                let size = 13 * this.scale;
+                if (this.canvas.width < 750 * this.scale) size = 11 * this.scale;
+                if (this.canvas.width < 600 * this.scale) size = 9.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) size = 8.5 * this.scale;
+                return size;
+            }
+        }
+
+        window.onload = () => APP.init();
+    </script>
+</body>
+
+</html>

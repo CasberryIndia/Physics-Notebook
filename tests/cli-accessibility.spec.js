@@ -104,9 +104,11 @@ test('AI buttons expose accessible names in the browser accessibility tree', asy
     await page.goto('/Concepts/newtons-laws-of-motion.html');
 
     const aiButtons = page.locator('.ai-btn');
-    await expect(aiButtons.first()).toHaveAccessibleName('Ask Perplexity');
+    await expect(aiButtons.first()).toHaveAccessibleName('Ask Claude');
     await expect(aiButtons.nth(1)).toHaveAccessibleName('Ask Gemini');
     await expect(aiButtons.nth(2)).toHaveAccessibleName('Ask ChatGPT');
+    await expect(aiButtons.nth(3)).toHaveAccessibleName('Ask Grok');
+    await expect(aiButtons.nth(4)).toHaveAccessibleName('Ask Perplexity');
 });
 
 test('concept canvases expose meaningful accessible names', async ({ page }) => {

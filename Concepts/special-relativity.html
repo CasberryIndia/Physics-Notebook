@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Relativity • Physics Notebook</title>
+    
+    <!-- Standard Framework Styles -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/article.css">
+
+    <style>
+        /* Interactive controls dashboard layout */
+        .sim-controls {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .slider-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .slider-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .slider-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            outline: none;
+            accent-color: var(--accent);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-dark {
+            background: var(--text-main);
+            color: var(--bg-color);
+        }
+
+        .btn-dark:hover {
+            opacity: 0.9;
+        }
+
+        /* AI Links */
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+    </style>
+
+    <!-- MathJax (LaTeX) Support -->
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Theme Initialization -->
+    <script>
+        const savedTheme = localStorage.getItem('physics-notebook-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="sticky">
+        <div class="nav-bg"></div>
+        <a href="../index.html" class="logo"><i data-lucide="arrow-left" width="16"></i> Library</a>
+        <button id="themeBtn"><i data-lucide="moon" width="16"></i> Theme</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="text-reveal-wrapper">
+            <h1 class="hero-title">Special<br>Relativity</h1>
+            <p style="margin-top: 2rem; font-size: 1.4rem; max-width: 40ch;">
+                Exploring Einstein's revolutionary concepts of light speed invariance, relative time dilation, length contraction, and the ultimate cosmic velocity limit.
+            </p>
+        </div>
+    </section>
+
+    <!-- 1. Time Dilation -->
+    <section>
+        <div class="split-layout">
+            <!-- Left: Content -->
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">01. Time Dilation</h3>
+                <h2>The Relativistic Light Clock</h2>
+                <p>
+                    Einstein's first postulate states that the speed of light $c$ is constant for all inertial observers. If a light pulse bounces vertically inside a moving train, an outside stationary observer sees the light trace a longer diagonal path. 
+                </p>
+                <p>
+                    Because the speed of light is absolute, the diagonal journey takes more time. Thus, moving clocks tick slower relative to clocks at rest.
+                </p>
+
+                <!-- Math Block -->
+                <div class="math-block">
+                    $$\Delta t = \gamma \Delta t_0 = \frac{\Delta t_0}{\sqrt{1 - v^2/c^2}}$$
+                </div>
+
+                <!-- Setup Card -->
+                <div class="etu-card">
+                    <span class="etu-tag">Key Insight</span>
+                    <h4 style="margin-bottom:0.5rem;">Lorentz Factor ($\gamma$)</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        As velocity $v$ approaches $c$, the Lorentz factor $\gamma$ approaches infinity, causing time to slow to a complete standstill from an external frame.
+                    </p>
+                </div>
+
+                <!-- AI Links -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('time-dilation', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('time-dilation', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('time-dilation', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('time-dilation', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('time-dilation', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <!-- Interactive Controls -->
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Velocity ($v/c$) <span id="val-td-speed">0.60</span></label>
+                        <input type="range" id="input-td-speed" min="0.0" max="0.99" step="0.01" value="0.60">
+                    </div>
+                    <div class="btn-group">
+                        <button id="btn-run-td" class="btn btn-primary">Start Clock</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Visualization -->
+            <div class="visual-col">
+                <canvas id="canvas-time-dilation"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 2. Length Contraction -->
+    <section>
+        <div class="split-layout">
+            <!-- Left: Content -->
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">02. Length Contraction</h3>
+                <h2>Relativistic Lorentz Compression</h2>
+                <p>
+                    As an elegant consequence of time dilation and relativity of simultaneity, space itself contracts along the direction of motion for an observer at rest.
+                </p>
+                <p>
+                    A traveling relativistic grid or vehicle appears contracted horizontally by the factor $1/\gamma$ when viewed from a stationary frame, while the transverse dimensions remain unaffected.
+                </p>
+
+                <!-- Math Block -->
+                <div class="math-block">
+                    $$L = \frac{L_0}{\gamma} = L_0 \sqrt{1 - v^2/c^2}$$
+                </div>
+
+                <!-- AI Links -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('length-contraction', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('length-contraction', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('length-contraction', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('length-contraction', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('length-contraction', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <!-- Interactive Controls -->
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Velocity ($v/c$) <span id="val-lc-speed">0.80</span></label>
+                        <input type="range" id="input-lc-speed" min="0.0" max="0.99" step="0.01" value="0.80">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Visualization -->
+            <div class="visual-col">
+                <canvas id="canvas-length-contraction"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 3. Speed Limit -->
+    <section>
+        <div class="split-layout">
+            <!-- Left: Content -->
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">03. Mass-Energy Limit</h3>
+                <h2>The Cosmic Speed Limit</h2>
+                <p>
+                    As a particle accelerates towards the speed of light, its momentum increases indefinitely ($p = \gamma m_0 v$). This means the force required to yield subsequent acceleration increases without bound.
+                </p>
+                <p>
+                    Under a constant accelerating force, a particle's velocity will asymptotically approach the speed of light $c$ but can never exceed or even reach it, showing that $c$ is the absolute speed limit of our universe.
+                </p>
+
+                <!-- Math Block -->
+                <div class="math-block">
+                    $$v(t) = \frac{(F \cdot t)}{\sqrt{m_0^2 + (F \cdot t / c)^2}}$$
+                </div>
+
+                <!-- AI Links -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('mass-energy', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('mass-energy', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('mass-energy', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('mass-energy', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('mass-energy', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <!-- Interactive Controls -->
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Constant Force ($F$) <span id="val-me-force">4.0</span> N</label>
+                        <input type="range" id="input-me-force" min="1.0" max="10.0" step="0.5" value="4.0">
+                    </div>
+                    <div class="slider-group">
+                        <label>Rest Mass ($m_0$) <span id="val-me-mass">2.0</span> kg</label>
+                        <input type="range" id="input-me-mass" min="0.5" max="5.0" step="0.1" value="2.0">
+                    </div>
+                    <div class="btn-group">
+                        <button id="btn-run-me" class="btn btn-primary">Start Accelerator</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Visualization -->
+            <div class="visual-col">
+                <canvas id="canvas-mass-energy"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- References -->
+    <section class="references">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h3>Academic References</h3>
+            <ul>
+                <li><strong>Einstein, A.</strong> (1905). <em>On the Electrodynamics of Moving Bodies</em>. Annalen der Physik, 17, 891-921.</li>
+                <li><strong>Taylor, E. F., & Wheeler, J. A.</strong> (1992). <em>Spacetime Physics: Introduction to Special Relativity</em>. W. H. Freeman and Company.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Standard Scripts -->
+    <script src="../js/common.js"></script>
+    <script>
+        // AI query setups
+        function openAI(topic, model) {
+            let prompt = "";
+            switch (topic) {
+                case 'time-dilation':
+                    prompt = "Derive Einstein's time dilation formula step-by-step using a light clock gedankenexperiment. Explain the physical importance of the invariance of light speed in all inertial reference frames.";
+                    break;
+                case 'length-contraction':
+                    prompt = "Explain how length contraction is a direct physical consequence of time dilation and the relativity of simultaneity. Include derivations and physical paradoxes like the Ladder Paradox.";
+                    break;
+                case 'mass-energy':
+                    prompt = "Derive the relativistic velocity formula for a particle accelerating under a constant force. Explain why its velocity asymptotically approaches the speed of light as momentum goes to infinity.";
+                    break;
+            }
+            launchAIPrompt(model, prompt);
+        }
+
+        // ==========================
+        // BASE SIMULATION CLASS
+        // ==========================
+        class BaseSim {
+            constructor(id) {
+                this.canvas = document.getElementById(id);
+                this.ctx = this.canvas.getContext('2d');
+                this.isVisible = false;
+                this.updateColors();
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                setTimeout(() => { this.resize(); this.loop(); }, 50);
+            }
+
+            updateColors() {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark' || 
+                               (document.body && document.body.getAttribute('data-theme') === 'dark');
+                this.isDarkTheme = isDark;
+                if (isDark) {
+                    this.color = '#EAEAEA';
+                    this.bgColor = '#0E0E0E';
+                    this.accent = '#5C7CFA';
+                    this.accentSecondary = '#FF4D5A';
+                    this.hudBg = 'rgba(255, 255, 255, 0.07)';
+                    this.hudBorder = 'rgba(255, 255, 255, 0.15)';
+                    this.gridColor = 'rgba(255, 255, 255, 0.08)';
+                } else {
+                    this.color = '#121212';
+                    this.bgColor = '#F8F6F2';
+                    this.accent = '#2A45B6';
+                    this.accentSecondary = '#CC2936';
+                    this.hudBg = 'rgba(0, 0, 0, 0.05)';
+                    this.hudBorder = 'rgba(0, 0, 0, 0.1)';
+                    this.gridColor = 'rgba(0, 0, 0, 0.06)';
+                }
+            }
+
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.style.width = '100%';
+                this.canvas.style.height = '100%';
+                this.scale = window.devicePixelRatio || 2;
+                this.canvas.width = rect.width * this.scale;
+                this.canvas.height = rect.height * this.scale;
+                this.w = rect.width;
+                this.h = rect.height;
+            }
+
+            loop() {
+                if (this.isVisible) this.draw();
+                requestAnimationFrame(() => this.loop());
+            }
+
+            draw() {}
+        }
+
+        // ===================================
+        // 1. TIME DILATION LIGHT CLOCK SIM
+        // ===================================
+        class TimeDilationSim extends BaseSim {
+            constructor(id) {
+                super(id);
+                this.speed = 0.60;
+                this.running = false;
+                this.timeRest = 0;
+                this.timeMoving = 0;
+                
+                // Mirror geometries
+                this.mirrorH = 16 * this.scale;
+
+                // Photon heights & positions
+                this.photonYRest = 0;
+                this.photonXRest = 0;
+                this.photonYMoving = 0;
+                this.photonXMoving = 0;
+                this.photonDirRest = 1; // 1 = down, -1 = up
+                this.photonDirMoving = 1;
+
+                this.diagonalTrace = [];
+
+                const inputSpeed = document.getElementById('input-td-speed');
+                const btnRun = document.getElementById('btn-run-td');
+
+                inputSpeed.addEventListener('input', (e) => {
+                    this.speed = parseFloat(e.target.value);
+                    document.getElementById('val-td-speed').innerText = this.speed.toFixed(2);
+                    if (!this.running) this.resetSim();
+                });
+
+                btnRun.addEventListener('click', () => {
+                    if (this.running) {
+                        this.resetSim();
+                    } else {
+                        this.running = true;
+                        btnRun.innerText = "Reset Clock";
+                        btnRun.classList.remove('btn-primary');
+                        btnRun.classList.add('btn-dark');
+                    }
+                });
+            }
+
+            resetSim() {
+                this.running = false;
+                this.timeRest = 0;
+                this.timeMoving = 0;
+                this.photonYRest = 0;
+                this.photonYMoving = 0;
+                this.photonXMoving = 0;
+                this.photonDirRest = 1;
+                this.photonDirMoving = 1;
+                this.diagonalTrace = [];
+
+                const btnRun = document.getElementById('btn-run-td');
+                btnRun.innerText = "Start Clock";
+                btnRun.classList.add('btn-primary');
+                btnRun.classList.remove('btn-dark');
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Math parameters
+                const gamma = 1 / Math.sqrt(1 - this.speed * this.speed);
+
+                // Grid dimensions
+                const laneW = this.canvas.width * 0.44;
+                const laneH = this.canvas.height * 0.45;
+                const laneY = this.canvas.height * 0.50; // Centered vertically
+
+                const restLaneX = this.canvas.width * 0.25;
+                const movingLaneX = this.canvas.width * 0.72;
+
+                const topMirrorY = laneY - laneH / 2;
+                const bottomMirrorY = laneY + laneH / 2;
+
+                // Physics speed of photon path
+                const basePhotonSpeed = 2.5 * this.scale;
+
+                if (this.running) {
+                    // Update Rest Observer Clock
+                    this.photonYRest += this.photonDirRest * basePhotonSpeed;
+                    if (this.photonYRest >= laneH / 2) {
+                        this.photonYRest = laneH / 2;
+                        this.photonDirRest = -1;
+                        this.timeRest += 1.0;
+                    } else if (this.photonYRest <= -laneH / 2) {
+                        this.photonYRest = -laneH / 2;
+                        this.photonDirRest = 1;
+                        this.timeRest += 1.0;
+                    }
+
+                    // Update Moving Observer Clock (Lorentz Dilation applied to rate of vertical bounce)
+                    const movingPhotonSpeedY = basePhotonSpeed / gamma;
+                    this.photonYMoving += this.photonDirMoving * movingPhotonSpeedY;
+                    this.timeMoving += 1.0 / gamma;
+
+                    // Trace horizontal speed
+                    const movingPhotonSpeedX = this.speed * basePhotonSpeed;
+                    this.photonXMoving += movingPhotonSpeedX;
+
+                    // Standard bounding bounce
+                    if (this.photonYMoving >= laneH / 2) {
+                        this.photonYMoving = laneH / 2;
+                        this.photonDirMoving = -1;
+                    } else if (this.photonYMoving <= -laneH / 2) {
+                        this.photonYMoving = -laneH / 2;
+                        this.photonDirMoving = 1;
+                    }
+
+                    // Loop horizontal position
+                    if (this.photonXMoving > laneW / 2) {
+                        this.photonXMoving = -laneW / 2;
+                        this.diagonalTrace = [];
+                    }
+
+                    // Record trajectory path
+                    this.diagonalTrace.push({
+                        x: movingLaneX + this.photonXMoving,
+                        y: laneY + this.photonYMoving
+                    });
+                } else {
+                    this.photonYRest = -laneH / 2;
+                    this.photonYMoving = -laneH / 2;
+                    this.photonXMoving = -laneW / 2;
+                }
+
+                // 1. Sleek Top Status Dashboard
+                const barX = 40 * this.scale;
+                const barY = 20 * this.scale;
+                const barW = this.canvas.width - 80 * this.scale;
+                const barH = 50 * this.scale;
+
+                this.ctx.fillStyle = this.hudBg;
+                this.ctx.strokeStyle = this.hudBorder;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.roundRect(barX, barY, barW, barH, 6 * this.scale);
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                // Dynamic responsive font size
+                let fontSize = 14 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 12 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 10 * this.scale;
+
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textBaseline = 'middle';
+
+                const isMobileDash = this.canvas.width < 500 * this.scale;
+
+                // Column 1: Rest Clock (Left)
+                this.ctx.textAlign = 'left';
+                this.ctx.fillStyle = this.color;
+                const restText = isMobileDash ? `t₀: ${(this.timeRest * 0.1).toFixed(1)}s` : `Rest Clock (t₀): ${(this.timeRest * 0.1).toFixed(1)}s`;
+                this.ctx.fillText(restText, barX + 12 * this.scale, barY + barH / 2);
+
+                // Column 2: Lorentz Gamma (Center)
+                this.ctx.textAlign = 'center';
+                this.ctx.fillStyle = this.accent;
+                const gammaText = isMobileDash ? `γ: ${gamma.toFixed(2)}` : `Lorentz (γ): ${gamma.toFixed(3)}`;
+                this.ctx.fillText(gammaText, barX + barW / 2, barY + barH / 2);
+
+                // Column 3: Moving Clock (Right)
+                this.ctx.textAlign = 'right';
+                this.ctx.fillStyle = this.accentSecondary;
+                const movingText = isMobileDash ? `t: ${(this.timeMoving * 0.1).toFixed(1)}s` : `Moving Clock (t): ${(this.timeMoving * 0.1).toFixed(1)}s`;
+                this.ctx.fillText(movingText, barX + barW - 12 * this.scale, barY + barH / 2);
+
+                this.ctx.textBaseline = 'alphabetic';
+
+                // 2. Draw Mirrored Frames
+                // Frame 1: Observer S (Rest Frame)
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                
+                const mirrorHalfWidth = Math.min(40 * this.scale, this.canvas.width * 0.08);
+
+                // Top mirror
+                this.ctx.beginPath();
+                this.ctx.moveTo(restLaneX - mirrorHalfWidth, topMirrorY);
+                this.ctx.lineTo(restLaneX + mirrorHalfWidth, topMirrorY);
+                this.ctx.stroke();
+                
+                // Bottom mirror
+                this.ctx.beginPath();
+                this.ctx.moveTo(restLaneX - mirrorHalfWidth, bottomMirrorY);
+                this.ctx.lineTo(restLaneX + mirrorHalfWidth, bottomMirrorY);
+                this.ctx.stroke();
+
+                // Frame label
+                let labelFontSize = Math.min(14 * this.scale, this.canvas.width * 0.045);
+                this.ctx.fillStyle = this.color;
+                this.ctx.font = `700 ${labelFontSize}px 'Inter', sans-serif`;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText("Rest Frame (S)", restLaneX, bottomMirrorY + 30 * this.scale);
+
+                // Frame 2: Observer S' (Moving Frame)
+                // Top mirror path
+                this.ctx.strokeStyle = this.color;
+                this.ctx.beginPath();
+                this.ctx.moveTo(movingLaneX - laneW / 2, topMirrorY);
+                this.ctx.lineTo(movingLaneX + laneW / 2, topMirrorY);
+                this.ctx.stroke();
+
+                // Bottom mirror path
+                this.ctx.beginPath();
+                this.ctx.moveTo(movingLaneX - laneW / 2, bottomMirrorY);
+                this.ctx.lineTo(movingLaneX + laneW / 2, bottomMirrorY);
+                this.ctx.stroke();
+
+                // Moving frame label
+                this.ctx.fillText("Moving Frame (S')", movingLaneX, bottomMirrorY + 30 * this.scale);
+
+                // 3. Draw Diagonal Trajectory (Observer S' frame sees photon traveling diagonally)
+                if (this.diagonalTrace.length > 1) {
+                    this.ctx.strokeStyle = this.accentSecondary;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    this.ctx.save();
+                    this.ctx.globalAlpha = 0.4;
+                    this.ctx.beginPath();
+                    this.diagonalTrace.forEach((pt, idx) => {
+                        if (idx === 0) this.ctx.moveTo(pt.x, pt.y);
+                        else this.ctx.lineTo(pt.x, pt.y);
+                    });
+                    this.ctx.stroke();
+                    this.ctx.restore();
+                }
+
+                // 4. Draw Photons (Minimalist Vector Circles)
+                const photonR = 6 * this.scale;
+
+                // Rest photon
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(restLaneX, laneY + this.photonYRest, photonR, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Moving photon
+                this.ctx.fillStyle = this.accentSecondary;
+                this.ctx.beginPath();
+                this.ctx.arc(movingLaneX + this.photonXMoving, laneY + this.photonYMoving, photonR, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+        }
+
+        // ==========================================
+        // 2. LENGTH CONTRACTION LORENTZ COMPRESSION
+        // ==========================================
+        class LengthContractionSim extends BaseSim {
+            constructor(id) {
+                super(id);
+                this.speed = 0.80;
+                const inputLC = document.getElementById('input-lc-speed');
+
+                inputLC.addEventListener('input', (e) => {
+                    this.speed = parseFloat(e.target.value);
+                    document.getElementById('val-lc-speed').innerText = this.speed.toFixed(2);
+                });
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                const gamma = 1 / Math.sqrt(1 - this.speed * this.speed);
+
+                // Geometry configuration
+                const centerY = this.canvas.height * 0.45;
+                const rulerStart = Math.min(60 * this.scale, this.canvas.width * 0.1);
+                const rulerEnd = this.canvas.width - rulerStart;
+                const rulerLen = rulerEnd - rulerStart;
+
+                // 1. Sleek Dashboard Bar
+                const barX = 40 * this.scale;
+                const barY = 20 * this.scale;
+                const barW = this.canvas.width - 80 * this.scale;
+                const barH = 50 * this.scale;
+
+                this.ctx.fillStyle = this.hudBg;
+                this.ctx.strokeStyle = this.hudBorder;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.roundRect(barX, barY, barW, barH, 6 * this.scale);
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                let fontSize = 14 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 12 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 10 * this.scale;
+
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textBaseline = 'middle';
+
+                // Display parameters
+                const restLength = 100.0;
+                const contractedLength = restLength / gamma;
+
+                const isMobileDash = this.canvas.width < 500 * this.scale;
+
+                // Column 1: Rest Length (Left)
+                this.ctx.textAlign = 'left';
+                this.ctx.fillStyle = this.color;
+                const restText = isMobileDash ? `L₀: ${restLength.toFixed(0)}m` : `Rest Length (L₀): ${restLength.toFixed(1)}m`;
+                this.ctx.fillText(restText, barX + 12 * this.scale, barY + barH / 2);
+
+                // Column 2: Velocity (Center)
+                this.ctx.textAlign = 'center';
+                this.ctx.fillStyle = this.accent;
+                const speedText = isMobileDash ? `v/c: ${this.speed.toFixed(2)}` : `Velocity (v/c): ${this.speed.toFixed(2)}`;
+                this.ctx.fillText(speedText, barX + barW / 2, barY + barH / 2);
+
+                // Column 3: Contracted Length (Right)
+                this.ctx.textAlign = 'right';
+                this.ctx.fillStyle = this.accentSecondary;
+                const contractedText = isMobileDash ? `L: ${contractedLength.toFixed(1)}m` : `Contracted (L): ${contractedLength.toFixed(1)}m`;
+                this.ctx.fillText(contractedText, barX + barW - 12 * this.scale, barY + barH / 2);
+
+                this.ctx.textBaseline = 'alphabetic';
+
+                // Box dimensions
+                const shapeW = rulerLen * 0.40; // Rest width
+                const shapeWContracted = shapeW / gamma;
+                const shapeH = Math.min(50 * this.scale, this.canvas.height * 0.15);
+
+                const shapeX = rulerStart + rulerLen * 0.30; // Center position of shape
+
+                // 2. Draw Relativistic Contraction Frame (Rocket/Grid shape)
+                // Draw Rest Reference Box (Ghost Box in blue accent)
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.setLineDash([4 * this.scale, 4 * this.scale]);
+                this.ctx.strokeRect(shapeX - shapeW / 2, centerY - shapeH / 2, shapeW, shapeH);
+                this.ctx.setLineDash([]);
+
+                let labelFontSize = Math.min(12 * this.scale, this.canvas.width * 0.035);
+                this.ctx.fillStyle = this.accent;
+                this.ctx.font = `700 ${labelFontSize}px 'Inter', sans-serif`;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText("Rest Frame Geometry (L₀)", shapeX, centerY - shapeH / 2 - 8 * this.scale);
+
+                // Draw Contracted Relativistic Box (Solid shape in red accent)
+                this.ctx.fillStyle = this.accentSecondary;
+                this.ctx.save();
+                this.ctx.globalAlpha = 0.15;
+                this.ctx.fillRect(shapeX - shapeWContracted / 2, centerY - shapeH / 2, shapeWContracted, shapeH);
+                this.ctx.restore();
+
+                this.ctx.strokeStyle = this.accentSecondary;
+                this.ctx.lineWidth = 2.5 * this.scale;
+                this.ctx.strokeRect(shapeX - shapeWContracted / 2, centerY - shapeH / 2, shapeWContracted, shapeH);
+
+                this.ctx.fillStyle = this.accentSecondary;
+                this.ctx.fillText("Contracted Frame (L)", shapeX, centerY + shapeH / 2 + 14 * this.scale);
+
+                // 3. Draw Ruler Marks (Observer reference scale) - Positioned below the boxes to avoid collisions
+                const rulerY = centerY + shapeH / 2 + 25 * this.scale;
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(rulerStart, rulerY);
+                this.ctx.lineTo(rulerEnd, rulerY);
+                this.ctx.stroke();
+
+                let tickFontSize = Math.min(11 * this.scale, this.canvas.width * 0.035);
+                this.ctx.font = `600 ${tickFontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillStyle = this.color;
+
+                const tickInterval = this.canvas.width < 500 * this.scale ? 20 : 10;
+                for (let m = 0; m <= 100; m += 10) {
+                    const mx = rulerStart + (m / 100) * rulerLen;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(mx, rulerY);
+                    const tickHeight = (m % tickInterval === 0) ? 8 * this.scale : 4 * this.scale;
+                    this.ctx.lineTo(mx, rulerY + tickHeight);
+                    this.ctx.stroke();
+                    
+                    if (m % tickInterval === 0) {
+                        this.ctx.fillText(`${m}m`, mx, rulerY + tickHeight + 12 * this.scale);
+                    }
+                }
+            }
+        }
+
+        // ==============================================
+        // 3. SPEED LIMIT RELATIVISTIC PARTICLE SIM
+        // ==============================================
+        class MassEnergySim extends BaseSim {
+            constructor(id) {
+                super(id);
+                this.force = 4.0;
+                this.mass = 2.0;
+                this.time = 0;
+                this.running = false;
+
+                this.particleX = 0;
+                this.velocityHistory = [];
+
+                const inputForce = document.getElementById('input-me-force');
+                const inputMass = document.getElementById('input-me-mass');
+                const btnRun = document.getElementById('btn-run-me');
+
+                inputForce.addEventListener('input', (e) => {
+                    this.force = parseFloat(e.target.value);
+                    document.getElementById('val-me-force').innerText = this.force.toFixed(1);
+                    if (!this.running) this.resetSim();
+                });
+
+                inputMass.addEventListener('input', (e) => {
+                    this.mass = parseFloat(e.target.value);
+                    document.getElementById('val-me-mass').innerText = this.mass.toFixed(1);
+                    if (!this.running) this.resetSim();
+                });
+
+                btnRun.addEventListener('click', () => {
+                    if (this.running) {
+                        this.resetSim();
+                    } else {
+                        this.running = true;
+                        btnRun.innerText = "Reset Accelerator";
+                        btnRun.classList.remove('btn-primary');
+                        btnRun.classList.add('btn-dark');
+                    }
+                });
+            }
+
+            resetSim() {
+                this.running = false;
+                this.time = 0;
+                this.particleX = 0;
+                this.velocityHistory = [];
+
+                const btnRun = document.getElementById('btn-run-me');
+                btnRun.innerText = "Start Accelerator";
+                btnRun.classList.add('btn-primary');
+                btnRun.classList.remove('btn-dark');
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Math Relativistic Speed calculation
+                const c = 10; // Normalized speed of light constant
+                const momentum = this.force * this.time;
+                const momentumC = momentum * c;
+                const divisor = Math.sqrt(this.mass * this.mass * c * c + momentum * momentum);
+                const currentV = divisor > 0 ? (momentum * c) / divisor : 0;
+                const relativeV = currentV / c; // Ratio v/c
+
+                // Determine layouts based on screen width
+                let isMobile = this.canvas.width < 500 * this.scale;
+
+                let midX, topY, plotW, plotH, trackX, trackY, trackW, plotX, plotY;
+
+                if (isMobile) {
+                    // Stacked layout
+                    // Track is at the top, Plot is at the bottom
+                    trackX = this.canvas.width * 0.50; // Centered
+                    trackY = 135 * this.scale;
+                    trackW = this.canvas.width * 0.80; // Uses most of width
+
+                    plotX = this.canvas.width * 0.12; // Left side of plot
+                    plotW = this.canvas.width * 0.76; // Wider plot
+                    
+                    topY = 200 * this.scale;
+                    plotH = Math.max(80 * this.scale, this.canvas.height - topY - 35 * this.scale);
+                    plotY = topY + plotH;
+                } else {
+                    // Side-by-side layout
+                    midX = this.canvas.width * 0.46;
+                    topY = this.canvas.height * 0.35;
+                    plotW = this.canvas.width * 0.44;
+                    plotH = this.canvas.height * 0.45;
+                    plotX = midX + 30 * this.scale;
+                    plotY = topY + plotH;
+
+                    trackX = this.canvas.width * 0.23;
+                    trackY = this.canvas.height * 0.60;
+                    trackW = this.canvas.width * 0.36;
+                }
+
+                const particleR = 10 * this.scale;
+                const maxTrackDisplacement = trackW / 2 - particleR;
+
+                if (this.running) {
+                    const dt = 0.05;
+                    this.time += dt;
+
+                    // Advance particle displacement horizontally
+                    this.particleX += currentV * dt * 4 * this.scale;
+                    if (this.particleX > maxTrackDisplacement) {
+                        this.particleX = -maxTrackDisplacement;
+                    }
+
+                    // Track acceleration profile
+                    if (this.velocityHistory.length < 150) {
+                        this.velocityHistory.push({ t: this.time, v: relativeV });
+                    }
+                }
+
+                // 1. Sleek Dashboard Bar
+                const barX = 40 * this.scale;
+                const barY = 20 * this.scale;
+                const barW = this.canvas.width - 80 * this.scale;
+                const barH = 50 * this.scale;
+
+                this.ctx.fillStyle = this.hudBg;
+                this.ctx.strokeStyle = this.hudBorder;
+                this.ctx.lineWidth = 1.5 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.roundRect(barX, barY, barW, barH, 6 * this.scale);
+                this.ctx.fill();
+                this.ctx.stroke();
+
+                let fontSize = 14 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 12 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 10 * this.scale;
+
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textBaseline = 'middle';
+
+                // Display readouts
+                const kineticEnergy = (this.running)
+                    ? (this.mass * c * c * (1 / Math.sqrt(1 - relativeV * relativeV) - 1))
+                    : 0;
+
+                const isMobileDash = this.canvas.width < 500 * this.scale;
+
+                // Column 1: Momentum (Left)
+                this.ctx.textAlign = 'left';
+                this.ctx.fillStyle = this.color;
+                const pText = isMobileDash ? `p: ${momentum.toFixed(1)} N·s` : `Momentum (p): ${momentum.toFixed(1)} N·s`;
+                this.ctx.fillText(pText, barX + 12 * this.scale, barY + barH / 2);
+
+                // Column 2: Relativistic Velocity (Center)
+                this.ctx.textAlign = 'center';
+                this.ctx.fillStyle = this.accentSecondary;
+                const vText = isMobileDash ? `v/c: ${relativeV.toFixed(3)}` : `Velocity (v/c): ${relativeV.toFixed(4)}`;
+                this.ctx.fillText(vText, barX + barW / 2, barY + barH / 2);
+
+                // Column 3: Kinetic Energy (Right)
+                this.ctx.textAlign = 'right';
+                this.ctx.fillStyle = this.accent;
+                const keText = isMobileDash ? `KE: ${kineticEnergy.toFixed(0)} J` : `Kinetic (KE): ${kineticEnergy.toFixed(1)} J`;
+                this.ctx.fillText(keText, barX + barW - 12 * this.scale, barY + barH / 2);
+
+                this.ctx.textBaseline = 'alphabetic';
+
+                // 2. Left side - Accelerator Track
+                // Draw track channel bounds
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 1 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(trackX - trackW / 2, trackY - 15 * this.scale);
+                this.ctx.lineTo(trackX + trackW / 2, trackY - 15 * this.scale);
+                this.ctx.moveTo(trackX - trackW / 2, trackY + 15 * this.scale);
+                this.ctx.lineTo(trackX + trackW / 2, trackY + 15 * this.scale);
+                this.ctx.stroke();
+
+                // Draw speed barrier boundary line at track end
+                this.ctx.strokeStyle = this.accentSecondary;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.setLineDash([4 * this.scale, 4 * this.scale]);
+                this.ctx.beginPath();
+                this.ctx.moveTo(trackX + trackW / 2, trackY - 30 * this.scale);
+                this.ctx.lineTo(trackX + trackW / 2, trackY + 30 * this.scale);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+
+                this.ctx.fillStyle = this.accentSecondary;
+                let barrierFontSize = Math.min(11 * this.scale, this.canvas.width * 0.035);
+                this.ctx.font = `700 ${barrierFontSize}px 'Inter', sans-serif`;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText("SPEED LIMIT (c)", trackX + trackW / 2, trackY - 38 * this.scale);
+
+                // Draw accelerating vector particle (Moving dot)
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(trackX + this.particleX, trackY, particleR, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Draw vector force arrow pushing the particle
+                if (this.running) {
+                    const arrowLen = 30 * this.scale * (this.force / 10.0);
+                    const arrowX = trackX + this.particleX - particleR - 4 * this.scale;
+                    this.ctx.strokeStyle = this.accentSecondary;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(arrowX - arrowLen, trackY);
+                    this.ctx.lineTo(arrowX, trackY);
+                    this.ctx.lineTo(arrowX - 6 * this.scale, trackY - 4 * this.scale);
+                    this.ctx.moveTo(arrowX, trackY);
+                    this.ctx.lineTo(arrowX - 6 * this.scale, trackY + 4 * this.scale);
+                    this.ctx.stroke();
+                }
+
+                // Track Label
+                this.ctx.fillStyle = this.color;
+                let trackLabelSize = Math.min(14 * this.scale, this.canvas.width * 0.045);
+                this.ctx.font = `700 ${trackLabelSize}px 'Inter', sans-serif`;
+                this.ctx.fillText("Particle Accelerator Frame", trackX, trackY + 42 * this.scale);
+
+                // Right side - Speed Limit asymptotic plot
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 1.5 * this.scale;
+
+                // Y Axis
+                this.ctx.beginPath();
+                this.ctx.moveTo(plotX, plotY);
+                this.ctx.lineTo(plotX, topY);
+                this.ctx.stroke();
+
+                // X Axis
+                this.ctx.beginPath();
+                this.ctx.moveTo(plotX, plotY);
+                this.ctx.lineTo(plotX + plotW, plotY);
+                this.ctx.stroke();
+
+                // Plot labels
+                this.ctx.fillStyle = this.color;
+                let axisLabelSize = Math.min(11 * this.scale, this.canvas.width * 0.035);
+                this.ctx.font = `600 ${axisLabelSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textAlign = 'right';
+                this.ctx.fillText("v/c", plotX - 8 * this.scale, topY + 10 * this.scale);
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText("Time (t)", plotX + plotW / 2, plotY + 24 * this.scale);
+
+                // Asymptotic Speed Limit grid indicator line at v/c = 1.0
+                const speedLimitY = plotY - plotH * 0.90;
+                this.ctx.strokeStyle = this.accentSecondary;
+                this.ctx.lineWidth = 1 * this.scale;
+                this.ctx.setLineDash([4 * this.scale, 4 * this.scale]);
+                this.ctx.beginPath();
+                this.ctx.moveTo(plotX, speedLimitY);
+                this.ctx.lineTo(plotX + plotW, speedLimitY);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+
+                this.ctx.fillStyle = this.accentSecondary;
+                this.ctx.textAlign = 'right';
+                this.ctx.fillText("Limit c (1.0)", plotX + plotW - 10 * this.scale, speedLimitY - 6 * this.scale);
+
+                // Draw historical acceleration velocity curve
+                if (this.velocityHistory.length > 1) {
+                    this.ctx.strokeStyle = this.accent;
+                    this.ctx.lineWidth = 2.5 * this.scale;
+                    this.ctx.beginPath();
+                    this.velocityHistory.forEach((pt, idx) => {
+                        const px = plotX + (idx / 150) * plotW;
+                        const py = plotY - pt.v * (plotH * 0.90);
+                        if (idx === 0) this.ctx.moveTo(px, py);
+                        else this.ctx.lineTo(px, py);
+                    });
+                    this.ctx.stroke();
+                }
+            }
+        }
+
+        // Initialize simulations on window load
+        const APP = {
+            visuals: [],
+            observer: null,
+
+            init() {
+                this.setupObserver();
+                this.initVisuals();
+
+                // Re-evaluate layouts on theme shifts
+                window.addEventListener('theme-changed', () => {
+                    this.visuals.forEach(v => v.updateColors());
+                });
+            },
+
+            setupObserver() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const visual = this.visuals.find(v => v.canvas === entry.target);
+                        if (visual) visual.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.1 });
+            },
+
+            initVisuals() {
+                this.addVisual(new TimeDilationSim('canvas-time-dilation'));
+                this.addVisual(new LengthContractionSim('canvas-length-contraction'));
+                this.addVisual(new MassEnergySim('canvas-mass-energy'));
+            },
+
+            addVisual(visual) {
+                this.visuals.push(visual);
+                this.observer.observe(visual.canvas);
+            }
+        };
+
+        window.onload = () => APP.init();
+    </script>
+</body>
+
+</html>

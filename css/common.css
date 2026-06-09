@@ -159,7 +159,7 @@ nav.sticky {
     top: 0;
     left: 0;
     right: 0;
-    padding: 1.5rem 3rem;
+    padding: 1.5rem 5vw;
     pointer-events: none;
     /* Let clicks pass through */
 }
@@ -178,10 +178,9 @@ nav.sticky .nav-bg {
     width: 100%;
     height: 100%;
     background: var(--bg-color);
-    opacity: 0.8;
+    opacity: 0.97;
     backdrop-filter: blur(5px);
     z-index: -1;
-    mask: linear-gradient(to bottom, black 50%, transparent);
 }
 
 .logo {

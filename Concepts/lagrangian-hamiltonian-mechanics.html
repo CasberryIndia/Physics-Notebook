@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lagrangian & Hamiltonian Mechanics • Physics Notebook</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/article.css">
+    <style>
+        /* AI Links */
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .sim-controls {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+        }
+    </style>
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Theme Init -->
+    <script>
+        const savedTheme = localStorage.getItem('physics-notebook-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body && document.body.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <nav class="sticky">
+        <div class="nav-bg"></div>
+        <a href="../index.html" class="logo">
+            <i data-lucide="arrow-left" width="16"></i>
+            Library
+        </a>
+        <button id="themeBtn">
+            <i data-lucide="moon" width="16"></i> Theme
+        </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="text-reveal-wrapper">
+            <h1 class="hero-title">Lagrangian &<br>Hamiltonian Mechanics</h1>
+            <p style="margin-top: 2rem; font-size: 1.4rem; max-width: 40ch;">
+                Reformulating classical mechanics through the elegant principles of stationary action, energy minimization, and phase space flow.
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION 1: Lagrangian & Stationary Action -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">01. Stationary Action</h3>
+                <h2>Lagrangian Dynamics</h2>
+                <p>
+                    Rather than analyzing forces vectorially, Lagrangian mechanics reformulates physics in terms of scalar energy. By defining the <strong>Lagrangian</strong> ($L$) as kinetic minus potential energy, we state that physical systems follow paths that extremize the total <strong>Action</strong> ($S$).
+                </p>
+                <div class="math-block">
+                    $$L = T - V \quad \text{and} \quad \frac{d}{dt}\left(\frac{\partial L}{\partial \dot{q}_i}\right) - \frac{\partial L}{\partial q_i} = 0$$
+                </div>
+                <p>
+                    These <strong>Euler-Lagrange equations</strong> yield the equations of motion for any generalized coordinate ($q_i$) and velocity ($\dot{q}_i$), eliminating constraint forces natively.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">The Path of Least Resistance</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        Similar to how a ray of light finds the path that minimizes travel time (Fermat's Principle), a physical object moves along the path that makes its cumulative "action" stationary.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('lagrangian', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('lagrangian', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('lagrangian', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('lagrangian', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('lagrangian', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Length (l) <span id="val-length">1.5</span> m</label>
+                        <input type="range" id="input-length" min="0.5" max="2.5" step="0.1" value="1.5">
+                    </div>
+                    <div class="slider-group">
+                        <label>Gravity (g) <span id="val-gravity">9.8</span> m/s²</label>
+                        <input type="range" id="input-gravity" min="1.0" max="20.0" step="0.5" value="9.8">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-lagrangian"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 2: Hamiltonian Flow & Phase Space -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent-secondary);">02. Energy State Space</h3>
+                <h2>Hamiltonian & Phase Space</h2>
+                <p>
+                    Hamiltonian mechanics shifts the description from generalized velocity to **generalized momentum** ($p_i = \partial L / \partial \dot{q}_i$). The **Hamiltonian** ($H$) represents the total energy ($T + V$).
+                </p>
+                <div class="math-block">
+                    $$\dot{q}_i = \frac{\partial H}{\partial p_i}, \quad \dot{p}_i = -\frac{\partial H}{\partial q_i}$$
+                </div>
+                <p>
+                    These first-order differential equations map the system's state onto a **Phase Space** grid of position vs. momentum. The evolution trace forms loops showing conserved energy curves.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Deep Concept</span>
+                    <h4 style="margin-bottom:0.5rem;">Liouville's Theorem</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        Phase space acts like an incompressible fluid. As a system evolves, any volume of phase space coordinates remains constant in time, conserving state information.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('hamiltonian', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('hamiltonian', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('hamiltonian', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('hamiltonian', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('hamiltonian', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Initial Displacement (q₀) <span id="val-disp">1.0</span> m</label>
+                        <input type="range" id="input-disp" min="0.2" max="2.0" step="0.1" value="1.0">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-hamiltonian"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 3: The Double Pendulum & Chaos -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--text-muted);">03. Chaotic Dynamics</h3>
+                <h2>The Double Pendulum</h2>
+                <p>
+                    Adding a second coordinates axis introduces coupling. In a double pendulum, the Euler-Lagrange equations produce highly non-linear differential dynamics that are extremely sensitive to initial states, generating **deterministic chaos**.
+                </p>
+                <div class="math-block">
+                    $$\text{Sensitivity: } \Delta \theta(t) \sim e^{\lambda t} \Delta \theta(0)$$
+                </div>
+                <p>
+                    Even with exact equations, the system's long-term motion is unpredictable. The simulation below uses a 4th-order Runge-Kutta (RK4) integrator to calculate coordinate evolution in real time.
+                </p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Scientific Milestone</span>
+                    <h4 style="margin-bottom:0.5rem;">The Butterfly Effect</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        In chaotic systems, tiny discrepancies—like a rounded digit in starting values—grow exponentially, leading to entirely distinct long-term trajectories.
+                    </p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('chaos', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('chaos', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('chaos', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('chaos', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('chaos', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Length 1 (l₁) <span id="val-l1">1.2</span> m</label>
+                        <input type="range" id="input-l1" min="0.6" max="1.8" step="0.1" value="1.2">
+                    </div>
+                    <div class="slider-group">
+                        <label>Length 2 (l₂) <span id="val-l2">1.2</span> m</label>
+                        <input type="range" id="input-l2" min="0.6" max="1.8" step="0.1" value="1.2">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-chaos"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- REFERENCES -->
+    <section class="references">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h3>Academic References</h3>
+            <ul>
+                <li><strong>Goldstein, H., Poole, C., & Safko, J.</strong> (2001). <em>Classical Mechanics</em>, 3rd Edition. Pearson.</li>
+                <li><strong>Landau, L. D., & Lifshitz, E. M.</strong> (1976). <em>Mechanics</em>, Vol. 1 of <em>Course of Theoretical Physics</em>, 3rd Edition. Butterworth-Heinemann.</li>
+            </ul>
+        </div>
+    </section>
+
+    <script src="../js/common.js"></script>
+    <script>
+        function openAI(topic, model) {
+            let prompt = "";
+            switch (topic) {
+                case 'lagrangian':
+                    prompt = "Explain the principle of stationary action and how the Euler-Lagrange equations generalize classical mechanics beyond simple vector force analysis.";
+                    break;
+                case 'hamiltonian':
+                    prompt = "How does Hamiltonian mechanics frame physics in terms of generalized coordinate and momentum phase space? Explain Liouville's theorem.";
+                    break;
+                case 'chaos':
+                    prompt = "Why does the double pendulum show deterministic chaos? Explain how its non-linear coupled equations create extreme sensitivity to initial conditions.";
+                    break;
+            }
+            launchAIPrompt(model, prompt);
+        }
+
+        const APP = {
+            visuals: [],
+            observer: null,
+
+            init() {
+                this.setupObserver();
+                this.initScrollAnimations();
+                this.initVisuals();
+
+                window.addEventListener('theme-changed', (e) => {
+                    this.visuals.forEach(v => v.updateColors());
+                });
+            },
+
+            setupObserver() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const visual = this.visuals.find(v => v.canvas === entry.target);
+                        if (visual) visual.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.1 });
+            },
+
+            initScrollAnimations() {
+                gsap.registerPlugin(ScrollTrigger);
+                gsap.utils.toArray('h1, h2, h3').forEach(el => {
+                    gsap.from(el, { opacity: 0, y: 30, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 85%" } });
+                });
+                gsap.utils.toArray('.math-block').forEach(el => {
+                    gsap.from(el, { scale: 0.95, opacity: 0, duration: 1, ease: "power2.out", scrollTrigger: { trigger: el, start: "top 90%" } });
+                });
+            },
+
+            initVisuals() {
+                this.addVisual(new LagrangianVisual('canvas-lagrangian'));
+                this.addVisual(new HamiltonianVisual('canvas-hamiltonian'));
+                this.addVisual(new ChaosVisual('canvas-chaos'));
+            },
+
+            addVisual(visual) {
+                this.visuals.push(visual);
+                this.observer.observe(visual.canvas);
+            }
+        };
+
+        class BaseVisual {
+            constructor(id) {
+                this.canvas = document.getElementById(id);
+                this.ctx = this.canvas.getContext('2d');
+                this.isVisible = false;
+                this.updateColors();
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.loop();
+            }
+            updateColors() {
+                this.color = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
+                this.bg = getComputedStyle(document.body).getPropertyValue('--bg-color').trim();
+                this.accent = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+                this.secondary = getComputedStyle(document.body).getPropertyValue('--accent-secondary').trim();
+            }
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width * 2;
+                this.canvas.height = rect.height * 2;
+                this.scale = 2;
+                this.cx = this.canvas.width / 2;
+                this.cy = this.canvas.height / 2;
+            }
+            loop() {
+                if (this.isVisible) this.draw();
+                requestAnimationFrame(() => this.loop());
+            }
+            draw() { }
+        }
+
+        class LagrangianVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.theta = 0.6;
+                this.omega = 0.0;
+                this.length = 1.5;
+                this.gravity = 9.8;
+
+                const lInput = document.getElementById('input-length');
+                const gInput = document.getElementById('input-gravity');
+
+                lInput.addEventListener('input', (e) => {
+                    this.length = parseFloat(e.target.value);
+                    document.getElementById('val-length').textContent = e.target.value;
+                });
+
+                gInput.addEventListener('input', (e) => {
+                    this.gravity = parseFloat(e.target.value);
+                    document.getElementById('val-gravity').textContent = e.target.value;
+                });
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Euler-Lagrange equations for single pendulum: d2theta = -g/l * sin(theta)
+                const alpha = -(this.gravity / this.length) * Math.sin(this.theta);
+                this.omega += alpha * 0.016;
+                this.omega *= 0.998; // minor friction
+                this.theta += this.omega * 0.016;
+
+                const simY = this.canvas.height * 0.4;
+                const maxPossibleLen = Math.min(this.canvas.width * 0.45, this.canvas.height * 0.5);
+                const len = maxPossibleLen * (this.length / 2.5);
+                const endX = this.cx + Math.sin(this.theta) * len;
+                const endY = simY + Math.cos(this.theta) * len;
+
+                // Energies: KE = 0.5 * m * (l*w)^2, PE = m * g * h
+                const h = this.length * (1 - Math.cos(this.theta));
+                const PE = this.gravity * h;
+                const KE = 0.5 * Math.pow(this.length * this.omega, 2);
+                const TotalE = PE + KE;
+
+                // Status Bar Display
+                const fontSize = this.getResponsiveFontSize();
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `L = T - V | q (theta) = ${this.theta.toFixed(2)} rad | T (KE) = ${KE.toFixed(1)} J | V (PE) = ${PE.toFixed(1)} J`,
+                    this.cx,
+                    30 * this.scale
+                );
+
+                // Draw string
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.cx, simY);
+                this.ctx.lineTo(endX, endY);
+                this.ctx.stroke();
+
+                // Draw mass bob
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(endX, endY, 11 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Draw pivot point
+                this.ctx.fillStyle = this.color;
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, simY, 4 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+
+            getResponsiveFontSize() {
+                let size = 13 * this.scale;
+                if (this.canvas.width < 750 * this.scale) size = 11 * this.scale;
+                if (this.canvas.width < 600 * this.scale) size = 9.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) size = 8.5 * this.scale;
+                return size;
+            }
+        }
+
+        class HamiltonianVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.q = 1.0;
+                this.p = 0.0;
+                this.k = 1.5;
+                this.history = [];
+
+                const dInput = document.getElementById('input-disp');
+                dInput.addEventListener('input', (e) => {
+                    this.q = parseFloat(e.target.value);
+                    this.p = 0;
+                    this.history = [];
+                    document.getElementById('val-disp').textContent = e.target.value;
+                });
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Hamilton's Equations: dq = p/m, dp = -kq (mass m=1)
+                const dq = this.p;
+                const dp = -this.k * this.q;
+
+                this.q += dq * 0.016;
+                this.p += dp * 0.016;
+
+                // Save path
+                this.history.push({ q: this.q, p: this.p });
+                if (this.history.length > 300) this.history.shift();
+
+                const simY = this.cy * 1.05;
+                const maxQ = 2.2;
+                const maxP = maxQ * Math.sqrt(this.k);
+                const scaleQ = (this.cx * 0.75) / maxQ;
+                const scaleP = (this.cy * 0.75) / maxP;
+
+                // Status Bar Display
+                const fontSize = this.getResponsiveFontSize();
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `H = T + V | Position (q) = ${this.q.toFixed(2)} | Momentum (p) = ${this.p.toFixed(2)}`,
+                    this.cx,
+                    30 * this.scale
+                );
+
+                // Draw Phase Space coordinates axis
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 1 * this.scale;
+                this.ctx.globalAlpha = 0.25;
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.cx - scaleQ * maxQ, simY);
+                this.ctx.lineTo(this.cx + scaleQ * maxQ, simY);
+                this.ctx.moveTo(this.cx, simY - scaleP * maxP);
+                this.ctx.lineTo(this.cx, simY + scaleP * maxP);
+                this.ctx.stroke();
+
+                // Axis Labels
+                this.ctx.fillStyle = this.color;
+                this.ctx.font = `${9 * this.scale}px 'JetBrains Mono', monospace`;
+                this.ctx.fillText("+q", this.cx + scaleQ * maxQ - 10 * this.scale, simY - 5 * this.scale);
+                this.ctx.fillText("+p", this.cx + 10 * this.scale, simY - scaleP * maxP + 10 * this.scale);
+                this.ctx.globalAlpha = 1.0;
+
+                // Draw Phase Space Trajectory Line
+                if (this.history.length > 1) {
+                    this.ctx.strokeStyle = this.accent;
+                    this.ctx.lineWidth = 1.5 * this.scale;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.cx + this.history[0].q * scaleQ, simY - this.history[0].p * scaleP);
+                    for (let i = 1; i < this.history.length; i++) {
+                        this.ctx.lineTo(this.cx + this.history[i].q * scaleQ, simY - this.history[i].p * scaleP);
+                    }
+                    this.ctx.stroke();
+                }
+
+                // Draw current state dot
+                this.ctx.fillStyle = this.secondary;
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx + this.q * scaleQ, simY - this.p * scaleP, 6 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+
+            getResponsiveFontSize() {
+                let size = 13 * this.scale;
+                if (this.canvas.width < 750 * this.scale) size = 11 * this.scale;
+                if (this.canvas.width < 600 * this.scale) size = 9.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) size = 8.5 * this.scale;
+                return size;
+            }
+        }
+
+        class ChaosVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                // System constants
+                this.g = 9.81;
+
+                // State array: [theta1, omega1, theta2, omega2]
+                this.state = [Math.PI / 2, 0.0, Math.PI / 2, 0.0];
+                this.m1 = 1.0;
+                this.m2 = 1.0;
+                this.l1 = 1.2;
+                this.l2 = 1.2;
+                this.trail = [];
+
+                const l1Input = document.getElementById('input-l1');
+                const l2Input = document.getElementById('input-l2');
+
+                l1Input.addEventListener('input', (e) => {
+                    this.l1 = parseFloat(e.target.value);
+                    this.trail = [];
+                    document.getElementById('val-l1').textContent = e.target.value;
+                });
+
+                l2Input.addEventListener('input', (e) => {
+                    this.l2 = parseFloat(e.target.value);
+                    this.trail = [];
+                    document.getElementById('val-l2').textContent = e.target.value;
+                });
+            }
+
+            getDerivatives(t1, w1, t2, w2) {
+                const delta = t1 - t2;
+                const den1 = this.l1 * (2 * this.m1 + this.m2 - this.m2 * Math.cos(2 * t1 - 2 * t2));
+                const den2 = this.l2 * (2 * this.m1 + this.m2 - this.m2 * Math.cos(2 * t1 - 2 * t2));
+
+                const num1 = -this.g * (2 * this.m1 + this.m2) * Math.sin(t1) - this.m2 * this.g * Math.sin(t1 - 2 * t2) - 2 * Math.sin(delta) * this.m2 * (w2 * w2 * this.l2 + w1 * w1 * this.l1 * Math.cos(delta));
+                const num2 = 2 * Math.sin(delta) * (w1 * w1 * this.l1 * (this.m1 + this.m2) + this.g * (this.m1 + this.m2) * Math.cos(t1) + w2 * w2 * this.l2 * this.m2 * Math.cos(delta));
+
+                const alpha1 = num1 / den1;
+                const alpha2 = num2 / den2;
+
+                return [w1, alpha1, w2, alpha2];
+            }
+
+            // Runge-Kutta 4th Order numerical integration
+            integrateRK4(dt) {
+                const [t1, w1, t2, w2] = this.state;
+
+                // k1
+                const [dt1_1, dw1_1, dt2_1, dw2_1] = this.getDerivatives(t1, w1, t2, w2);
+
+                // k2
+                const [dt1_2, dw1_2, dt2_2, dw2_2] = this.getDerivatives(
+                    t1 + 0.5 * dt * dt1_1,
+                    w1 + 0.5 * dt * dw1_1,
+                    t2 + 0.5 * dt * dt2_1,
+                    w2 + 0.5 * dt * dw2_1
+                );
+
+                // k3
+                const [dt1_3, dw1_3, dt2_3, dw2_3] = this.getDerivatives(
+                    t1 + 0.5 * dt * dt1_2,
+                    w1 + 0.5 * dt * dw1_2,
+                    t2 + 0.5 * dt * dt2_2,
+                    w2 + 0.5 * dt * dw2_2
+                );
+
+                // k4
+                const [dt1_4, dw1_4, dt2_4, dw2_4] = this.getDerivatives(
+                    t1 + dt * dt1_3,
+                    w1 + dt * dw1_3,
+                    t2 + dt * dt2_3,
+                    w2 + dt * dw2_3
+                );
+
+                // Update state
+                this.state[0] += (dt / 6) * (dt1_1 + 2 * dt1_2 + 2 * dt1_3 + dt1_4);
+                this.state[1] += (dt / 6) * (dw1_1 + 2 * dw1_2 + 2 * dw1_3 + dw1_4);
+                this.state[2] += (dt / 6) * (dt2_1 + 2 * dt2_2 + 2 * dt2_3 + dt2_4);
+                this.state[3] += (dt / 6) * (dw2_1 + 2 * dw2_2 + 2 * dw2_3 + dw2_4);
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Time step
+                const dt = 0.025;
+                this.integrateRK4(dt);
+
+                const t1 = this.state[0];
+                const t2 = this.state[2];
+
+                const simY = this.canvas.height * 0.45;
+                const maxVisualLength = Math.min(this.canvas.width * 0.45, this.canvas.height * 0.45);
+                const scaleLen = maxVisualLength / 3.6; // Max combined l1 + l2 is 1.8 + 1.8 = 3.6
+                const len1 = scaleLen * this.l1;
+                const len2 = scaleLen * this.l2;
+
+                const x1 = this.cx + Math.sin(t1) * len1;
+                const y1 = simY + Math.cos(t1) * len1;
+                const x2 = x1 + Math.sin(t2) * len2;
+                const y2 = y1 + Math.cos(t2) * len2;
+
+                // Save trace trail
+                this.trail.push({ x: x2, y: y2 });
+                if (this.trail.length > 200) this.trail.shift();
+
+                // Status Bar Display
+                const fontSize = this.getResponsiveFontSize();
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(
+                    `theta_1 = ${t1.toFixed(2)} rad | theta_2 = ${t2.toFixed(2)} rad`,
+                    this.cx,
+                    30 * this.scale
+                );
+
+                // Draw chaotic trace trail line
+                if (this.trail.length > 1) {
+                    this.ctx.strokeStyle = this.secondary;
+                    this.ctx.lineWidth = 1 * this.scale;
+                    this.ctx.globalAlpha = 0.4;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.trail[0].x, this.trail[0].y);
+                    for (let i = 1; i < this.trail.length; i++) {
+                        this.ctx.lineTo(this.trail[i].x, this.trail[i].y);
+                    }
+                    this.ctx.stroke();
+                    this.ctx.globalAlpha = 1.0;
+                }
+
+                // Draw rods
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 2.5 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(this.cx, simY);
+                this.ctx.lineTo(x1, y1);
+                this.ctx.lineTo(x2, y2);
+                this.ctx.stroke();
+
+                // Draw center pivot
+                this.ctx.fillStyle = this.color;
+                this.ctx.beginPath();
+                this.ctx.arc(this.cx, simY, 4 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // Draw mass bobs
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(x1, y1, 10 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(x2, y2, 10 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+
+            getResponsiveFontSize() {
+                let size = 13 * this.scale;
+                if (this.canvas.width < 750 * this.scale) size = 11 * this.scale;
+                if (this.canvas.width < 600 * this.scale) size = 9.5 * this.scale;
+                if (this.canvas.width < 450 * this.scale) size = 8.5 * this.scale;
+                return size;
+            }
+        }
+
+        window.onload = () => APP.init();
+    </script>
+</body>
+
+</html>

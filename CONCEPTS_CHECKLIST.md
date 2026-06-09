@@ -8,10 +8,10 @@ You can add the missing concept and domains to this list. So that anyone can use
 - [x] Newton's Laws of Motion
 - [x] Conservation of Energy
 - [x] Conservation of Momentum & Angular Momentum
-- [ ] Work-Energy Principle
-- [ ] Rotational Dynamics
-- [ ] Oscillations and Harmonic Motion
-- [ ] Lagrangian & Hamiltonian Mechanics
+- [x] Work-Energy Principle
+- [x] Rotational Dynamics
+- [x] Oscillations and Harmonic Motion
+- [x] Lagrangian & Hamiltonian Mechanics
 - [ ] Principle of Least Action
 - [ ] Noether's Theorem
 - [ ] Chaos and Nonlinear Dynamics
@@ -62,7 +62,7 @@ You can add the missing concept and domains to this list. So that anyone can use
 - [ ] Quantum Field Theory
 
 ## Relativity
-- [ ] Special Relativity
+- [x] Special Relativity
 - [ ] General Relativity
 - [ ] Equivalence Principle
 - [ ] Lorentz Transformation

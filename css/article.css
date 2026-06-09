@@ -195,21 +195,26 @@ input[type=range] {
         height: 50vh;
         position: relative;
         top: 0;
-        /* order: -1; Removed to keep content on top */
         margin-bottom: 2rem;
-        width: 100vw;
-        margin-left: -5vw;
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
+        width: 100%;
+        margin-left: 0;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
     }
+}
 
-    @media (min-width: 768px) {
-        .visual-col {
-            width: 100%;
-            margin-left: 0;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-        }
-    }
+/* ------------------------------------------------------------------
+   AI BRAND COLORS IN LIGHT THEME
+   ------------------------------------------------------------------ */
+body:not([data-theme="dark"]) .ai-claude {
+    color: hsl(14.8, 63.1%, 59.6%) !important;
+}
+body:not([data-theme="dark"]) .ai-chatgpt {
+    color: #10a37f !important;
+}
+body:not([data-theme="dark"]) .ai-grok {
+    color: #121212 !important;
+}
+body:not([data-theme="dark"]) .ai-perplexity {
+    color: #19a1a1 !important;
 }

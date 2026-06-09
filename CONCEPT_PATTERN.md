@@ -21,10 +21,52 @@ Use the following structure for the HTML file.
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/article.css">
     
-    <!-- Page Specific Styles (AI Links types) -->
+    <!-- Page Specific Styles -->
     <style>
-        /* ... Copy AI Links styles from existing pages ... */
-        /* ... Add specific styles for interactive controls ... */
+        /* AI Links & Buttons styling */
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Specific styles for interactive controls */
+        .sim-controls {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+        }
     </style>
 
     <!-- MathJax (LaTeX) Support -->
@@ -84,12 +126,12 @@ Use the following structure for the HTML file.
                 <!-- AI Links -->
                 <div class="ai-links">
                     <span class="ai-label">Ask AI:</span>
-                    <!-- Example: Perplexity, Gemini, ChatGPT, Claude, Grok -->
-                    <button onclick="openAI('topic', 'perplexity')" class="ai-btn" title="Ask Perplexity"><svg ... ></svg></button>
-                    <button onclick="openAI('topic', 'gemini')" class="ai-btn" title="Ask Gemini"><svg ... ></svg></button>
-                    <button onclick="openAI('topic', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"><svg ... ></svg></button>
-                    <button onclick="openAI('topic', 'claude')" class="ai-btn" title="Ask Claude"><svg ... ></svg></button>
-                    <button onclick="openAI('topic', 'grok')" class="ai-btn" title="Ask Grok"><svg ... ></svg></button>
+                    <!-- Automatically populated with clean, standardized SVGs by AILinksManager inside common.js on load -->
+                    <button onclick="openAI('topic', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('topic', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('topic', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('topic', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('topic', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
                 </div>
                 
                 <!-- Interactive Controls (Optional) -->
@@ -295,5 +337,27 @@ class MySpecificVisual extends BaseVisual {
 ## 5. Design & Accessibility Standards
 - **Shared Typography**: Standard site fonts are bundled locally and loaded through `../css/common.css`. Do not add page-level Google Fonts includes for `DM Serif Display`, `Inter`, or `JetBrains Mono`.
 - **Shared Design Rules**: Read `STYLE_GUIDE.md` before changing shared typography, layout, color, or motion behavior.
+- **Minimalist Academic Aesthetic vs. Cartoon Realism**:
+  - All canvas simulations must represent physical systems using clean, abstract, minimalist vector graphics (such as simple circles, paths, and lines) rather than literal, cartoon-like, or game-like illustrations (e.g., detailed cars, cart wheels, asphalt texture fills, or road markings). Keep the visuals looking like an elegant, premium academic textbook.
+  - Strictly bind all drawing colors to theme-derived variables fetched from the CSS custom properties (`this.accent` for primary, `this.accentSecondary` for secondary, and `this.color` for standard text/lines) instead of hardcoding arbitrary colors, ensuring native dark and light theme adaptability.
+- **Non-Overlapping Compositions & Horizontal Dashboard Layouts**:
+  - To prevent animated physics elements (like carts, blocks, pendulums, or vectors) from overlapping readouts, **never use bulky floating HUD boxes** in the active simulation area.
+  - Standardize on a **sleek, horizontal status bar spanning the full width of the canvas top** (typically `y = 20 * scale` to `70 * scale`) to group and display live variables cleanly, similar to a professional instrument cluster.
+  - Position tracks, roads, and active motion paths lower down vertically (e.g., `trackY` at `0.44` to `0.52` of canvas height) to maintain a massive visual safety margin (minimum `100px` scaled) between the top dashboard bar and the highest path of any animated object.
+- **Fluid Sizing & Concise Scientific Notation**:
+  - Always implement dynamic, responsive font scaling in the drawing loop to guarantee readouts fit side-by-side in columns on narrow mobile/tablet screen viewports:
+    ```javascript
+    let fontSize = 15 * this.scale;
+    if (this.canvas.width < 750 * this.scale) fontSize = 13 * this.scale;
+    if (this.canvas.width < 600 * this.scale) fontSize = 11 * this.scale;
+    if (this.canvas.width < 450 * this.scale) fontSize = 9.5 * this.scale;
+    this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+    ```
+  - Standardize on compact, internationally recognized physics variables and abbreviations (e.g., `W_applied`, `Heat (Q)`, `KE`, `Velocity (v)`, `d_stop`) instead of verbose text strings. This cuts label lengths by over **60%**, eliminating text collisions and maximizing screen utilization.
 - **Readable and Responsive Simulation Text**: The text labels in the simulations must be clearly readable. Make sure they are responsive for all devices (e.g., using dynamic sizing with `this.scale` for high-DPI displays) and clearly legible across all simulations.
 - **Interactive Controls Placement**: Interactive controls, such as sliders, toggle switches, or buttons, must always be positioned **above** the simulations on mobile and tablet responsive views. Furthermore, both the controls and the canvas simulation they affect should comfortably fit within the viewport of the device simultaneously to prevent the user from having to scroll up and down to observe the simulation changes.
+- **Mobile & Tablet Responsiveness**:
+  - The site and all concept pages must be fully responsive. Ensure all layout components wrap cleanly on screens down to 320px width.
+  - **Avoid MathJax in Form Controls**: Do not use MathJax/LaTeX notation (like `$\tau$`, `$l_1$`) inside input sliders, buttons, or `<label>` tags. MathJax containers create layout shifts, vertical offsets, and wide spacing gaps on small viewports. Use clean, native Unicode characters (e.g., `τ`, `l₁`, `l₂`, `q₀`, `θ₀`) for standard mathematical symbols inside controls.
+  - Ensure the navigation bar has a solid or highly opaque background to mask underlying content when scrolling, preventing text overlaps.
+  - Verify that canvas sizes fit perfectly inside their parent column containers dynamically without horizontal clipping.

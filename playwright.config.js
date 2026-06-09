@@ -15,10 +15,9 @@ const config = {
     },
     projects: [
         {
-            name: 'edge',
+            name: 'chromium',
             use: {
-                browserName: 'chromium',
-                channel: 'msedge'
+                browserName: 'chromium'
             }
         }
     ]

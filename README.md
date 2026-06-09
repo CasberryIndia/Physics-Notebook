@@ -35,6 +35,8 @@ Physics Notebook is an open-source interactive learning platform that brings phy
 - 🏹 Projectile Motion
 - 🪐 Orbital Mechanics
 - ⏱️ Simple Pendulum
+- 🔄 Rotational Dynamics
+- 🛠️ Lagrangian & Hamiltonian Mechanics
 
 #### **Waves & Optics**
 - 🌊 Wave Interference
@@ -211,6 +213,18 @@ Update `index.html` DATA array:
 
 Refer to [STYLE_GUIDE.md](STYLE_GUIDE.md) when changing shared typography,
 layout, motion, or page structure.
+
+### 🤖 Automated Concept Generation
+
+If you are using an AI agent (such as Antigravity, Claude, Copilot, etc.) to contribute, you can automate the process of selecting, researching, generating, and registering a new concept page using our automated workflow tools:
+
+1. **AI Agent Runbook (`scripts/add_concept_workflow.md`)**: Point your AI assistant to this runbook file (e.g. *"Please read scripts/add_concept_workflow.md and add the next concept"*). The agent will autonomously read the checklist, search the web, generate the HTML page conforming to the style guidelines, update `index.html`, and run verification scripts.
+2. **Workflow Automation Script (`scripts/add_concept.py`)**: Run this Python script directly from your terminal:
+   ```bash
+   python3 scripts/add_concept.py
+   ```
+   - **If `GEMINI_API_KEY` is set**: The script calls the Gemini API (with Google Search Grounding enabled) to autonomously research the next unchecked concept, generate all matching assets, write the files, update the main index layout, run accessibility checks, and check the concept off in the checklist.
+   - **If `GEMINI_API_KEY` is not set**: The script identifies the next unchecked concept and prints a comprehensive, pre-formatted prompt that you can copy and paste to your AI assistant to execute the workflow.
 
 ### Contribution Guidelines
 
