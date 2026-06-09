@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Allow all major crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+# Sitemap location
+Sitemap: https://physics-notebook.casberry.in/sitemap.xml
