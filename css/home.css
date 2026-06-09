@@ -237,3 +237,328 @@ canvas {
 .main-footer a:hover {
     color: var(--accent);
 }
+
+/* ------------------------------------------------------------------
+   VIEW ALL DOMAINS BUTTON (filter chip variant)
+   ------------------------------------------------------------------ */
+.view-all-domains-btn {
+    border-color: var(--accent);
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    margin-left: 0.25rem;
+}
+.view-all-domains-btn:hover,
+.view-all-domains-btn[aria-expanded="true"] {
+    background: var(--accent);
+    color: var(--bg-color);
+    border-color: var(--accent);
+}
+
+/* ------------------------------------------------------------------
+   DOMAINS OVERLAY
+   ------------------------------------------------------------------ */
+.domains-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+/* CRITICAL: override display:flex when the hidden attribute is present */
+.domains-overlay[hidden] {
+    display: none !important;
+}
+
+/* Translucent backdrop */
+.domains-overlay-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+.domains-overlay.is-open .domains-overlay-backdrop {
+    opacity: 1;
+}
+
+/* Side panel */
+.domains-overlay-panel {
+    position: relative;
+    z-index: 1;
+    width: min(680px, 100vw);
+    height: 100dvh;
+    background: var(--bg-color);
+    border-left: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow: hidden;
+}
+.domains-overlay.is-open .domains-overlay-panel {
+    transform: translateX(0);
+}
+
+/* Panel header */
+.domains-overlay-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 2rem 2rem 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+}
+
+.domains-overlay-title {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--text-main);
+    margin: 0 0 0.4rem 0;
+    line-height: 1.2;
+}
+
+.domains-overlay-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+    max-width: 42ch;
+}
+
+/* Close button */
+.domains-close-btn {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border-subtle);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    margin-top: 0.25rem;
+}
+.domains-close-btn:hover,
+.domains-close-btn:focus-visible {
+    background: var(--text-main);
+    color: var(--bg-color);
+    border-color: var(--text-main);
+    outline: none;
+}
+
+/* Scrollable body */
+.domains-overlay-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 2rem 4rem 2rem;
+    overscroll-behavior: contain;
+}
+
+/* Domain section */
+.domain-section {
+    padding: 1.5rem 0;
+}
+
+.domain-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.domain-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 0.15rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.domain-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    flex-shrink: 0;
+}
+
+.domain-section-header > div {
+    flex: 1;
+}
+
+.domain-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 0.3rem 0;
+    line-height: 1.3;
+}
+
+.domain-sub {
+    font-weight: 400;
+    color: var(--text-muted);
+    font-size: 0.95em;
+}
+
+.domain-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+    max-width: unset;
+}
+
+/* Domain badges */
+.domain-badge {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+    margin-top: 0.2rem;
+}
+.domain-badge--active {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.domain-badge--new {
+    background: color-mix(in srgb, #f59e0b 12%, transparent);
+    color: #b45309;
+    border: 1px solid color-mix(in srgb, #f59e0b 35%, transparent);
+}
+[data-theme="dark"] .domain-badge--new {
+    color: #fbbf24;
+}
+
+/* Concept list */
+.concept-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem;
+}
+
+.concept-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    transition: background 0.2s;
+}
+
+/* Live concepts */
+.concept-item--live {
+    background: color-mix(in srgb, var(--accent) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+}
+.concept-item--live:hover {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.concept-item--live a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 500;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+.concept-item--live a:hover {
+    color: var(--accent);
+}
+
+/* Roadmap / upcoming concepts */
+.concept-item--soon {
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    opacity: 0.65;
+}
+.concept-item--soon span:first-child {
+    color: var(--text-muted);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Status pills */
+.concept-status {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 7px;
+    border-radius: 100px;
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    color: var(--accent);
+}
+.concept-status--soon {
+    background: color-mix(in srgb, var(--text-muted) 10%, transparent);
+    color: var(--text-muted);
+}
+
+/* Divider between major domains */
+.domain-divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 0.5rem 0;
+}
+
+/* ------------------------------------------------------------------
+   DOMAINS OVERLAY: RESPONSIVE
+   ------------------------------------------------------------------ */
+@media (max-width: 600px) {
+    .domains-overlay-panel {
+        width: 100vw;
+        border-left: none;
+    }
+    .domains-overlay-header {
+        padding: 1.5rem 1.25rem 1.25rem 1.25rem;
+    }
+    .domains-overlay-body {
+        padding: 1rem 1.25rem 4rem 1.25rem;
+    }
+    .concept-list {
+        grid-template-columns: 1fr;
+    }
+    .domains-overlay-title {
+        font-size: 1.5rem;
+    }
+    .domain-badge {
+        display: none;
+    }
+}
+
+@media (max-width: 420px) {
+    .domain-section-header {
+        flex-wrap: wrap;
+    }
+}

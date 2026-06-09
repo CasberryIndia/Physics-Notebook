@@ -423,7 +423,6 @@
 
             init() {
                 this.setupObserver();
-                this.initScrollAnimations();
                 this.initVisuals();
                 this.initSliders();
 
@@ -439,16 +438,6 @@
                         if (visual) visual.isVisible = entry.isIntersecting;
                     });
                 }, { threshold: 0.1 });
-            },
-
-            initScrollAnimations() {
-                gsap.registerPlugin(ScrollTrigger);
-                gsap.utils.toArray('h1, h2, h3').forEach(el => {
-                    gsap.from(el, { opacity: 0, y: 30, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 85%" } });
-                });
-                gsap.utils.toArray('.math-block').forEach(el => {
-                    gsap.from(el, { scale: 0.95, opacity: 0, duration: 1, ease: "power2.out", scrollTrigger: { trigger: el, start: "top 90%" } });
-                });
             },
 
             initVisuals() {

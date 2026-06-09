@@ -141,3 +141,138 @@ pre code {
     background: var(--line-subtle);
     margin: 6rem 0;
 }
+
+/* ------------------------------------------------------------------
+   AI AGENT WORKFLOW SECTION
+   ------------------------------------------------------------------ */
+
+.ai-workflow-section {
+    border-left: 3px solid var(--accent);
+    padding-left: 2rem;
+}
+
+.ai-workflow-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    color: var(--accent);
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    margin-bottom: 2rem;
+}
+
+/* Prompt block */
+.prompt-block {
+    background: var(--card-hover);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    overflow: hidden;
+}
+
+.prompt-block-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.6rem 1rem;
+    background: var(--line-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+}
+
+.prompt-block-header span {
+    flex: 1;
+}
+
+.prompt-block > code {
+    display: block;
+    background: none;
+    color: var(--text-main);
+    padding: 1.25rem;
+    font-size: 0.9em;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.prompt-block > code code {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent);
+    padding: 0.15rem 0.35rem;
+}
+
+.copy-btn {
+    background: none;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    border-radius: 5px;
+    padding: 3px 7px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s, color 0.2s;
+}
+
+.copy-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+/* Workflow info grid */
+.workflow-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+}
+
+.workflow-info-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: border-color 0.25s, transform 0.25s;
+}
+
+.workflow-info-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.workflow-info-card i {
+    color: var(--accent);
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.workflow-info-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+
+.workflow-info-card p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 0;
+    max-width: unset;
+}
+
+@media (max-width: 600px) {
+    .workflow-info-grid {
+        grid-template-columns: 1fr;
+    }
+    .ai-workflow-section {
+        padding-left: 1rem;
+    }
+}

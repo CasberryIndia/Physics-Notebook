@@ -48,6 +48,10 @@ Open [index.html](file:///Users/eswarprasaath/Documents/AI%20Playground/Physics-
    ```
 2. **Add Visualization Class**: Implement a simplified mini-simulation class for the dashboard card by extending `BaseVisual`.
 3. **Link Class in switch-case**: Add the new case to the `renderGrid` method's switch statement to map `concept-type` to your new class.
+4. **Register the Domain (if new)**:
+   - Check the existing `<div class="filter-group">` filter chips. The current parent domains exposed as chips are: `Mechanics`, `Waves`, `Electromagnetism`, `Quantum`.
+   - If the new concept belongs to a domain **not yet listed as a filter chip** (e.g., Thermodynamics, Relativity, Atomic/Nuclear, Condensed Matter, Astrophysics), add a new `<button class="filter-chip">` for it inside `#filterContainer`.
+   - Also update the **Domains Overlay** (`#domainsOverlay`) — find the matching `<section class="domain-section">` for that domain and add the new concept as a new `<li class="concept-item concept-item--live">` entry with a link to its live page. Change the section's badge from `domain-badge--new` to `domain-badge--active` once it has at least one live concept.
 
 ## Step 5: Verify & Run Accessibility Checks
 1. Run a local development server if it isn't running: `python3 -m http.server 8000`.

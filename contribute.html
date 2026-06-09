@@ -19,8 +19,6 @@
 
     <!-- Libs -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 
 <body>
@@ -140,6 +138,90 @@ python3 -m http.server 8000  # or npx http-server</code></pre>
 
         <div class="divider"></div>
 
+        <!-- ======================================================
+             AI AGENT WORKFLOW SECTION
+        ====================================================== -->
+        <section class="guide-section ai-workflow-section">
+            <h2><i data-lucide="bot" width="28"></i> AI Agent Workflow</h2>
+            <p>Have an AI agent create a new concept page for you — fully automatically. Clone the repo, point your AI assistant to the runbook, and it will research, code, verify, and register the new concept from start to finish.</p>
+
+            <div class="ai-workflow-badge">
+                <i data-lucide="sparkles" width="20"></i>
+                <span>Powered by AI — zero manual coding required</span>
+            </div>
+
+            <div class="step-card">
+                <span class="step-number">STEP 01</span>
+                <h3>Clone &amp; Start the Server</h3>
+                <p>Get the project running locally. No build step needed — it's plain HTML &amp; JS.</p>
+                <pre><code>git clone https://github.com/CasberryIndia/Physics-Notebook.git
+cd Physics-Notebook
+python3 -m http.server 8000</code></pre>
+            </div>
+
+            <div class="step-card">
+                <span class="step-number">STEP 02</span>
+                <h3>Ask Your AI Agent</h3>
+                <p>Open the runbook in your AI coding assistant (Antigravity, Claude, Copilot, Cursor, etc.) and give it this prompt. The agent reads the checklist, searches the web for accuracy, generates the concept page, registers it, and runs verification checks.</p>
+                <div class="prompt-block">
+                    <div class="prompt-block-header">
+                        <i data-lucide="message-square-quote" width="14"></i>
+                        <span>Paste this into your AI agent</span>
+                        <button class="copy-btn" onclick="copyPrompt(this)" title="Copy prompt">
+                            <i data-lucide="copy" width="14"></i>
+                        </button>
+                    </div>
+                    <code id="agent-prompt">Please read <code>scripts/add_concept_workflow.md</code> and add the next unchecked concept from CONCEPTS_CHECKLIST.md to the Physics Notebook. Follow every instruction in the runbook exactly.</code>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <span class="step-number">STEP 03</span>
+                <h3>Or Run the Python Script Directly</h3>
+                <p>Alternatively, run the automation script. With a Gemini API key it operates fully autonomously — without one, it prints a ready-to-paste prompt for your AI assistant.</p>
+                <pre><code># Without API key — prints the prompt for you:
+python3 scripts/add_concept.py
+
+# With Gemini API key — runs end-to-end autonomously:
+export GEMINI_API_KEY="your_key_here"
+python3 scripts/add_concept.py</code></pre>
+            </div>
+
+            <div class="step-card">
+                <span class="step-number">STEP 04</span>
+                <h3>Review &amp; Submit a PR</h3>
+                <p>The agent will run accessibility checks automatically. Review the generated concept page in your browser at <code>http://localhost:8000</code>, then open a Pull Request.</p>
+                <pre><code>git add .
+git commit -m "feat: add [Concept Name] concept page"
+git push origin your-branch</code></pre>
+            </div>
+
+            <div class="workflow-info-grid">
+                <div class="workflow-info-card">
+                    <i data-lucide="file-text" width="24"></i>
+                    <h4>Runbook</h4>
+                    <p>Step-by-step instructions for AI agents in <code>scripts/add_concept_workflow.md</code></p>
+                </div>
+                <div class="workflow-info-card">
+                    <i data-lucide="terminal" width="24"></i>
+                    <h4>Automation Script</h4>
+                    <p>Python script that handles everything: <code>scripts/add_concept.py</code></p>
+                </div>
+                <div class="workflow-info-card">
+                    <i data-lucide="list-checks" width="24"></i>
+                    <h4>Concept Checklist</h4>
+                    <p>Track what's been done and what's next: <code>CONCEPTS_CHECKLIST.md</code></p>
+                </div>
+                <div class="workflow-info-card">
+                    <i data-lucide="layout-template" width="24"></i>
+                    <h4>Pattern Template</h4>
+                    <p>The canonical HTML structure all pages must follow: <code>CONCEPT_PATTERN.md</code></p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
         <div style="text-align: center; margin-top: 6rem;">
             <p style="margin-bottom: 1.5rem; font-size: 1.2rem; font-family: var(--font-serif);">Ready to submit your
                 changes?</p>
@@ -152,34 +234,18 @@ python3 -m http.server 8000  # or npx http-server</code></pre>
 
     <script src="js/common.js"></script>
     <script>
-        // Entry Animations
-        window.addEventListener('DOMContentLoaded', () => {
-            if (window.lucide) window.lucide.createIcons();
-
-            const tl = gsap.timeline();
-
-            tl.from('header > *', {
-                y: 30,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.1,
-                ease: "power2.out"
-            })
-                .from('.step-card', {
-                    y: 40,
-                    opacity: 0,
-                    duration: 0.8,
-                    stagger: 0.15,
-                    ease: "power2.out"
-                }, "-=0.4")
-                .from('.checklist-item', {
-                    scale: 0.9,
-                    opacity: 0,
-                    duration: 0.5,
-                    stagger: 0.05,
-                    ease: "back.out(1.7)"
-                }, "-=0.4");
-        });
+        function copyPrompt(btn) {
+            const text = document.getElementById('agent-prompt').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const icon = btn.querySelector('i');
+                icon.setAttribute('data-lucide', 'check');
+                if (window.lucide) window.lucide.createIcons();
+                setTimeout(() => {
+                    icon.setAttribute('data-lucide', 'copy');
+                    if (window.lucide) window.lucide.createIcons();
+                }, 2000);
+            });
+        }
     </script>
 </body>
 
