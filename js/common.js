@@ -397,7 +397,7 @@ const AILinksManager = {
 // Google Analytics
 const GoogleAnalytics = {
     init() {
-        const id = 'G-REQTSJ0Q84';
+        const id = 'G-45509NCQXN';
         
         // Inject script tag
         const script = document.createElement('script');
