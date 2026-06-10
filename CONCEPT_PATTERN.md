@@ -5,6 +5,7 @@ This guide documents the standard pattern for creating new concept pages in the 
 ## 1. File Structure & Location
 -   **New Concept File**: Create in `Concepts/<concept-name>.html`.
 -   **Asset Linking**: Ensure CSS (`../css/`) and JS (`../js/`) paths are correct relative to the `Concepts/` directory.
+-   **Analytics**: Do not manually add Google Analytics (gtag.js) script tags to new concept pages. Analytics tracking is initialized automatically when `../js/common.js` is imported.
 
 ## 2. HTML Template
 Use the following structure for the HTML file.

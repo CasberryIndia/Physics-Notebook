@@ -394,6 +394,28 @@ const AILinksManager = {
     }
 };
 
+// Google Analytics
+const GoogleAnalytics = {
+    init() {
+        const id = 'G-REQTSJ0Q84';
+        
+        // Inject script tag
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
+        document.head.appendChild(script);
+
+        // Setup window.dataLayer and gtag
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function() {
+            window.dataLayer.push(arguments);
+        };
+        
+        window.gtag('js', new Date());
+        window.gtag('config', id);
+    }
+};
+
 window.ThemeManager = ThemeManager;
 window.openExternalLink = (url) => ExternalNavigation.open(url);
 window.launchAIPrompt = (model, prompt, options) => AIProviderLauncher.launch(model, prompt, options);
@@ -403,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     GitHubStats.init();
     AILinksManager.init();
     AccessibilityManager.init();
+    GoogleAnalytics.init();
     // Initialize Lucide icons if library is present
     if (window.lucide) {
         window.lucide.createIcons();
