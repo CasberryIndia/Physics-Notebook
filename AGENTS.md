@@ -31,7 +31,8 @@ Editing rules
 - Consult `STYLE_GUIDE.md` before making cross-page layout, typography, color,
   or motion changes.
 - If you add a new concept page, update the `DATA` array in `index.html` and
-  follow `CONCEPT_PATTERN.md`.
+  follow `CONCEPT_PATTERN.md`. For automated concept generation, use
+  `CREATE_CONCEPT.md` as the primary runbook.
 
 Verification
 

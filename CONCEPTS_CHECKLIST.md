@@ -14,13 +14,13 @@ You can add the missing concept and domains to this list. So that anyone can use
 - [x] Lagrangian & Hamiltonian Mechanics
 - [x] Principle of Least Action
 - [x] Noether's Theorem
-- [ ] Chaos and Nonlinear Dynamics
+- [x] Chaos and Nonlinear Dynamics
 
 ## Waves & Optics
-- [ ] Wave Equation and Superposition Principle
-- [ ] Interference
-- [ ] Diffraction
-- [ ] Polarization of Waves
+- [x] Wave Equation and Superposition Principle
+- [x] Interference
+- [x] Diffraction
+- [x] Polarization of Waves
 - [ ] Geometrical Optics
 - [ ] Physical Optics
 - [ ] Lasers and Coherence

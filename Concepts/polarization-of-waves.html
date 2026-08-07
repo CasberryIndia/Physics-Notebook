@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polarization of Waves • Physics Notebook</title>
+
+    <!-- Standard Framework Styles -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/article.css">
+    
+    <!-- Page Specific Styles -->
+    <style>
+        /* AI Links & Buttons styling */
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Specific styles for interactive controls */
+        .sim-controls {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+        }
+    </style>
+
+    <!-- MathJax (LaTeX) Support -->
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Theme Initialization -->
+    <script>
+        const savedTheme = localStorage.getItem('physics-notebook-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="sticky">
+        <div class="nav-bg"></div>
+        <a href="../index.html" class="logo"><i data-lucide="arrow-left" width="16"></i> Library</a>
+        <button id="themeBtn"><i data-lucide="moon" width="16"></i> Theme</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="text-reveal-wrapper">
+            <h1 class="hero-title">Polarization<br>of Waves</h1>
+            <p style="margin-top: 2rem; font-size: 1.4rem; max-width: 40ch;">
+                The geometric orientation of a wave's oscillations and its behavior as it passes through filters.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 1: Linear Polarization -->
+    <section>
+        <div class="split-layout">
+            <!-- Left: Content -->
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">01. Linear Polarization</h3>
+                <h2>Oscillating in One Plane</h2>
+                <p>An electromagnetic wave consists of electric and magnetic fields oscillating perpendicular to the direction of travel. In a linearly polarized wave, the electric field vector is confined to a single plane along the direction of propagation.</p>
+                
+                <!-- Math Block -->
+                <div class="math-block">$$ \vec{E}(z,t) = E_0 \cos(kz - \omega t) \hat{n} $$</div>
+                
+                <!-- Setup/Analogy Card -->
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">Shaking a Rope</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">Imagine shaking a rope up and down to create a wave. If you only move your hand vertically, the wave is vertically polarized. If you shake it side-to-side, it is horizontally polarized.</p>
+                </div>
+
+                <!-- AI Links -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('linear_polarization', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('linear_polarization', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('linear_polarization', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('linear_polarization', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('linear_polarization', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                
+                <!-- Interactive Controls (Optional) -->
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Polarization Angle (θ) <span id="val-theta">45</span>°</label>
+                        <input type="range" id="input-theta" min="0" max="360" step="1" value="45">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Visualization -->
+            <div class="visual-col">
+                <canvas id="canvas-linear"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 2: Wave Superposition & Polarization States -->
+    <section>
+        <div class="split-layout">
+            <!-- Left: Content -->
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">02. Polarization States</h3>
+                <h2>Circular and Elliptical</h2>
+                <p>When two orthogonal linearly polarized waves (e.g., in the x and y directions) superpose, their combined state depends on their relative amplitudes and the phase difference $\delta$ between them. A phase difference of $90^\circ$ ($\pi/2$) with equal amplitudes produces circularly polarized light.</p>
+                
+                <!-- Math Block -->
+                <div class="math-block">$$ E_x = E_{0x} \cos(\omega t) \quad ; \quad E_y = E_{0y} \cos(\omega t + \delta) $$</div>
+                
+                <!-- Setup/Analogy Card -->
+                <div class="etu-card">
+                    <span class="etu-tag">Visualizing the Trace</span>
+                    <h4 style="margin-bottom:0.5rem;">Lissajous Figures</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">Looking at the wave head-on, the tip of the electric field vector traces out a shape over time. It can be a straight line, a circle, or an ellipse, forming Lissajous figures depending on the phase and amplitude ratios.</p>
+                </div>
+
+                <!-- AI Links -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('circular_polarization', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('circular_polarization', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('circular_polarization', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('circular_polarization', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('circular_polarization', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                
+                <!-- Interactive Controls (Optional) -->
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>E_x Amplitude <span id="val-ex">1.0</span></label>
+                        <input type="range" id="input-ex" min="0" max="2" step="0.1" value="1.0">
+                    </div>
+                    <div class="slider-group">
+                        <label>E_y Amplitude <span id="val-ey">1.0</span></label>
+                        <input type="range" id="input-ey" min="0" max="2" step="0.1" value="1.0">
+                    </div>
+                    <div class="slider-group">
+                        <label>Phase Diff (δ) <span id="val-delta">90</span>°</label>
+                        <input type="range" id="input-delta" min="-180" max="180" step="5" value="90">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Visualization -->
+            <div class="visual-col">
+                <canvas id="canvas-states"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 3: Malus's Law -->
+    <section>
+        <div class="split-layout">
+            <!-- Left: Content -->
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">03. Malus's Law</h3>
+                <h2>Passing Through Polarizers</h2>
+                <p>When linearly polarized light of intensity $I_0$ passes through a polarizing filter (analyzer) whose transmission axis is at an angle $\theta$ relative to the incoming polarization, the transmitted intensity $I$ is reduced according to Malus's Law.</p>
+                
+                <!-- Math Block -->
+                <div class="math-block">$$ I = I_0 \cos^2(\theta) $$</div>
+                
+                <!-- Setup/Analogy Card -->
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">Picket Fence</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">If you shake a rope to make a wave and pass it through the vertical slats of a picket fence, only vertical waves get through. If you try to pass horizontal waves through the same vertical fence, they are completely blocked.</p>
+                </div>
+
+                <!-- AI Links -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('malus_law', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('malus_law', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('malus_law', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('malus_law', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('malus_law', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                
+                <!-- Interactive Controls (Optional) -->
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Analyzer Angle (θ) <span id="val-analyzer">45</span>°</label>
+                        <input type="range" id="input-analyzer" min="0" max="90" step="1" value="45">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Visualization -->
+            <div class="visual-col">
+                <canvas id="canvas-malus"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- References -->
+    <section class="references">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h3>Academic References</h3>
+            <ul>
+                <li><strong>Hecht, E.</strong> (2017). <em>Optics (5th Edition)</em>, Pearson. Section 8.1 on Polarization states and Malus's Law.</li>
+                <li><strong>Feynman, R. P., Leighton, R. B., & Sands, M.</strong> (1963). <em>The Feynman Lectures on Physics, Vol. I</em>, Basic Books. Chapter 33, Polarization.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="../js/common.js"></script>
+    <script>
+        // AI Prompts
+        function openAI(topic, model) {
+            let prompt = "";
+            switch (topic) {
+                case 'linear_polarization': 
+                    prompt = "Explain linear polarization of electromagnetic waves. How is the direction of polarization defined relative to the electric and magnetic fields?"; 
+                    break;
+                case 'circular_polarization': 
+                    prompt = "How does the phase difference between two orthogonal linearly polarized waves result in circular or elliptical polarization? Explain the concept of left-handed and right-handed circular polarization."; 
+                    break;
+                case 'malus_law': 
+                    prompt = "Derive and explain Malus's Law. Why does the intensity of transmitted light depend on the cosine squared of the angle between polarizers?"; 
+                    break;
+            }
+            launchAIPrompt(model, prompt);
+        }
+
+        // Base Visual class handling scaling, responsiveness and drawing loop
+        class BaseVisual {
+            constructor(id) {
+                this.canvas = document.getElementById(id);
+                this.ctx = this.canvas.getContext('2d');
+                this.isVisible = false;
+                this.updateColors();
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                
+                // Animation state
+                this.time = 0;
+                this.loop();
+            }
+            updateColors() {
+                this.color = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
+                this.bg = getComputedStyle(document.body).getPropertyValue('--bg-color').trim();
+                this.accent = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+                this.secondary = getComputedStyle(document.body).getPropertyValue('--accent-secondary').trim() || '#3498db';
+                this.gridColor = getComputedStyle(document.body).getPropertyValue('--line-subtle').trim() || 'rgba(150,150,150,0.2)';
+            }
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width * 2;
+                this.canvas.height = rect.height * 2;
+                this.scale = 2;
+                this.cx = this.canvas.width / 2;
+                this.cy = this.canvas.height / 2;
+                this.viewScale = Math.min(this.canvas.width, this.canvas.height);
+            }
+            loop() {
+                if (this.isVisible) {
+                    this.time += 0.05;
+                    this.draw();
+                }
+                requestAnimationFrame(() => this.loop());
+            }
+            draw() { /* Override this */ }
+            
+            drawDashboard(labels) {
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 13 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 11 * this.scale;
+                if (this.canvas.width < 450 * this.scale) fontSize = 9.5 * this.scale;
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textAlign = 'center';
+                
+                const stepX = this.canvas.width / (labels.length + 1);
+                const dashY = 40 * this.scale;
+                
+                labels.forEach((label, idx) => {
+                    const px = stepX * (idx + 1);
+                    this.ctx.fillStyle = label.color || this.color;
+                    this.ctx.fillText(label.text, px, dashY);
+                });
+            }
+            
+            isoProject(x, y, z) {
+                // Isometric projection
+                const isoX = (x - z) * Math.cos(Math.PI / 6);
+                const isoY = y - (x + z) * Math.sin(Math.PI / 6);
+                return { x: isoX, y: isoY };
+            }
+        }
+
+        // Section 1: Linear Polarization
+        class LinearVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.theta = 45;
+                
+                const inputTheta = document.getElementById('input-theta');
+                if (inputTheta) {
+                    inputTheta.addEventListener('input', (e) => {
+                        this.theta = parseFloat(e.target.value);
+                        document.getElementById('val-theta').innerText = this.theta;
+                    });
+                }
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                const rad = this.theta * Math.PI / 180;
+                
+                // Dashboard
+                this.drawDashboard([
+                    { text: `Angle: ${this.theta}°`, color: this.accent }
+                ]);
+                
+                const L = this.viewScale * 0.4; // Z axis length
+                const E0 = this.viewScale * 0.2; // Amplitude
+                
+                this.ctx.save();
+                this.ctx.translate(this.cx, this.cy + this.viewScale * 0.1);
+                
+                // Draw axes
+                this.ctx.strokeStyle = this.gridColor;
+                this.ctx.lineWidth = 2;
+                
+                // Z axis
+                this.ctx.beginPath();
+                const zEnd = this.isoProject(0, 0, L);
+                const zStart = this.isoProject(0, 0, -L);
+                this.ctx.moveTo(zStart.x, zStart.y);
+                this.ctx.lineTo(zEnd.x, zEnd.y);
+                this.ctx.stroke();
+                
+                // X and Y axes
+                this.ctx.beginPath();
+                const xEnd = this.isoProject(E0*1.5, 0, 0);
+                this.ctx.moveTo(0, 0);
+                this.ctx.lineTo(xEnd.x, xEnd.y);
+                const yEnd = this.isoProject(0, -E0*1.5, 0); // -y is up in canvas
+                this.ctx.moveTo(0, 0);
+                this.ctx.lineTo(yEnd.x, yEnd.y);
+                this.ctx.stroke();
+                
+                // Draw wave
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 3 * this.scale;
+                
+                this.ctx.beginPath();
+                for (let z = -L; z <= L; z += L / 50) {
+                    // E = E0 * cos(kz - wt)
+                    const phase = (z / L) * Math.PI * 4 - this.time;
+                    const E = E0 * Math.cos(phase);
+                    
+                    const Ex = E * Math.cos(rad);
+                    const Ey = -E * Math.sin(rad); // - for canvas y
+                    
+                    const p = this.isoProject(Ex, Ey, z);
+                    
+                    if (z === -L) this.ctx.moveTo(p.x, p.y);
+                    else this.ctx.lineTo(p.x, p.y);
+                }
+                this.ctx.stroke();
+                
+                // Draw electric field vectors at intervals
+                this.ctx.strokeStyle = this.accentSecondary;
+                this.ctx.lineWidth = 1 * this.scale;
+                this.ctx.globalAlpha = 0.5;
+                for (let z = -L; z <= L; z += L / 10) {
+                    const phase = (z / L) * Math.PI * 4 - this.time;
+                    const E = E0 * Math.cos(phase);
+                    const Ex = E * Math.cos(rad);
+                    const Ey = -E * Math.sin(rad);
+                    
+                    const base = this.isoProject(0, 0, z);
+                    const tip = this.isoProject(Ex, Ey, z);
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(base.x, base.y);
+                    this.ctx.lineTo(tip.x, tip.y);
+                    this.ctx.stroke();
+                }
+                this.ctx.globalAlpha = 1.0;
+                
+                this.ctx.restore();
+            }
+        }
+
+        // Section 2: Wave Superposition & States
+        class StatesVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.Ex = 1.0;
+                this.Ey = 1.0;
+                this.delta = 90;
+                
+                const bindSlider = (id, prop) => {
+                    const el = document.getElementById(`input-${id}`);
+                    if (el) {
+                        el.addEventListener('input', (e) => {
+                            this[prop] = parseFloat(e.target.value);
+                            document.getElementById(`val-${id}`).innerText = this[prop];
+                            // clear trace on change
+                            this.trace = [];
+                        });
+                    }
+                };
+                
+                bindSlider('ex', 'Ex');
+                bindSlider('ey', 'Ey');
+                bindSlider('delta', 'delta');
+                
+                this.trace = [];
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                let state = "Elliptical";
+                if (this.Ex === 0 || this.Ey === 0 || this.delta % 180 === 0) {
+                    state = "Linear";
+                } else if (this.Ex === this.Ey && Math.abs(this.delta) % 180 === 90) {
+                    state = "Circular";
+                }
+                
+                // Dashboard
+                this.drawDashboard([
+                    { text: `State: ${state}`, color: this.accent },
+                    { text: `δ: ${this.delta}°`, color: this.color }
+                ]);
+                
+                const radDelta = this.delta * Math.PI / 180;
+                const E0 = this.viewScale * 0.15;
+                
+                // Calculate current E vector
+                const x = this.Ex * E0 * Math.cos(-this.time);
+                const y = -this.Ey * E0 * Math.cos(-this.time + radDelta); // -y for canvas up
+                
+                // Update trace
+                this.trace.push({x, y});
+                if (this.trace.length > 200) this.trace.shift();
+                
+                this.ctx.save();
+                this.ctx.translate(this.cx, this.cy + this.viewScale * 0.05);
+                
+                // Draw axes
+                this.ctx.strokeStyle = this.gridColor;
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                this.ctx.moveTo(-E0*2.5, 0); this.ctx.lineTo(E0*2.5, 0);
+                this.ctx.moveTo(0, -E0*2.5); this.ctx.lineTo(0, E0*2.5);
+                this.ctx.stroke();
+                
+                // Draw bounding box
+                this.ctx.setLineDash([5, 5]);
+                this.ctx.strokeRect(-this.Ex*E0, -this.Ey*E0, this.Ex*E0*2, this.Ey*E0*2);
+                this.ctx.setLineDash([]);
+                
+                // Draw trace (Lissajous figure)
+                if (this.trace.length > 1) {
+                    this.ctx.strokeStyle = this.accentSecondary;
+                    this.ctx.lineWidth = 2 * this.scale;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(this.trace[0].x, this.trace[0].y);
+                    for (let i = 1; i < this.trace.length; i++) {
+                        this.ctx.lineTo(this.trace[i].x, this.trace[i].y);
+                    }
+                    this.ctx.stroke();
+                }
+                
+                // Draw current vector
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 4 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, 0);
+                this.ctx.lineTo(x, y);
+                this.ctx.stroke();
+                
+                // Draw point at end of vector
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(x, y, 6 * this.scale, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                this.ctx.restore();
+            }
+        }
+
+        // Section 3: Malus's Law
+        class MalusVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.analyzer = 45; // angle in degrees
+                
+                const inputAnalyzer = document.getElementById('input-analyzer');
+                if (inputAnalyzer) {
+                    inputAnalyzer.addEventListener('input', (e) => {
+                        this.analyzer = parseFloat(e.target.value);
+                        document.getElementById('val-analyzer').innerText = this.analyzer;
+                    });
+                }
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                const rad = this.analyzer * Math.PI / 180;
+                const I0 = 100;
+                const I = I0 * Math.pow(Math.cos(rad), 2);
+                
+                // Dashboard
+                this.drawDashboard([
+                    { text: `I₀: 100%`, color: this.color },
+                    { text: `I: ${I.toFixed(1)}%`, color: this.accent }
+                ]);
+                
+                const L = this.viewScale * 0.4;
+                const E0 = this.viewScale * 0.15;
+                
+                this.ctx.save();
+                this.ctx.translate(this.cx, this.cy + this.viewScale * 0.1);
+                
+                // Z axis
+                this.ctx.strokeStyle = this.gridColor;
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                const zEnd = this.isoProject(0, 0, L);
+                const zStart = this.isoProject(0, 0, -L);
+                this.ctx.moveTo(zStart.x, zStart.y);
+                this.ctx.lineTo(zEnd.x, zEnd.y);
+                this.ctx.stroke();
+                
+                // Polarizer 1 (Fixed at vertical, theta = 90 deg in standard math, but let's say 0 is vertical here)
+                // Let's use standard convention: 0 is vertical.
+                const p1z = -L * 0.2;
+                this.drawPolarizer(0, p1z, E0*2, this.color);
+                
+                // Polarizer 2 (Analyzer at angle theta)
+                const p2z = L * 0.2;
+                this.drawPolarizer(this.analyzer, p2z, E0*2, this.accentSecondary);
+                
+                // Draw incident wave (unpolarized, just show vertical for simplicity before P1)
+                // Actually, let's just show wave from P1 to P2, and P2 onwards.
+                
+                // Wave between P1 and P2 (Vertically polarized, amplitude E0)
+                this.drawWave(p1z, p2z, 0, E0, this.color);
+                
+                // Wave after P2 (Polarized at analyzer angle, amplitude E0 * cos(theta))
+                const transmittedE = E0 * Math.cos(rad);
+                this.drawWave(p2z, L, this.analyzer, transmittedE, this.accent);
+                
+                this.ctx.restore();
+            }
+            
+            drawPolarizer(angleDeg, z, size, color) {
+                const rad = angleDeg * Math.PI / 180;
+                
+                // Draw circle in iso projection
+                this.ctx.strokeStyle = color;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.fillStyle = this.bg;
+                
+                // We'll approximate the circle with lines
+                this.ctx.beginPath();
+                for (let a = 0; a <= Math.PI * 2; a += 0.1) {
+                    const x = size * Math.cos(a);
+                    const y = size * Math.sin(a);
+                    const p = this.isoProject(x, y, z);
+                    if (a === 0) this.ctx.moveTo(p.x, p.y);
+                    else this.ctx.lineTo(p.x, p.y);
+                }
+                this.ctx.fill();
+                this.ctx.stroke();
+                
+                // Draw transmission axis lines
+                this.ctx.globalAlpha = 0.5;
+                const lineSpacing = size * 0.3;
+                for (let offset = -size*0.8; offset <= size*0.8; offset += lineSpacing) {
+                    // Line direction is along angleDeg. Perpendicular is angleDeg + 90
+                    // In my convention, 0 is vertical. 
+                    // Let's map angle to x,y: x = sin(angle), y = cos(angle) up
+                    const pRad = rad + Math.PI/2;
+                    
+                    const dx = offset * Math.cos(pRad); // actually, if 0 is vertical, cos is x
+                    const dy = -offset * Math.sin(pRad);
+                    
+                    // Line length
+                    const l = Math.sqrt(size*size - offset*offset);
+                    const lx = l * Math.sin(rad); // x offset for line
+                    const ly = l * Math.cos(rad); // y offset for line
+                    
+                    const p1 = this.isoProject(dx + lx, dy - ly, z);
+                    const p2 = this.isoProject(dx - lx, dy + ly, z);
+                    
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(p1.x, p1.y);
+                    this.ctx.lineTo(p2.x, p2.y);
+                    this.ctx.stroke();
+                }
+                this.ctx.globalAlpha = 1.0;
+            }
+            
+            drawWave(zStart, zEnd, angleDeg, amplitude, color) {
+                const rad = angleDeg * Math.PI / 180;
+                this.ctx.strokeStyle = color;
+                this.ctx.lineWidth = 3 * this.scale;
+                
+                this.ctx.beginPath();
+                const totalL = this.viewScale * 0.4 * 2; // -L to L
+                for (let z = zStart; z <= zEnd; z += totalL / 100) {
+                    // E = E0 * cos(kz - wt)
+                    const phase = ((z + this.viewScale*0.4) / (this.viewScale*0.8)) * Math.PI * 8 - this.time*2;
+                    const E = amplitude * Math.cos(phase);
+                    
+                    const Ex_v = E * Math.sin(rad);
+                    const Ey_v = E * Math.cos(rad); // up
+                    
+                    const p = this.isoProject(Ex_v, -Ey_v, z);
+                    
+                    if (z === zStart) this.ctx.moveTo(p.x, p.y);
+                    else this.ctx.lineTo(p.x, p.y);
+                }
+                this.ctx.stroke();
+            }
+        }
+
+        // Initialize Application
+        const APP = {
+            visuals: [],
+            observer: null,
+
+            init() {
+                this.setupObserver();
+                this.initVisuals();
+
+                window.addEventListener('theme-changed', () => {
+                    this.visuals.forEach(v => v.updateColors());
+                });
+            },
+
+            setupObserver() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const visual = this.visuals.find(v => v.canvas === entry.target);
+                        if (visual) visual.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.1 });
+            },
+
+            initVisuals() {
+                this.addVisual(new LinearVisual('canvas-linear'));
+                this.addVisual(new StatesVisual('canvas-states'));
+                this.addVisual(new MalusVisual('canvas-malus'));
+            },
+
+            addVisual(visual) {
+                this.visuals.push(visual);
+                this.observer.observe(visual.canvas);
+            }
+        };
+
+        window.onload = () => APP.init();
+    </script>
+</body>
+</html>

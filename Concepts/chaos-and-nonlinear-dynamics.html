@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaos and Nonlinear Dynamics • Physics Notebook</title>
+
+    <!-- Standard Framework Styles -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/article.css">
+    
+    <!-- Page Specific Styles -->
+    <style>
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .sim-controls {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+        }
+    </style>
+
+    <!-- MathJax (LaTeX) Support -->
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Theme Initialization -->
+    <script>
+        const savedTheme = localStorage.getItem('physics-notebook-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="sticky">
+        <div class="nav-bg"></div>
+        <a href="../index.html" class="logo"><i data-lucide="arrow-left" width="16"></i> Library</a>
+        <button id="themeBtn"><i data-lucide="moon" width="16"></i> Theme</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="text-reveal-wrapper">
+            <h1 class="hero-title">Chaos Theory<br>Nonlinear Dynamics</h1>
+            <p style="margin-top: 2rem; font-size: 1.4rem; max-width: 40ch;">
+                Exploring deterministic systems that exhibit unpredictable, chaotic behavior due to extreme sensitivity to initial conditions.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 1 -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">01. Deterministic Chaos</h3>
+                <h2>Order in Unpredictability</h2>
+                <p>In classical mechanics, if we know the exact initial state of a deterministic system (like a pendulum), we can perfectly predict its future behavior forever. However, many systems in nature are <strong>nonlinear</strong> and exhibit what is known as deterministic chaos.</p>
+                <p>A chaotic system is highly sensitive to its starting conditions. Even the smallest measurement error or numerical rounding will exponentially compound over time, making long-term prediction fundamentally impossible, despite the system obeying strict deterministic laws.</p>
+                
+                <div class="math-block">$$ \Delta x(t) \approx \Delta x_0 e^{\lambda t} $$</div>
+                <p style="font-size: 0.9em; opacity: 0.8; text-align: center;">Lyapunov exponent $\lambda$ defines the rate of separation.</p>
+                
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">Weather Forecasting</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">The atmosphere is a highly chaotic fluid system. Because we cannot measure the temperature and pressure of every cubic inch of air on Earth perfectly, our weather forecasts lose accuracy beyond a week. The tiny unknown errors rapidly multiply and change the predicted outcome.</p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('chaos_theory', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('chaos_theory', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('chaos_theory', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('chaos_theory', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('chaos_theory', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-chaos-intro"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 2 -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">02. The Lorenz Attractor</h3>
+                <h2>The Shape of Chaos</h2>
+                <p>In 1963, meteorologist Edward Lorenz simplified the Navier-Stokes equations for atmospheric convection into three coupled nonlinear differential equations. When plotted in 3D space, the solutions trace out a beautifully structured, infinite, non-repeating path known as a strange attractor.</p>
+                
+                <div class="math-block">
+                    $$ \frac{dx}{dt} = \sigma(y - x) $$
+                    $$ \frac{dy}{dt} = x(\rho - z) - y $$
+                    $$ \frac{dz}{dt} = xy - \beta z $$
+                </div>
+                
+                <p>The system never perfectly repeats its past path, yet it is confined to the bounds of the "butterfly" shape. In this simulation, you can control the Rayleigh number ($\rho$) which drives the convection instability.</p>
+
+                <div class="etu-card">
+                    <span class="etu-tag">Key Insight</span>
+                    <h4 style="margin-bottom:0.5rem;">Strange Attractors</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">An attractor is a set of numerical values toward which a system tends to evolve. A "strange" attractor has fractal structure and chaotic dynamics on it.</p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('lorenz_equations', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('lorenz_equations', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('lorenz_equations', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('lorenz_equations', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('lorenz_equations', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Rayleigh Number (ρ) <span id="val-rho">28.0</span></label>
+                        <input type="range" id="input-rho" min="10" max="50" step="0.5" value="28.0">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-lorenz"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 3 -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">03. The Butterfly Effect</h3>
+                <h2>Sensitive Dependence</h2>
+                <p>The phrase "Butterfly Effect" stems from Lorenz's realization that a butterfly flapping its wings in Brazil could set off a cascade of atmospheric events leading to a tornado in Texas weeks later.</p>
+                <p>In the simulation, we track two distinct particles. Their starting positions are identical except for a microscopic difference of $1 \times 10^{-5}$ in the x-coordinate. Watch how their paths overlap perfectly at first, but eventually diverge exponentially, ending up on entirely different wings of the attractor.</p>
+                
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('butterfly_effect', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('butterfly_effect', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('butterfly_effect', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('butterfly_effect', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('butterfly_effect', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+
+                <div class="sim-controls">
+                    <button class="action-btn" id="btn-restart" style="width:100%; padding: 12px; background: var(--accent); color: var(--bg-color); border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Restart Simulation</button>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-butterfly"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <section class="references">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h3>Academic References</h3>
+            <ul>
+                <li><strong>Lorenz, E. N.</strong> (1963). <em>Deterministic Nonperiodic Flow</em>, Journal of the Atmospheric Sciences, 20(2), 130-141.</li>
+                <li><strong>Strogatz, S. H.</strong> (2014). <em>Nonlinear Dynamics and Chaos: With Applications to Physics, Biology, Chemistry, and Engineering</em>, Westview Press.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="../js/common.js"></script>
+    <script>
+        function openAI(topic, model) {
+            let prompt = "";
+            switch (topic) {
+                case 'chaos_theory': 
+                    prompt = "Explain deterministic chaos and the Lyapunov exponent in classical mechanics simply."; 
+                    break;
+                case 'lorenz_equations': 
+                    prompt = "Explain the Lorenz attractor equations and what a strange attractor is in topology."; 
+                    break;
+                case 'butterfly_effect': 
+                    prompt = "Explain the Butterfly Effect and sensitive dependence on initial conditions in chaos theory."; 
+                    break;
+            }
+            launchAIPrompt(model, prompt);
+        }
+
+        class BaseVisual {
+            constructor(id) {
+                this.canvas = document.getElementById(id);
+                this.ctx = this.canvas.getContext('2d');
+                this.isVisible = false;
+                this.updateColors();
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.loop();
+            }
+            updateColors() {
+                this.color = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
+                this.bg = getComputedStyle(document.body).getPropertyValue('--bg-color').trim();
+                this.accent = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+                this.secondary = getComputedStyle(document.body).getPropertyValue('--accent-secondary').trim();
+                this.grid = getComputedStyle(document.body).getPropertyValue('--line-subtle').trim();
+            }
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width * 2;
+                this.canvas.height = rect.height * 2;
+                this.scale = 2;
+                this.cx = this.canvas.width / 2;
+                this.cy = this.canvas.height / 2;
+            }
+            loop() {
+                if (this.isVisible) this.draw();
+                requestAnimationFrame(() => this.loop());
+            }
+            draw() { }
+        }
+
+        // Shared utility for Lorenz integration
+        function lorenzStep(p, sigma, rho, beta, dt) {
+            const dx = sigma * (p.y - p.x);
+            const dy = p.x * (rho - p.z) - p.y;
+            const dz = p.x * p.y - beta * p.z;
+            p.x += dx * dt;
+            p.y += dy * dt;
+            p.z += dz * dt;
+            return p;
+        }
+
+        function project(x, y, z, scale, cx, cy) {
+            // Isometric projection approximation
+            const px = x * 0.8 + y * 0.8;
+            const py = -(z - 25) + y * 0.4 - x * 0.4; // Offset Z to center the attractor (z typically ranges 0-50)
+            return {
+                x: cx + px * scale,
+                y: cy + py * scale
+            };
+        }
+
+        class ChaosIntroVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.particles = [];
+                for(let i=0; i<300; i++) {
+                    this.particles.push({
+                        x: (Math.random() - 0.5) * 40,
+                        y: (Math.random() - 0.5) * 40,
+                        z: (Math.random() - 0.5) * 40 + 20,
+                        history: []
+                    });
+                }
+                this.sigma = 10;
+                this.rho = 28;
+                this.beta = 8/3;
+                this.dt = 0.005;
+                this.time = 0;
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.time += this.dt;
+
+                // Draw header HUD
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 13 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 11 * this.scale;
+                if (this.canvas.width < 450 * this.scale) fontSize = 9.5 * this.scale;
+                
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'left';
+                this.ctx.fillText(`State: Chaotic Fluid Phase Space`, 20 * this.scale, 40 * this.scale);
+                this.ctx.textAlign = 'right';
+                this.ctx.fillText(`t = ${this.time.toFixed(2)}s`, this.canvas.width - 20 * this.scale, 40 * this.scale);
+
+                const viewScale = Math.min(this.canvas.width, this.canvas.height) * 0.015;
+
+                this.ctx.fillStyle = this.accent;
+                this.ctx.globalAlpha = 0.6;
+                for(let p of this.particles) {
+                    lorenzStep(p, this.sigma, this.rho, this.beta, this.dt);
+                    let proj = project(p.x, p.y, p.z, viewScale, this.cx, this.cy);
+                    this.ctx.beginPath();
+                    this.ctx.arc(proj.x, proj.y, 1.5 * this.scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+                this.ctx.globalAlpha = 1.0;
+            }
+        }
+
+        class LorenzVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.sigma = 10;
+                this.rho = 28;
+                this.beta = 8/3;
+                this.dt = 0.005;
+                
+                this.reset();
+
+                const rhoSlider = document.getElementById('input-rho');
+                if (rhoSlider) {
+                    rhoSlider.addEventListener('input', (e) => {
+                        this.rho = parseFloat(e.target.value);
+                        document.getElementById('val-rho').innerText = this.rho.toFixed(1);
+                        this.reset();
+                    });
+                }
+            }
+
+            reset() {
+                this.p = { x: 0.1, y: 0, z: 0 };
+                this.history = [];
+                this.time = 0;
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Integrate a few steps per frame for speed
+                for (let i = 0; i < 3; i++) {
+                    lorenzStep(this.p, this.sigma, this.rho, this.beta, this.dt);
+                    this.history.push({x: this.p.x, y: this.p.y, z: this.p.z});
+                    if (this.history.length > 2000) {
+                        this.history.shift();
+                    }
+                    this.time += this.dt;
+                }
+
+                // Draw header HUD
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 13 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 11 * this.scale;
+                if (this.canvas.width < 450 * this.scale) fontSize = 9.5 * this.scale;
+                
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'left';
+                this.ctx.fillText(`ρ = ${this.rho.toFixed(1)}`, 20 * this.scale, 40 * this.scale);
+                this.ctx.fillText(`σ = ${this.sigma.toFixed(1)}`, 120 * this.scale, 40 * this.scale);
+                this.ctx.textAlign = 'right';
+                this.ctx.fillText(`[x,y,z] = [${this.p.x.toFixed(1)}, ${this.p.y.toFixed(1)}, ${this.p.z.toFixed(1)}]`, this.canvas.width - 20 * this.scale, 40 * this.scale);
+
+                const viewScale = Math.min(this.canvas.width, this.canvas.height) * 0.015;
+
+                // Draw trail
+                this.ctx.beginPath();
+                for (let i = 0; i < this.history.length; i++) {
+                    let pt = this.history[i];
+                    let proj = project(pt.x, pt.y, pt.z, viewScale, this.cx, this.cy);
+                    if (i === 0) this.ctx.moveTo(proj.x, proj.y);
+                    else this.ctx.lineTo(proj.x, proj.y);
+                }
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.lineJoin = 'round';
+                this.ctx.globalAlpha = 0.8;
+                this.ctx.stroke();
+                this.ctx.globalAlpha = 1.0;
+
+                // Draw current point
+                let proj = project(this.p.x, this.p.y, this.p.z, viewScale, this.cx, this.cy);
+                this.ctx.beginPath();
+                this.ctx.arc(proj.x, proj.y, 4 * this.scale, 0, Math.PI * 2);
+                this.ctx.fillStyle = this.color;
+                this.ctx.fill();
+            }
+        }
+
+        class ButterflyVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.sigma = 10;
+                this.rho = 28;
+                this.beta = 8/3;
+                this.dt = 0.005;
+                
+                this.reset();
+
+                const btn = document.getElementById('btn-restart');
+                if (btn) {
+                    btn.addEventListener('click', () => {
+                        this.reset();
+                    });
+                }
+            }
+
+            reset() {
+                this.p1 = { x: 0.1, y: 0, z: 0 };
+                this.p2 = { x: 0.10001, y: 0, z: 0 }; // Microscopic difference
+                this.hist1 = [];
+                this.hist2 = [];
+                this.time = 0;
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Integrate
+                for (let i = 0; i < 3; i++) {
+                    lorenzStep(this.p1, this.sigma, this.rho, this.beta, this.dt);
+                    lorenzStep(this.p2, this.sigma, this.rho, this.beta, this.dt);
+                    this.hist1.push({x: this.p1.x, y: this.p1.y, z: this.p1.z});
+                    this.hist2.push({x: this.p2.x, y: this.p2.y, z: this.p2.z});
+                    if (this.hist1.length > 2000) {
+                        this.hist1.shift();
+                        this.hist2.shift();
+                    }
+                    this.time += this.dt;
+                }
+
+                // Draw header HUD
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 13 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 11 * this.scale;
+                if (this.canvas.width < 450 * this.scale) fontSize = 9.5 * this.scale;
+                
+                let dist = Math.sqrt(Math.pow(this.p1.x - this.p2.x, 2) + Math.pow(this.p1.y - this.p2.y, 2) + Math.pow(this.p1.z - this.p2.z, 2));
+
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.textAlign = 'left';
+                this.ctx.fillStyle = this.accent;
+                this.ctx.fillText(`Path A`, 20 * this.scale, 40 * this.scale);
+                this.ctx.fillStyle = this.secondary;
+                this.ctx.fillText(`Path B`, 100 * this.scale, 40 * this.scale);
+                
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'right';
+                this.ctx.fillText(`Separation (Δ): ${dist.toFixed(2)}`, this.canvas.width - 20 * this.scale, 40 * this.scale);
+
+                const viewScale = Math.min(this.canvas.width, this.canvas.height) * 0.015;
+
+                // Draw trail 2 (Secondary)
+                this.ctx.beginPath();
+                for (let i = 0; i < this.hist2.length; i++) {
+                    let proj = project(this.hist2[i].x, this.hist2[i].y, this.hist2[i].z, viewScale, this.cx, this.cy);
+                    if (i === 0) this.ctx.moveTo(proj.x, proj.y);
+                    else this.ctx.lineTo(proj.x, proj.y);
+                }
+                this.ctx.strokeStyle = this.secondary;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.lineJoin = 'round';
+                this.ctx.globalAlpha = 0.7;
+                this.ctx.stroke();
+
+                // Draw trail 1 (Accent)
+                this.ctx.beginPath();
+                for (let i = 0; i < this.hist1.length; i++) {
+                    let proj = project(this.hist1[i].x, this.hist1[i].y, this.hist1[i].z, viewScale, this.cx, this.cy);
+                    if (i === 0) this.ctx.moveTo(proj.x, proj.y);
+                    else this.ctx.lineTo(proj.x, proj.y);
+                }
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.stroke();
+                this.ctx.globalAlpha = 1.0;
+            }
+        }
+
+        const APP = {
+            visuals: [],
+            observer: null,
+            init() {
+                this.setupObserver();
+                this.initVisuals();
+
+                window.addEventListener('theme-changed', (e) => {
+                    this.visuals.forEach(v => v.updateColors());
+                });
+            },
+            setupObserver() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const visual = this.visuals.find(v => v.canvas === entry.target);
+                        if (visual) visual.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.1 });
+            },
+            initVisuals() {
+                this.addVisual(new ChaosIntroVisual('canvas-chaos-intro'));
+                this.addVisual(new LorenzVisual('canvas-lorenz'));
+                this.addVisual(new ButterflyVisual('canvas-butterfly'));
+            },
+            addVisual(visual) {
+                this.visuals.push(visual);
+                this.observer.observe(visual.canvas);
+            }
+        };
+
+        window.onload = () => APP.init();
+    </script>
+</body>
+</html>

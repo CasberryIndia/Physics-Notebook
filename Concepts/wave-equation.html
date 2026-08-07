@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Equation & Superposition Principle • Physics Notebook</title>
+
+    <!-- Standard Framework Styles -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/article.css">
+    
+    <!-- Page Specific Styles -->
+    <style>
+        /* AI Links & Buttons styling */
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Specific styles for interactive controls */
+        .sim-controls {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+        }
+    </style>
+
+    <!-- MathJax (LaTeX) Support -->
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Theme Initialization -->
+    <script>
+        const savedTheme = localStorage.getItem('physics-notebook-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="sticky">
+        <div class="nav-bg"></div>
+        <a href="../index.html" class="logo"><i data-lucide="arrow-left" width="16"></i> Library</a>
+        <button id="themeBtn"><i data-lucide="moon" width="16"></i> Theme</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="text-reveal-wrapper">
+            <h1 class="hero-title">Wave Equation &<br>Superposition Principle</h1>
+            <p style="margin-top: 2rem; font-size: 1.4rem; max-width: 40ch;">
+                The fundamental differential equation of wave motion and the mathematical linearity that allows waves to exist independently.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 1: Wave Equation -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">01. The PDE</h3>
+                <h2>The 1D Wave Equation</h2>
+                <p>
+                    The wave equation is a second-order linear partial differential equation that describes the propagation of oscillations through a continuous medium. It links the spatial curvature of the wave to its temporal acceleration.
+                </p>
+                
+                <!-- Math Block -->
+                <div class="math-block">$$ \frac{\partial^2 y}{\partial t^2} = v^2 \frac{\partial^2 y}{\partial x^2} $$</div>
+                
+                <p>
+                    Here, $v$ is the wave propagation speed. This equation arises from applying Newton's laws to a continuous medium, like a stretched string or fluid.
+                </p>
+
+                <!-- Setup/Analogy Card -->
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">The Stadium Wave</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        Think of a wave propagating through a crowd in a stadium. Each person only moves up and down vertically, responding to the height of their immediate neighbors. Yet, this localized up-and-down motion creates a macro "wave" that travels horizontally around the stadium at a constant speed.
+                    </p>
+                </div>
+
+                <!-- AI Links -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('wave-equation', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('wave-equation', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('wave-equation', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('wave-equation', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('wave-equation', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                
+                <!-- Interactive Controls -->
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Wave Speed (v) <span id="val-speed">1.5</span></label>
+                        <input type="range" id="input-speed" min="0.5" max="3.0" step="0.1" value="1.5">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization -->
+            <div class="visual-col">
+                <canvas id="canvas-wave-equation"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 2: Traveling Waves -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent-secondary);">02. Solutions</h3>
+                <h2>Traveling Waves</h2>
+                <p>
+                    In 1747, Jean le Rond d'Alembert discovered the general solution to the 1D wave equation. He showed that the general solution consists of two arbitrary wave shapes, one traveling to the right and one to the left.
+                </p>
+                
+                <!-- Math Block -->
+                <div class="math-block">$$ y(x,t) = f(x - vt) + g(x + vt) $$</div>
+                
+                <p>
+                    The function $f(x - vt)$ represents a wave traveling in the positive $x$ direction with speed $v$, while $g(x + vt)$ travels in the negative $x$ direction. Their shapes remain constant as they propagate.
+                </p>
+
+                <!-- AI Links -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('dalembert', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('dalembert', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('dalembert', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('dalembert', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('dalembert', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                
+                <!-- Interactive Controls -->
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Pulse Width <span id="val-width">20</span></label>
+                        <input type="range" id="input-width" min="10" max="50" step="1" value="20">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization -->
+            <div class="visual-col">
+                <canvas id="canvas-dalembert"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 3: Superposition -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--text-muted);">03. Linearity</h3>
+                <h2>The Superposition Principle</h2>
+                <p>
+                    Because the wave equation is <strong>linear</strong> (it contains no terms like $y^2$ or $y \cdot \frac{\partial y}{\partial x}$), the sum of any valid solutions is also a valid solution.
+                </p>
+                
+                <!-- Math Block -->
+                <div class="math-block">$$ y_3(x,t) = a \cdot y_1(x,t) + b \cdot y_2(x,t) $$</div>
+                
+                <p>
+                    Physically, this means that two waves can pass through the same medium simultaneously without destroying or altering one another. When they overlap, the total displacement is merely the algebraic sum of their individual displacements.
+                </p>
+
+                <!-- Setup/Analogy Card -->
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">Ripples in a Pond</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">
+                        If you throw two stones into a calm pond, circular ripples expand from both splash points. When the two sets of ripples meet, they don't bounce off each other. They smoothly pass right through one another, momentarily adding their heights together, and then continue on their original paths undisturbed.
+                    </p>
+                </div>
+
+                <!-- AI Links -->
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('superposition', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('superposition', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('superposition', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('superposition', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('superposition', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+            </div>
+
+            <!-- Visualization -->
+            <div class="visual-col">
+                <canvas id="canvas-superposition"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- References -->
+    <section class="references">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h3>Academic References</h3>
+            <ul>
+                <li><strong>Feynman, R. P., Leighton, R. B., & Sands, M.</strong> (1963). <em>The Feynman Lectures on Physics</em>, Vol. I, Chapter 47.</li>
+                <li><strong>Griffiths, D. J.</strong> (2017). <em>Introduction to Electrodynamics</em>, Chapter 9.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="../js/common.js"></script>
+    <script>
+        // ------------------------------------------------------------------
+        // AI LINKS HANDLER
+        // ------------------------------------------------------------------
+        function openAI(topic, model) {
+            let prompt = "";
+            switch (topic) {
+                case 'wave-equation':
+                    prompt = "Explain the 1D wave equation and what its terms mean physically, suited for an undergraduate physics student.";
+                    break;
+                case 'dalembert':
+                    prompt = "Explain d'Alembert's formula and how it proves that waves travel left and right without changing shape.";
+                    break;
+                case 'superposition':
+                    prompt = "Why does the linearity of the wave equation allow for the superposition principle? Explain it mathematically and intuitively.";
+                    break;
+            }
+            launchAIPrompt(model, prompt);
+        }
+
+        // ------------------------------------------------------------------
+        // APP INITIALIZATION
+        // ------------------------------------------------------------------
+        const APP = {
+            visuals: [],
+            observer: null,
+
+            init() {
+                this.setupObserver();
+                this.initVisuals();
+
+                // Listen for theme changes to update canvas colors
+                window.addEventListener('theme-changed', (e) => {
+                    this.visuals.forEach(v => v.updateColors());
+                });
+            },
+
+            setupObserver() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const visual = this.visuals.find(v => v.canvas === entry.target);
+                        if (visual) visual.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.1 });
+            },
+
+            initVisuals() {
+                this.addVisual(new WaveEquationVisual('canvas-wave-equation'));
+                this.addVisual(new DalembertVisual('canvas-dalembert'));
+                this.addVisual(new SuperpositionVisual('canvas-superposition'));
+            },
+
+            addVisual(visual) {
+                this.visuals.push(visual);
+                this.observer.observe(visual.canvas);
+            }
+        };
+
+        // ------------------------------------------------------------------
+        // BASE VISUAL CLASS
+        // ------------------------------------------------------------------
+        class BaseVisual {
+            constructor(id) {
+                this.canvas = document.getElementById(id);
+                this.ctx = this.canvas.getContext('2d');
+                this.isVisible = false;
+                this.updateColors();
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.loop();
+            }
+            updateColors() {
+                this.color = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
+                this.bg = getComputedStyle(document.body).getPropertyValue('--bg-color').trim();
+                this.accent = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+                this.secondary = getComputedStyle(document.body).getPropertyValue('--accent-secondary').trim();
+                this.muted = 'rgba(128,128,128, 0.4)';
+            }
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.canvas.width = rect.width * 2;
+                this.canvas.height = rect.height * 2;
+                this.scale = 2;
+                this.cx = this.canvas.width / 2;
+                this.cy = this.canvas.height / 2;
+            }
+            loop() {
+                if (this.isVisible) this.draw();
+                requestAnimationFrame(() => this.loop());
+            }
+            draw() { }
+        }
+
+        // ------------------------------------------------------------------
+        // VISUAL 1: WAVE EQUATION
+        // ------------------------------------------------------------------
+        class WaveEquationVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.time = 0;
+                this.speed = 1.5;
+                
+                const speedInput = document.getElementById('input-speed');
+                if (speedInput) {
+                    speedInput.addEventListener('input', (e) => {
+                        this.speed = parseFloat(e.target.value);
+                        document.getElementById('val-speed').innerText = this.speed.toFixed(1);
+                    });
+                }
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                // The speed variable changes how fast time advances for the wave
+                this.time += 0.05 * this.speed;
+
+                const amp = Math.min(40 * this.scale, this.canvas.height * 0.2);
+                const freq = (2 * Math.PI) / (this.canvas.width * 0.4);
+
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 13 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 11 * this.scale;
+                if (this.canvas.width < 450 * this.scale) fontSize = 9.5 * this.scale;
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+
+                // Draw continuous wave
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.beginPath();
+                for (let x = 0; x < this.canvas.width; x += 5) {
+                    const y = this.cy + Math.sin(x * freq - this.time) * amp;
+                    if (x === 0) this.ctx.moveTo(x, y);
+                    else this.ctx.lineTo(x, y);
+                }
+                this.ctx.stroke();
+
+                // Dashboard Bar
+                this.ctx.fillStyle = this.color;
+                this.ctx.fillText(`v = ${this.speed.toFixed(1)} m/s`, 20 * this.scale, 40 * this.scale);
+                this.ctx.fillText(`y(x,t) = A sin(kx - vt)`, 20 * this.scale, 65 * this.scale);
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // VISUAL 2: D'ALEMBERT SOLUTION
+        // ------------------------------------------------------------------
+        class DalembertVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.time = -100;
+                this.pulseWidth = 20;
+                
+                const widthInput = document.getElementById('input-width');
+                if (widthInput) {
+                    widthInput.addEventListener('input', (e) => {
+                        this.pulseWidth = parseFloat(e.target.value);
+                        document.getElementById('val-width').innerText = this.pulseWidth;
+                    });
+                }
+            }
+
+            gaussPulse(x, width) {
+                return Math.exp(-(x * x) / (2 * width * width));
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.time += 1.5;
+                
+                // Reset loop
+                if (this.time > this.canvas.width / 2 + 100) {
+                    this.time = -(this.canvas.width / 2 + 100);
+                }
+
+                const amp = Math.min(50 * this.scale, this.canvas.height * 0.25);
+                const w = this.pulseWidth * this.scale;
+
+                // Two pulses meeting at center
+                const v = 2 * this.scale;
+                const distLeft = -this.time * v;
+                const distRight = this.time * v;
+
+                this.ctx.lineWidth = 2 * this.scale;
+
+                // Left Traveling Pulse g(x + vt)
+                this.ctx.strokeStyle = this.secondary;
+                this.ctx.setLineDash([5 * this.scale, 5 * this.scale]);
+                this.ctx.beginPath();
+                for (let x = 0; x < this.canvas.width; x += 5) {
+                    const localX = x - this.cx - distLeft;
+                    const y = this.cy + this.gaussPulse(localX, w) * amp;
+                    if (x === 0) this.ctx.moveTo(x, y); else this.ctx.lineTo(x, y);
+                }
+                this.ctx.stroke();
+
+                // Right Traveling Pulse f(x - vt)
+                this.ctx.strokeStyle = this.muted;
+                this.ctx.beginPath();
+                for (let x = 0; x < this.canvas.width; x += 5) {
+                    const localX = x - this.cx - distRight;
+                    const y = this.cy - this.gaussPulse(localX, w) * amp;
+                    if (x === 0) this.ctx.moveTo(x, y); else this.ctx.lineTo(x, y);
+                }
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+
+                // Resultant Wave y(x,t)
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 3 * this.scale;
+                this.ctx.beginPath();
+                for (let x = 0; x < this.canvas.width; x += 5) {
+                    const localX1 = x - this.cx - distLeft;
+                    const localX2 = x - this.cx - distRight;
+                    const y1 = this.gaussPulse(localX1, w) * amp;
+                    const y2 = -this.gaussPulse(localX2, w) * amp;
+                    const y = this.cy + y1 + y2;
+                    if (x === 0) this.ctx.moveTo(x, y); else this.ctx.lineTo(x, y);
+                }
+                this.ctx.stroke();
+
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 13 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 11 * this.scale;
+                if (this.canvas.width < 450 * this.scale) fontSize = 9.5 * this.scale;
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+
+                // Dashboard Bar
+                this.ctx.fillStyle = this.color;
+                this.ctx.fillText(`f(x-vt)`, 20 * this.scale, 40 * this.scale);
+                this.ctx.fillStyle = this.secondary;
+                this.ctx.fillText(`g(x+vt)`, 20 * this.scale, 65 * this.scale);
+                this.ctx.fillStyle = this.accent;
+                this.ctx.fillText(`y(x,t) = f + g`, 20 * this.scale, 90 * this.scale);
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // VISUAL 3: SUPERPOSITION
+        // ------------------------------------------------------------------
+        class SuperpositionVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.time = 0;
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.time += 0.03;
+
+                const amp1 = 30 * this.scale;
+                const freq1 = (2 * Math.PI) / (this.canvas.width * 0.5);
+                const amp2 = 20 * this.scale;
+                const freq2 = (2 * Math.PI) / (this.canvas.width * 0.25);
+
+                this.ctx.lineWidth = 2 * this.scale;
+                
+                // Wave 1
+                this.ctx.strokeStyle = this.muted;
+                this.ctx.beginPath();
+                for (let x = 0; x < this.canvas.width; x += 5) {
+                    const y = this.cy - 60 * this.scale + Math.sin(x * freq1 - this.time * 2) * amp1;
+                    if (x === 0) this.ctx.moveTo(x, y); else this.ctx.lineTo(x, y);
+                }
+                this.ctx.stroke();
+
+                // Wave 2
+                this.ctx.strokeStyle = this.secondary;
+                this.ctx.beginPath();
+                for (let x = 0; x < this.canvas.width; x += 5) {
+                    const y = this.cy - 60 * this.scale + Math.sin(x * freq2 + this.time * 3) * amp2;
+                    if (x === 0) this.ctx.moveTo(x, y); else this.ctx.lineTo(x, y);
+                }
+                this.ctx.stroke();
+
+                // Superposition
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 3 * this.scale;
+                this.ctx.beginPath();
+                for (let x = 0; x < this.canvas.width; x += 5) {
+                    const y1 = Math.sin(x * freq1 - this.time * 2) * amp1;
+                    const y2 = Math.sin(x * freq2 + this.time * 3) * amp2;
+                    const y = this.cy + 60 * this.scale + y1 + y2;
+                    if (x === 0) this.ctx.moveTo(x, y); else this.ctx.lineTo(x, y);
+                }
+                this.ctx.stroke();
+                
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 13 * this.scale;
+                if (this.canvas.width < 600 * this.scale) fontSize = 11 * this.scale;
+                if (this.canvas.width < 450 * this.scale) fontSize = 9.5 * this.scale;
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+
+                // Labels
+                this.ctx.fillStyle = this.color;
+                this.ctx.fillText(`Wave 1 & 2`, 20 * this.scale, this.cy - 60 * this.scale - 40 * this.scale);
+                this.ctx.fillStyle = this.accent;
+                this.ctx.fillText(`Superposition`, 20 * this.scale, this.cy + 60 * this.scale - 40 * this.scale);
+            }
+        }
+
+        window.onload = () => APP.init();
+    </script>
+</body>
+</html>

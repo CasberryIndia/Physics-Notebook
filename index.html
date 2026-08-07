@@ -173,7 +173,7 @@
                         <li class="concept-item concept-item--live"><a href="Concepts/lagrangian-hamiltonian-mechanics.html">Lagrangian &amp; Hamiltonian Mechanics</a><span class="concept-status">Live</span></li>
                         <li class="concept-item concept-item--live"><a href="Concepts/principle-of-least-action.html">Principle of Least Action</a><span class="concept-status">Live</span></li>
                         <li class="concept-item concept-item--live"><a href="Concepts/noethers-theorem.html">Noether's Theorem</a><span class="concept-status">Live</span></li>
-                        <li class="concept-item concept-item--soon"><span>Chaos and Nonlinear Dynamics</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/chaos-and-nonlinear-dynamics.html">Chaos and Nonlinear Dynamics</a><span class="concept-status">Live</span></li>
                     </ul>
                 </section>
 
@@ -192,9 +192,9 @@
                     <ul class="concept-list">
                         <li class="concept-item concept-item--live"><a href="Concepts/wave-interference.html">Wave Interference</a><span class="concept-status">Live</span></li>
                         <li class="concept-item concept-item--live"><a href="Concepts/gravitational-waves.html">Gravitational Waves</a><span class="concept-status">Live</span></li>
-                        <li class="concept-item concept-item--soon"><span>Wave Equation and Superposition Principle</span><span class="concept-status concept-status--soon">Roadmap</span></li>
-                        <li class="concept-item concept-item--soon"><span>Diffraction</span><span class="concept-status concept-status--soon">Roadmap</span></li>
-                        <li class="concept-item concept-item--soon"><span>Polarization of Waves</span><span class="concept-status concept-status--soon">Roadmap</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/wave-equation.html">Wave Equation and Superposition Principle</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/diffraction.html">Diffraction</a><span class="concept-status">Live</span></li>
+                        <li class="concept-item concept-item--live"><a href="Concepts/polarization-of-waves.html">Polarization of Waves</a><span class="concept-status">Live</span></li>
                         <li class="concept-item concept-item--soon"><span>Geometrical Optics</span><span class="concept-status concept-status--soon">Roadmap</span></li>
                         <li class="concept-item concept-item--soon"><span>Physical Optics</span><span class="concept-status concept-status--soon">Roadmap</span></li>
                         <li class="concept-item concept-item--soon"><span>Lasers and Coherence</span><span class="concept-status concept-status--soon">Roadmap</span></li>
@@ -414,12 +414,28 @@
                 href: 'Concepts/projectile-motion.html'
             },
             {
+                id: 'chaos',
+                title: 'Chaos and Nonlinear Dynamics',
+                domain: 'Mechanics',
+                desc: 'Deterministic chaos, strange attractors, and sensitive dependence on initial conditions.',
+                type: 'chaos',
+                href: 'Concepts/chaos-and-nonlinear-dynamics.html'
+            },
+            {
                 id: 'waves',
                 title: 'Wave Interference',
                 domain: 'Waves',
                 desc: 'Superposition principle, constructive and destructive interference.',
                 type: 'waves',
                 href: 'Concepts/wave-interference.html'
+            },
+            {
+                id: 'wave-equation',
+                title: 'Wave Equation',
+                domain: 'Waves',
+                desc: 'The fundamental PDE of wave motion and the mathematical linearity that allows waves to exist independently.',
+                type: 'wave-equation',
+                href: 'Concepts/wave-equation.html'
             },
             {
                 id: 'orbit',
@@ -540,6 +556,22 @@
                 desc: 'Every continuous symmetry of a physical system yields a conserved quantity — the deep bridge between symmetry and conservation laws.',
                 type: 'noethers-theorem',
                 href: 'Concepts/noethers-theorem.html'
+            },
+            {
+                id: 'diffraction',
+                title: 'Diffraction',
+                domain: 'Waves',
+                desc: 'The spreading out of waves as they pass through an aperture or around an obstacle.',
+                type: 'diffraction',
+                href: 'Concepts/diffraction.html'
+            },
+            {
+                id: 'polarization',
+                title: 'Polarization of Waves',
+                domain: 'Waves',
+                desc: 'The geometric orientation of a wave\'s oscillations and its behavior as it passes through filters.',
+                type: 'polarization',
+                href: 'Concepts/polarization-of-waves.html'
             }
         ];
 
@@ -1468,6 +1500,141 @@
             }
         }
 
+        class ChaosVisual extends BaseVisual {
+            constructor(canvas) {
+                super(canvas);
+                this.time = 0;
+            }
+            draw() {
+                if (!this.isVisible) return;
+                this.time += 0.02;
+                this.clear();
+                const cx = this.width / 2;
+                const cy = this.height / 2;
+                const r = this.height * 0.25;
+
+                this.ctx.beginPath();
+                for (let i = 0; i < 40; i++) {
+                    const t = this.time + i * 0.1;
+                    const x = Math.sin(t * 1.5) * Math.cos(t * 0.5) * r * 1.5;
+                    const y = Math.sin(t * 1.1) * Math.sin(t * 0.7) * r;
+                    if (i === 0) this.ctx.moveTo(cx + x, cy + y);
+                    else this.ctx.lineTo(cx + x, cy + y);
+                }
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 1.5;
+                this.ctx.stroke();
+
+                this.ctx.beginPath();
+                const hx = Math.sin(this.time * 1.5) * Math.cos(this.time * 0.5) * r * 1.5;
+                const hy = Math.sin(this.time * 1.1) * Math.sin(this.time * 0.7) * r;
+                this.ctx.arc(cx + hx, cy + hy, 3, 0, Math.PI * 2);
+                this.ctx.fillStyle = this.color;
+                this.ctx.fill();
+            }
+        }
+
+        class WaveEquationVisual extends BaseVisual {
+            constructor(canvas) {
+                super(canvas);
+                this.time = 0;
+            }
+            draw() {
+                if (!this.isVisible) return;
+                this.time += 0.05;
+                this.clear();
+
+                const cx = this.width / 2;
+                const cy = this.height / 2;
+                const amp = Math.min(20, this.height * 0.2);
+                const freq = (2 * Math.PI) / (this.width * 0.4);
+
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 2;
+                this.ctx.beginPath();
+                for (let x = 0; x < this.width; x += 5) {
+                    const y = cy + Math.sin(x * freq - this.time) * amp;
+                    if (x === 0) this.ctx.moveTo(x, y);
+                    else this.ctx.lineTo(x, y);
+                }
+                this.ctx.stroke();
+            }
+        }
+
+        class PolarizationVisual extends BaseVisual {
+            constructor(canvas) {
+                super(canvas);
+                this.time = 0;
+            }
+            draw() {
+                if (!this.isVisible) return;
+                this.time += 0.05;
+                this.clear();
+                
+                const cx = this.width / 2;
+                const cy = this.height / 2;
+                const E0 = Math.min(this.width, this.height) * 0.25;
+                
+                // Elliptical trace
+                const x = E0 * Math.cos(this.time);
+                const y = -E0 * Math.cos(this.time + Math.PI/3);
+                
+                this.ctx.strokeStyle = this.accentSecondary;
+                this.ctx.lineWidth = 2;
+                this.ctx.setLineDash([2, 4]);
+                this.ctx.beginPath();
+                // We'll just draw a generic ellipse for the dash
+                this.ctx.ellipse(cx, cy, E0, E0*0.8, -Math.PI/6, 0, Math.PI * 2);
+                this.ctx.stroke();
+                this.ctx.setLineDash([]);
+                
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 3;
+                this.ctx.beginPath();
+                this.ctx.moveTo(cx, cy);
+                this.ctx.lineTo(cx + x, cy + y);
+                this.ctx.stroke();
+                
+                this.ctx.fillStyle = this.accent;
+                this.ctx.beginPath();
+                this.ctx.arc(cx + x, cy + y, 5, 0, Math.PI * 2);
+                this.ctx.fill();
+            }
+        }
+
+        class DiffractionVisual extends BaseVisual {
+            constructor(canvas) {
+                super(canvas);
+                this.time = 0;
+            }
+            draw() {
+                if (!this.isVisible) return;
+                this.time += 0.05;
+                this.clear();
+
+                const cx = this.width / 2;
+                const cy = this.height / 2;
+
+                this.ctx.fillStyle = this.color;
+                this.ctx.fillRect(cx - 2, cy - 40, 4, 30);
+                this.ctx.fillRect(cx - 2, cy + 10, 4, 30);
+
+                this.ctx.strokeStyle = this.accent;
+                this.ctx.lineWidth = 1.5;
+
+                const maxR = 60;
+                const speed = 20;
+                const phase = (this.time * speed) % 20;
+                for(let r = phase; r < maxR; r += 20) {
+                    this.ctx.globalAlpha = 1 - (r / maxR);
+                    this.ctx.beginPath();
+                    this.ctx.arc(cx, cy, r, -Math.PI/3, Math.PI/3);
+                    this.ctx.stroke();
+                }
+                this.ctx.globalAlpha = 1;
+            }
+        }
+
         // ------------------------------------------------------------------
         // APP LOGIC
         // ------------------------------------------------------------------
@@ -1571,6 +1738,10 @@
                             case 'lagrangian-hamiltonian': visual = new LagrangianHamiltonianVisual(canvas); break;
                             case 'least-action': visual = new LeastActionVisual(canvas); break;
                             case 'noethers-theorem': visual = new NoethersTheoremVisual(canvas); break;
+                            case 'chaos': visual = new ChaosVisual(canvas); break;
+                            case 'wave-equation': visual = new WaveEquationVisual(canvas); break;
+                            case 'diffraction': visual = new DiffractionVisual(canvas); break;
+                            case 'polarization': visual = new PolarizationVisual(canvas); break;
                             default: visual = new BaseVisual(canvas);
                         }
                         visual.resize();

@@ -218,7 +218,7 @@ layout, motion, or page structure.
 
 If you are using an AI agent (such as Antigravity, Claude, Copilot, etc.) to contribute, you can automate the process of selecting, researching, generating, and registering a new concept page using our automated workflow tools:
 
-1. **AI Agent Runbook (`scripts/add_concept_workflow.md`)**: Point your AI assistant to this runbook file (e.g. *"Please read scripts/add_concept_workflow.md and add the next concept"*). The agent will autonomously read the checklist, search the web, generate the HTML page conforming to the style guidelines, update `index.html`, and run verification scripts.
+1. **AI Agent Runbook (`CREATE_CONCEPT.md`)**: Point your AI assistant to this runbook file (e.g. *"Please read CREATE_CONCEPT.md and add the next concept"*). The agent will autonomously read the checklist, search the web, generate the HTML page conforming to the style guidelines, update `index.html`, and run verification scripts.
 2. **Workflow Automation Script (`scripts/add_concept.py`)**: Run this Python script directly from your terminal:
    ```bash
    python3 scripts/add_concept.py

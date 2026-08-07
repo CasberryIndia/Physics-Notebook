@@ -105,6 +105,7 @@ Core tokens live in `css/common.css`.
   visible and not dependent on tiny, low-contrast marks.
 - Prefer simple detector guides, histograms, labels, or status text over
   purely decorative effects.
+- **Simulation Boundaries**: All canvas simulations must be completely contained within the canvas window without overflowing or getting cropped. Calculate scaling dynamically based on the canvas dimensions (e.g., using `Math.min(width, height)`) and perfectly center the visualization.
 
 ## Accessibility baseline
 

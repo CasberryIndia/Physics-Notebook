@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diffraction • Physics Notebook</title>
+
+    <!-- Standard Framework Styles -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/article.css">
+    
+    <!-- Page Specific Styles -->
+    <style>
+        .ai-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .ai-label {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-right: 0.2rem;
+            font-weight: 500;
+        }
+
+        .ai-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--line-subtle);
+            color: var(--text-muted);
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 8px;
+        }
+
+        .ai-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .sim-controls {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+        }
+    </style>
+
+    <!-- MathJax (LaTeX) Support -->
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Theme Initialization -->
+    <script>
+        const savedTheme = localStorage.getItem('physics-notebook-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <nav class="sticky">
+        <div class="nav-bg"></div>
+        <a href="../index.html" class="logo"><i data-lucide="arrow-left" width="16"></i> Library</a>
+        <button id="themeBtn"><i data-lucide="moon" width="16"></i> Theme</button>
+    </nav>
+
+    <section class="hero">
+        <div class="text-reveal-wrapper">
+            <h1 class="hero-title">Diffraction<br>Bending of Waves</h1>
+            <p style="margin-top: 2rem; font-size: 1.4rem; max-width: 40ch;">
+                The spreading out of waves as they pass through an aperture or around an obstacle.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 1 -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">01. Single-Slit Diffraction</h3>
+                <h2>Intensity Profile</h2>
+                <p>When a plane wave passes through a narrow slit, it does not travel straight through but spreads out into the region of the geometrical shadow. This creates a diffraction pattern on a distant screen consisting of a central bright fringe flanked by alternating dark and bright fringes.</p>
+                <p>The intensity $I$ at an angle $\theta$ is governed by the slit width $a$ and the wavelength $\lambda$.</p>
+                
+                <div class="math-block">$$ I(\theta) = I_0 \left( \frac{\sin \left( \frac{\pi a \sin \theta}{\lambda} \right)}{\frac{\pi a \sin \theta}{\lambda}} \right)^2 $$</div>
+                
+                <div class="etu-card">
+                    <span class="etu-tag">Real World Analogy</span>
+                    <h4 style="margin-bottom:0.5rem;">Water Waves in a Harbor</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">Imagine ocean waves striking a breakwater with a small gap. Instead of passing through as a straight beam of water, the waves spread out radially from the gap into the harbor. If the gap is small compared to the wavelength, the spreading is more pronounced.</p>
+                </div>
+
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('diffraction', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('diffraction', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('diffraction', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('diffraction', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('diffraction', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Wavelength (λ) <span id="val-wavelength1">500</span> nm</label>
+                        <input type="range" id="input-wavelength1" min="400" max="700" step="5" value="500">
+                    </div>
+                    <div class="slider-group">
+                        <label>Slit Width (a) <span id="val-width1">1500</span> nm</label>
+                        <input type="range" id="input-width1" min="500" max="4000" step="50" value="1500">
+                    </div>
+                </div>
+            </div>
+
+            <div class="visual-col">
+                <canvas id="canvas-diffraction1"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 2 -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent-secondary);">02. Huygens' Principle</h3>
+                <h2>Every Point is a Source</h2>
+                <p>The Huygens-Fresnel principle states that every point on a wavefront acts as a source of secondary spherical wavelets. The sum of these wavelets determines the form of the advancing wave.</p>
+                <div class="math-block">$$ E(P) \propto \int_{\text{slit}} \frac{e^{ikr}}{r} \, dS $$</div>
+                <div class="etu-card">
+                    <span class="etu-tag">Concept</span>
+                    <h4 style="margin-bottom:0.5rem;">Wavelets Interfering</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">When a plane wave hits a slit, we can imagine the slit as being filled with many tiny point sources. These sources emit waves that interfere with each other, causing the diffraction pattern.</p>
+                </div>
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('huygens', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('huygens', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('huygens', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('huygens', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('huygens', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Number of Point Sources <span id="val-sources">3</span></label>
+                        <input type="range" id="input-sources" min="1" max="10" step="1" value="3">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-diffraction2"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Section 3 -->
+    <section>
+        <div class="split-layout">
+            <div class="content-col">
+                <h3 class="section-label" style="color: var(--accent);">03. Circular Apertures</h3>
+                <h2>The Airy Disk</h2>
+                <p>When light passes through a circular aperture, such as a camera lens or a telescope, it forms a diffraction pattern known as an Airy disk. This consists of a bright central circular region surrounded by fainter concentric rings.</p>
+                <div class="math-block">$$ \theta = 1.22 \frac{\lambda}{D} $$</div>
+                <div class="etu-card">
+                    <span class="etu-tag">Resolution Limit</span>
+                    <h4 style="margin-bottom:0.5rem;">Rayleigh Criterion</h4>
+                    <p style="font-size: 0.95rem; margin-bottom:0;">Because of the Airy disk, two closely spaced point sources (like stars) will blur together if their central maxima are too close. This limits the maximum resolving power of any optical system.</p>
+                </div>
+                <div class="ai-links">
+                    <span class="ai-label">Ask AI:</span>
+                    <button onclick="openAI('airy', 'claude')" class="ai-btn" title="Ask Claude"></button>
+                    <button onclick="openAI('airy', 'gemini')" class="ai-btn" title="Ask Gemini"></button>
+                    <button onclick="openAI('airy', 'chatgpt')" class="ai-btn" title="Ask ChatGPT"></button>
+                    <button onclick="openAI('airy', 'grok')" class="ai-btn" title="Ask Grok"></button>
+                    <button onclick="openAI('airy', 'perplexity')" class="ai-btn" title="Ask Perplexity"></button>
+                </div>
+                <div class="sim-controls">
+                    <div class="slider-group">
+                        <label>Wavelength (λ) <span id="val-wavelength3">500</span> nm</label>
+                        <input type="range" id="input-wavelength3" min="400" max="700" step="5" value="500">
+                    </div>
+                    <div class="slider-group">
+                        <label>Aperture Diameter (D) <span id="val-diam">2000</span> nm</label>
+                        <input type="range" id="input-diam" min="1000" max="4000" step="100" value="2000">
+                    </div>
+                </div>
+            </div>
+            <div class="visual-col">
+                <canvas id="canvas-diffraction3"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="references">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h3>Academic References</h3>
+            <ul>
+                <li><strong>Hecht, E.</strong> (2017). <em>Optics (5th Edition)</em>, Pearson.</li>
+                <li><strong>Feynman, R. P., Leighton, R. B., & Sands, M.</strong> (1963). <em>The Feynman Lectures on Physics, Vol. I</em>, Addison-Wesley.</li>
+            </ul>
+        </div>
+    </section>
+
+    <script src="../js/common.js"></script>
+    <script>
+        function openAI(topic, model) {
+            let prompt = "";
+            switch (topic) {
+                case 'diffraction': 
+                    prompt = "Explain single-slit diffraction and why the central maximum is wider than the secondary maxima. Include the condition for minima."; 
+                    break;
+                case 'huygens':
+                    prompt = "Explain the Huygens-Fresnel principle and how it relates to wave propagation and diffraction.";
+                    break;
+                case 'airy':
+                    prompt = "What is the Airy disk and how does the Rayleigh criterion determine the resolving power of a telescope?";
+                    break;
+            }
+            launchAIPrompt(model, prompt);
+        }
+
+        class BaseVisual {
+            constructor(id) {
+                this.canvas = document.getElementById(id);
+                this.ctx = this.canvas.getContext('2d');
+                this.isVisible = false;
+                this.updateColors();
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                setTimeout(() => { this.resize(); this.loop(); }, 50);
+            }
+            updateColors() {
+                this.color = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
+                this.bg = getComputedStyle(document.body).getPropertyValue('--bg-color').trim();
+                this.accent = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+                this.secondary = getComputedStyle(document.body).getPropertyValue('--accent-secondary').trim();
+            }
+            resize() {
+                const rect = this.canvas.parentElement.getBoundingClientRect();
+                this.scale = window.devicePixelRatio || 2;
+                this.canvas.width = rect.width * this.scale;
+                this.canvas.height = rect.height * this.scale;
+                this.cx = this.canvas.width / 2;
+                this.cy = this.canvas.height / 2;
+            }
+            nmToColor(lambda) {
+                let r = 0, g = 0, b = 0;
+                if (lambda >= 380 && lambda < 440) { r = -(lambda - 440) / (440 - 380); g = 0; b = 1; } 
+                else if (lambda >= 440 && lambda < 490) { r = 0; g = (lambda - 440) / (490 - 440); b = 1; } 
+                else if (lambda >= 490 && lambda < 510) { r = 0; g = 1; b = -(lambda - 510) / (510 - 490); } 
+                else if (lambda >= 510 && lambda < 580) { r = (lambda - 510) / (580 - 510); g = 1; b = 0; } 
+                else if (lambda >= 580 && lambda < 645) { r = 1; g = -(lambda - 645) / (645 - 580); b = 0; } 
+                else if (lambda >= 645 && lambda <= 780) { r = 1; g = 0; b = 0; }
+                
+                let factor = 1;
+                if (lambda >= 380 && lambda < 420) factor = 0.3 + 0.7 * (lambda - 380) / (420 - 380);
+                else if (lambda >= 700 && lambda <= 780) factor = 0.3 + 0.7 * (780 - lambda) / (780 - 700);
+
+                r = Math.round(255 * Math.pow(r * factor, 0.8));
+                g = Math.round(255 * Math.pow(g * factor, 0.8));
+                b = Math.round(255 * Math.pow(b * factor, 0.8));
+                return `rgb(${r},${g},${b})`;
+            }
+            loop() {
+                if (this.isVisible) this.draw();
+                requestAnimationFrame(() => this.loop());
+            }
+            draw() {}
+        }
+
+        class SingleSlitVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.lambda = 500;
+                this.slitWidth = 1500;
+                this.time = 0;
+                
+                document.getElementById('input-wavelength1').addEventListener('input', (e) => {
+                    this.lambda = parseFloat(e.target.value);
+                    document.getElementById('val-wavelength1').innerText = e.target.value;
+                });
+                document.getElementById('input-width1').addEventListener('input', (e) => {
+                    this.slitWidth = parseFloat(e.target.value);
+                    document.getElementById('val-width1').innerText = e.target.value;
+                });
+            }
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.time += 0.05;
+                
+                let fontSize = 15 * this.scale;
+                if (this.canvas.width < 750 * this.scale) fontSize = 13 * this.scale;
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+
+                const screenDist = this.canvas.width * 0.4;
+                const barrierX = this.cx - screenDist / 2;
+                const screenX = this.cx + screenDist / 2;
+                
+                const simH = this.canvas.height * 0.7;
+                const baseY = this.cy + 50 * this.scale;
+                const waveColor = this.nmToColor(this.lambda);
+                
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'left';
+                this.ctx.fillText(`λ: ${this.lambda.toFixed(0)} nm`, 30 * this.scale, 40 * this.scale);
+                this.ctx.fillText(`a: ${this.slitWidth.toFixed(0)} nm`, 30 * this.scale, 70 * this.scale);
+                
+                this.ctx.strokeStyle = waveColor;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.globalAlpha = 0.4;
+                const waveSpacing = (this.lambda / 500) * 20 * this.scale; 
+                const phase = (this.time * waveSpacing) % waveSpacing;
+                
+                for (let x = barrierX - phase; x > 20 * this.scale; x -= waveSpacing) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x, baseY - simH/2);
+                    this.ctx.lineTo(x, baseY + simH/2);
+                    this.ctx.stroke();
+                }
+                this.ctx.globalAlpha = 1.0;
+                
+                const scaledSlit = (this.slitWidth / 1500) * 30 * this.scale;
+                this.ctx.fillStyle = this.color;
+                this.ctx.fillRect(barrierX - 4 * this.scale, baseY - simH/2, 8 * this.scale, simH/2 - scaledSlit/2);
+                this.ctx.fillRect(barrierX - 4 * this.scale, baseY + scaledSlit/2, 8 * this.scale, simH/2 - scaledSlit/2);
+                
+                this.ctx.beginPath();
+                this.ctx.strokeStyle = waveColor;
+                this.ctx.lineWidth = 3 * this.scale;
+                const I0 = screenDist * 0.4; 
+                
+                for (let y = -simH/2; y <= simH/2; y += 2) {
+                    const physY = (y / (simH/2)) * 10000;
+                    const physL = screenDist * (10000 / (simH/2)); 
+                    const sinTheta = physY / Math.sqrt(physL * physL + physY * physY);
+                    const beta = (Math.PI * this.slitWidth * sinTheta) / this.lambda;
+                    
+                    let I = 1;
+                    if (beta !== 0) {
+                        const sinc = Math.sin(beta) / beta;
+                        I = sinc * sinc;
+                    }
+                    
+                    const plotX = screenX + I * I0;
+                    if (y === -simH/2) this.ctx.moveTo(plotX, baseY + y);
+                    else this.ctx.lineTo(plotX, baseY + y);
+                }
+                this.ctx.stroke();
+                
+                this.ctx.globalAlpha = 0.2;
+                this.ctx.fillStyle = waveColor;
+                this.ctx.lineTo(screenX, baseY + simH/2);
+                this.ctx.lineTo(screenX, baseY - simH/2);
+                this.ctx.fill();
+                this.ctx.globalAlpha = 1.0;
+
+                this.ctx.strokeStyle = this.color;
+                this.ctx.lineWidth = 2 * this.scale;
+                this.ctx.beginPath();
+                this.ctx.moveTo(screenX, baseY - simH/2);
+                this.ctx.lineTo(screenX, baseY + simH/2);
+                this.ctx.stroke();
+                
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText("Incident", barrierX/2 + 10*this.scale, baseY - simH/2 - 20*this.scale);
+                this.ctx.fillText("Slit (a)", barrierX, baseY - simH/2 - 20*this.scale);
+                this.ctx.fillText("Screen", screenX, baseY - simH/2 - 20*this.scale);
+                this.ctx.fillText("I(θ)", screenX + I0/2, baseY - simH/2 - 20*this.scale);
+            }
+        }
+
+        class HuygensVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.numSources = 3;
+                this.time = 0;
+                document.getElementById('input-sources').addEventListener('input', (e) => {
+                    this.numSources = parseInt(e.target.value);
+                    document.getElementById('val-sources').innerText = this.numSources;
+                });
+            }
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.time += 0.02;
+
+                const cx = this.canvas.width * 0.3;
+                const baseY = this.cy;
+                const simH = this.canvas.height * 0.7;
+                
+                // Draw barrier
+                this.ctx.fillStyle = this.color;
+                this.ctx.fillRect(cx - 4 * this.scale, baseY - simH, 8 * this.scale, simH - 100 * this.scale);
+                this.ctx.fillRect(cx - 4 * this.scale, baseY + 100 * this.scale, 8 * this.scale, simH - 100 * this.scale);
+
+                // Point Sources
+                this.ctx.fillStyle = this.accent;
+                this.ctx.strokeStyle = this.color;
+                
+                const spacing = (200 * this.scale) / (this.numSources + 1);
+                const startY = baseY - 100 * this.scale;
+                
+                for (let i = 1; i <= this.numSources; i++) {
+                    const py = startY + i * spacing;
+                    this.ctx.beginPath();
+                    this.ctx.arc(cx, py, 4 * this.scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                    // Wavelets
+                    this.ctx.lineWidth = 1.5 * this.scale;
+                    for (let r = (this.time * 20) % 30; r < this.canvas.width; r += 30) {
+                        this.ctx.globalAlpha = Math.max(0, 1 - (r / (this.canvas.width * 0.6)));
+                        this.ctx.beginPath();
+                        this.ctx.arc(cx, py, r, -Math.PI/2.5, Math.PI/2.5);
+                        this.ctx.stroke();
+                    }
+                }
+                this.ctx.globalAlpha = 1.0;
+            }
+        }
+
+        class AiryDiskVisual extends BaseVisual {
+            constructor(id) {
+                super(id);
+                this.lambda = 500;
+                this.D = 2000;
+                document.getElementById('input-wavelength3').addEventListener('input', (e) => {
+                    this.lambda = parseFloat(e.target.value);
+                    document.getElementById('val-wavelength3').innerText = this.lambda;
+                });
+                document.getElementById('input-diam').addEventListener('input', (e) => {
+                    this.D = parseFloat(e.target.value);
+                    document.getElementById('val-diam').innerText = this.D;
+                });
+            }
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                const cx = this.cx;
+                const cy = this.cy;
+                const maxR = Math.min(this.cx, this.cy) * 0.9;
+                const waveColor = this.nmToColor(this.lambda);
+                
+                // Draw 2D airy disk approximation
+                // We use circles with decreasing alpha
+                const scaleF = (1000 * this.lambda) / this.D; // relative scaling
+                
+                this.ctx.strokeStyle = waveColor;
+                for (let r = 1; r < maxR; r += 1) {
+                    const x = r / scaleF;
+                    // Approximation of airy pattern intensity
+                    let I = 1;
+                    if (x !== 0) {
+                        // Sinc approximation
+                        const val = Math.sin(x) / x;
+                        I = val * val;
+                    }
+                    if (I > 0.01) {
+                        this.ctx.globalAlpha = I * 0.8;
+                        this.ctx.beginPath();
+                        this.ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                        this.ctx.stroke();
+                    }
+                }
+                this.ctx.globalAlpha = 1.0;
+
+                let fontSize = 14 * this.scale;
+                this.ctx.font = `700 ${fontSize}px 'JetBrains Mono', monospace`;
+                this.ctx.fillStyle = this.color;
+                this.ctx.textAlign = 'left';
+                this.ctx.fillText(`Aperture D: ${this.D} nm`, 20 * this.scale, 30 * this.scale);
+                this.ctx.fillText(`Wavelength: ${this.lambda} nm`, 20 * this.scale, 50 * this.scale);
+            }
+        }
+
+        const APP = {
+            visuals: [],
+            observer: null,
+            init() {
+                this.setupObserver();
+                this.visuals.push(new SingleSlitVisual('canvas-diffraction1'));
+                this.visuals.push(new HuygensVisual('canvas-diffraction2'));
+                this.visuals.push(new AiryDiskVisual('canvas-diffraction3'));
+                
+                this.visuals.forEach(v => {
+                    if (this.observer) this.observer.observe(v.canvas);
+                    v.isVisible = true; 
+                });
+
+                window.addEventListener('theme-changed', () => {
+                    this.visuals.forEach(v => v.updateColors());
+                });
+            },
+            setupObserver() {
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const visual = this.visuals.find(v => v.canvas === entry.target);
+                        if (visual) visual.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.1 });
+            }
+        };
+
+        window.onload = () => APP.init();
+    </script>
+</body>
+</html>
